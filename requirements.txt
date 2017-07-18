@@ -1,9 +1,9 @@
+click==6.7
 Flask==0.12.2
+Flask-Cors==3.0.3
+Flask-Jsonpify==1.5.0
+itsdangerous==0.24
 Jinja2==2.9.6
 MarkupSafe==1.0
+six==1.10.0
 Werkzeug==0.12.2
-argparse==1.2.1
-click==6.7
-distribute==0.6.24
-itsdangerous==0.24
-wsgiref==0.1.2
