@@ -1,0 +1,29 @@
+{{#contacts}}
+<section class="card mb-3 card-outline-danger" style="border-radius: 15px">
+  <!-- <img class="img-fluid w-25" src="http://localhost:5000/static/images/molssi.jpg" /> -->
+  <div class="card-block">
+      <h3 class="card-title text-danger">{{name}}</h3>
+      <h5 class='text-center text-white bg-info'>{{shortname}}</h5>
+      <p class="card-text text-justify mt-md-4">{{bio}}</p>
+
+      <div class="row">
+          <div class="col-md-4 mb-2">
+              <span class="bg-inverse text-white mr-2 p-1 rounded">Domain</span>QM \ MM
+          </div> <!-- col-->
+          <div class="col-md-8 mb-2">
+              <span class="bg-danger text-white mr-2 p-1 rounded">Langauges</span>Python, FORTRAN, JavaScript
+          </div> <!-- col-->
+          <div class="col-md mb-2">
+              <span class="bg-primary text-white mr-2 p-1 rounded">Keywords</span>Keyword1, keyword2, keyword3
+          </div> <!-- col-->
+      </div> <!-- row -->
+
+  </div><!-- card block -->
+
+  <div class="card-footer" style="border-radius: 0 0 15px 15px">
+     <a class="card-link" href="{{source_code}}">Project homepage</a>
+     <a class="card-link disabled" href="{{source_code}}">Source code</a>
+ </div> <!-- card footer -->
+
+</section> <!-- section card -->
+{{/contacts}}
