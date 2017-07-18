@@ -1,11 +1,22 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, send_from_directory
+from flask_cors import CORS, cross_origin
+
 # from flask.ext.sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
+CORS(app)
+# cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
+# For: @app.route("/api/v1/users")
+
 app.config.from_object('config')
+print(app.config['APPLICATION_ROOT'])
 
 # db = SQLAlchemy(app)
 
+@app.route('/static/<path:path>')
+def send_js(path):
+    print("in send_js, path= ", path)
+    return send_from_directory('static', path)
 
 @app.errorhandler(404)
 def not_found(error):
@@ -21,4 +32,3 @@ app.register_blueprint(core)
 #from app.posts.views import mod as postsModule
 #app.register_blueprint(commentsModule)
 #app.register_blueprint(postsModule)
-
