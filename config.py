@@ -1,10 +1,23 @@
 import os
 _basedir = os.path.abspath(os.path.dirname(__file__))
 
-DEBUG = True
-TESTING = True
+IS_DEVELOP = True
 
-ADMINS = frozenset(['youremail@yourdomain.com'])
+APPLICATION_ROOT = os.path.join(_basedir, 'app')
+STATIC_FOLDER = 'static'
+
+if IS_DEVELOP:
+    DEBUG = True
+    TESTING = True
+    WORDPRESS_DOMAIN = 'http://localhost:8888'
+    API_DOMAIN = 'http://localhost:5000'
+else:
+    DEBUG = True
+    TESTING = False
+    WORDPRESS_DOMAIN = 'http://molssi.org'
+    API_DOMAIN = 'http://api.molssi.org'
+
+ADMINS = frozenset(['daltarawy@vt.edu'])
 SECRET_KEY = 'SecretKeyForSessionSigning'
 
 SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(_basedir, 'app.db')
