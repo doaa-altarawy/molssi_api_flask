@@ -5,5 +5,5 @@ if sys.executable != INTERP:
 sys.path.append(os.getcwd())
 
 
-sys.path.append('app')
+sys.path.append('molssi_api_flask')
 from molssi_api_flask import app as application
