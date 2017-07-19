@@ -1,4 +1,4 @@
-from app.core.models.resource import Resource
+from molssi_api_flask.core.models.resource import Resource
 
 class Repository():
 

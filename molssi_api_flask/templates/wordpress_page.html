@@ -3,6 +3,8 @@
 <head>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css' ) }}"></script>
+
 </head>
 
 <body>
@@ -24,10 +26,10 @@
       <div class="form-group input-group col-md-6">
           <input id="libraryName" type="text" class="form-control" name="libraryName" placeholder="Enter keywords..." >
           <span class="input-group-btn">
-              <button class="btn btn-primary active">Search <i class="fa fa-search"></i></button>
+              <button class="btn-sm btn-primary active">Search <i class="fa fa-search"></i></button>
           </span>
           <span class="input-group-btn">
-              <button class="btn btn-danger collapsed" data-toggle="collapse" data-target="#advancedSearch">Advanced
+              <button class="btn-sm btn-danger collapsed" data-toggle="collapse" data-target="#advancedSearch">Advanced
                   <i class="fa fa-caret-down"></i>
               </button>
           </span>
@@ -84,7 +86,7 @@
         <!-- Button -->
         <div class="form-group row">
           <div class="col-md-2 offset-md-2">
-            <button id="submit" name="submit" class="btn btn-primary">Search</button>
+            <button id="submit" name="submit" class="btn-sm btn-primary">Search</button>
           </div>
       </div> <!-- btn-group -->
 

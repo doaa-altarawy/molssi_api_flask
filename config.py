@@ -3,7 +3,7 @@ _basedir = os.path.abspath(os.path.dirname(__file__))
 
 IS_DEVELOP = True
 
-APPLICATION_ROOT = os.path.join(_basedir, 'app')
+APPLICATION_ROOT = os.path.join(_basedir, 'molssi_api_flask')
 STATIC_FOLDER = 'static'
 
 if IS_DEVELOP:

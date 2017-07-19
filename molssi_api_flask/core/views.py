@@ -1,7 +1,7 @@
 from flask import Blueprint, request, render_template, flash, g, session, \
                     redirect, url_for, abort, jsonify, send_from_directory,\
                     current_app
-from app.core.repository import *
+from molssi_api_flask.core.repository import *
 from flask_jsonpify import jsonpify
 import os
 import json

@@ -6,4 +6,4 @@ sys.path.append(os.getcwd())
 
 
 sys.path.append('app')
-from app import app as application
+from molssi_api_flask import app as application

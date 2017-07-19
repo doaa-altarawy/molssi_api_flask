@@ -15,14 +15,13 @@ print(app.config['APPLICATION_ROOT'])
 
 @app.route('/static/<path:path>')
 def send_js(path):
-    print("in send_js, path= ", path)
     return send_from_directory('static', path)
 
 @app.errorhandler(404)
 def not_found(error):
   return render_template('404.html'), 404
 
-from app.core.views import mod as core
+from molssi_api_flask.core.views import mod as core
 app.register_blueprint(core)
 
 #app.register_blueprint(core, url_prefix='/api')
