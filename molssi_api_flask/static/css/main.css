@@ -2,3 +2,6 @@ body {
     font-family: 'Open Sans', sans-serif;
     font-size: 14px;
 }
+div.form-group.row {
+    margin-bottom: 0;
+}

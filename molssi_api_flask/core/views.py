@@ -10,9 +10,6 @@ import mongo_database as db
 
 
 mod = Blueprint('core', __name__)
-#  MongoDB connection
-db.get_connection('resources_webiste', 'localhost', 27017)
-
 
 @mod.route('/')
 def index():

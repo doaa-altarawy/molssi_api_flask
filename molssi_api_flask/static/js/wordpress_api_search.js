@@ -17,7 +17,7 @@ jQuery(document).ready(function() {
         var perPage = 5;
         // Only show the first `per_page` items initially.
         items.slice(perPage).hide();
-
+        jQuery('p#results_count').html(numItems + ' results found')
         //Pagination:
         jQuery('#pagination').twbsPagination('destroy');  // reset previous
         if (numItems == 0){
@@ -54,6 +54,9 @@ jQuery(document).ready(function() {
         $.each($("#languages input:checked"), function(){
             languages.push.apply(languages,$(this).val().split(','));
         });
+        if (languages.indexOf('Any') != -1){
+            languages = [];     // set to any langauge
+        }
         var data = {
                 query: query,
                 domain: JSON.stringify(domain),

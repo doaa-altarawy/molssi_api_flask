@@ -1,7 +1,7 @@
 from flask import Flask, render_template, send_from_directory
 from flask_cors import CORS, cross_origin
+import molssi_api_flask.core.mongo_database as db
 
-# from flask.ext.sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 CORS(app)
@@ -11,7 +11,10 @@ CORS(app)
 app.config.from_object('config')
 print(app.config['APPLICATION_ROOT'])
 
-# db = SQLAlchemy(app)
+#  MongoDB connection
+db.get_connection(app.config['DB_NAME'],
+                  app.config['DB_HOST'],
+                  app.config['DB_PORT'])
 
 @app.route('/static/<path:path>')
 def send_js(path):

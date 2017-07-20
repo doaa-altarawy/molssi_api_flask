@@ -11,18 +11,21 @@ Field Options:
     choices: Make sure the field's value is equal to one of the values given in an array
 """
 
-class Library(Document):
+class Library(DynamicDocument): # or DynamicDocument?
     name = StringField(required=True)
     description = StringField()
     languages = ListField(StringField())
     domain = StringField() # QM, MM, QM/MM, etc..
+    website = StringField()
 
     published = DateTimeField()
     added = DateTimeField(default=datetime.datetime.now)
     is_active = BooleanField()
 
     # Use the $ prefix to set a text index
-    meta = {'indexes': [
+    meta = {
+    # 'strict': False, # allow extra fields
+    'indexes': [
         {'fields': ['$name', "$description", "domain", "languages"],
          'default_language': "en",
          "language_override": "en",
