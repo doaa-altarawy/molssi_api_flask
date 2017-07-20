@@ -26,7 +26,7 @@
       <div class="form-group input-group col-md-6">
           <input id="libraryName" type="text" class="form-control" name="libraryName" placeholder="Enter keywords..." >
           <span class="input-group-btn">
-              <button class="btn-sm btn-primary active">Search <i class="fa fa-search"></i></button>
+              <button id='search_quick' class="btn-sm btn-primary active">Search <i class="fa fa-search"></i></button>
           </span>
           <span class="input-group-btn">
               <button class="btn-sm btn-danger collapsed" data-toggle="collapse" data-target="#advancedSearch">Advanced
@@ -46,33 +46,44 @@
           <label class="control-label col-md-2 form-control-label text-md-right" for="radius">Domain</label>
 
             <div class="form-check col-md-5">
-                <select id="radius" name="radius" class="form-control">
-                  <option value="1">Quantum Mechanics</option>
-                  <option value="2">Molecular Mechanics</option>
+                <select id="domain" name="domain" class="form-control">
+                  <option value="QM,MM">Any</option>
+                  <option value="QM">Quantum Mechanics</option>
+                  <option value="MM">Molecular Mechanics</option>
                 </select>
             </div>
         </div> <!-- form-group -->
 
         <!-- radio inline -->
         <div class="form-group row">
-            <label  class="control-label d-block col-md-2 col-form-label text-md-right"> Form Check test</label>
+            <label class="control-label d-block col-md-2 col-form-label text-md-right">Languages</label>
 
-            <div class="form-group col-md-8">
+            <div id='languages' class="form-group col-md-8">
                 <div class="form-check form-check-inline">
                     <label class="form-check-label">
-                        <input class="form-check-input" type="checkbox" name="select" value="S" checked>Knowledge Seeker
+                        <input class="form-check-input" type="checkbox" name="select" value="Python,C++,FORTRAN" checked>Any
                     </label>
                 </div>
                 <div class="form-check form-check-inline">
                     <label class="form-check-label">
-                        <input class="form-check-input" type="checkbox" name="select2" value="P">Knowledge Provider
+                        <input class="form-check-input" type="checkbox" name="select" value="Python">Python
+                    </label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <label class="form-check-label">
+                        <input class="form-check-input" type="checkbox" name="select2" value="C++">C++
+                    </label>
+                </div> <!-- form check -->
+                <div class="form-check form-check-inline">
+                    <label class="form-check-label">
+                        <input class="form-check-input" type="checkbox" name="select2" value="FORTRAN">FORTRAN
                     </label>
                 </div> <!-- form check -->
             </div> <!-- form group -->
         </div> <!-- form-group -->
 
         <!-- Select Basic -->
-        <div class="form-group row">
+        <!-- <div class="form-group row">
           <label class="control-label col-md-2 col-form-label text-md-right" for="keywords">Multiselect keywords</label>
           <div class="form-group col-md-8">
             <select id="keywords" name="keywords" class="form-control">
@@ -82,11 +93,10 @@
           </div>
         </div> <!-- form-group -->
 
-
         <!-- Button -->
         <div class="form-group row">
           <div class="col-md-2 offset-md-2">
-            <button id="submit" name="submit" class="btn-sm btn-primary">Search</button>
+            <button id="search_adv" name="submit" class="btn-sm btn-primary">Search</button>
           </div>
       </div> <!-- btn-group -->
 
@@ -113,6 +123,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"></script>
 
-<script type="text/javascript" src="{{ url_for('static', filename='js/wordpress_api_contact.js' ) }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/wordpress_api_search.js' ) }}"></script>
 
 </html>

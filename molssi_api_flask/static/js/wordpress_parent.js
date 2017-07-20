@@ -4,6 +4,7 @@ function handleMessage(event) {
   if (jQuery.inArray(event.origin, apiOrigins)) {
     console.log("Event:", event);
     jQuery('#pageContent').get(0).height = event.data + 'px';   // adjust height
+    jQuery('html,body').contents().scrollTop(); // not working
   } else{
   	console.error('Unknown origin', event.origin);
   }
