@@ -7,7 +7,7 @@ APPLICATION_ROOT = os.path.join(_basedir, 'molssi_api_flask')
 STATIC_FOLDER = 'static'
 
 # Database:
-DB_NAME = 'resources_webiste'
+DB_NAME = 'resources_website'
 DB_HOST = 'localhost'
 DB_PORT = 27017
 
