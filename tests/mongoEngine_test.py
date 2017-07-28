@@ -1,4 +1,5 @@
 from __future__ import print_function
+# from molssi_api_flask import app
 from molssi_api_flask.core.models.library import Library
 from molssi_api_flask.core.mongo_database import *
 import pytest
@@ -14,6 +15,11 @@ verbose = False
 
 def setup_module():
     # get_connection('resources_webiste', 'localhost', 27017)
+    # creates a test client
+    # app = app.test_client()
+    # propagate the exceptions to the test client
+    # app.testing = True
+
     get_connection('libraries_test', is_mock=False) # text_search doesn't work in mocks
     clear_libraries()
     load_collection_from_json('./tests/data/test_libs.json')

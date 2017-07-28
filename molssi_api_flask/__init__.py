@@ -12,9 +12,7 @@ app.config.from_object('config')
 print(app.config['APPLICATION_ROOT'])
 
 #  MongoDB connection
-db.get_connection(app.config['DB_NAME'],
-                  app.config['DB_HOST'],
-                  app.config['DB_PORT'])
+db.get_connection(host=app.config['DB_URI'])
 
 @app.route('/static/<path:path>')
 def send_js(path):

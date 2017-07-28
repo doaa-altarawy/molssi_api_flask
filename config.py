@@ -1,26 +1,34 @@
 import os
+
+
+SETTINGS = "DEVELOP"    # "TESTING", "PRODUCTION"
+
 _basedir = os.path.abspath(os.path.dirname(__file__))
-
-IS_DEVELOP = True
-
 APPLICATION_ROOT = os.path.join(_basedir, 'molssi_api_flask')
 STATIC_FOLDER = 'static'
 
-# Database:
-DB_NAME = 'resources_website'
-DB_HOST = 'localhost'
-DB_PORT = 27017
 
-if IS_DEVELOP:
+if SETTINGS == "DEVELOP":
     DEBUG = True
     TESTING = True
     WORDPRESS_DOMAIN = 'http://localhost:8888'
     API_DOMAIN = 'http://localhost:5000'
-else:
+    DB_URI = "mongodb://ninja:fakePass@localhost:27017/resources_website"
+
+elif SETTINGS == "TESTING":  # (fake pass)
+    DEBUG = True
+    TESTING = False
+    WORDPRESS_DOMAIN = 'http://molssi.org'
+    API_DOMAIN = 'http://molssi-api.herokuapp.com'
+    DB_URI = "mongodb://ninja:fakePass@ds127173.mlab.com:27173/heroku_rzz9knz9"
+
+elif SETTINGS == "PRODUCTION":   # (fake pass)
     DEBUG = True
     TESTING = False
     WORDPRESS_DOMAIN = 'http://molssi.org'
     API_DOMAIN = 'http://api.molssi.org'
+    DB_URI = "mongodb://ninja:fakePass@ds127173.mlab.com:27173/heroku_rzz9knz9"
+
 
 ADMINS = frozenset(['daltarawy@vt.edu'])
 SECRET_KEY = 'SecretKeyForSessionSigning'

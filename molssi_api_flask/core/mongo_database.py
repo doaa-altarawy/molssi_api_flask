@@ -69,15 +69,18 @@ from_json??
 '''
 
 
-def get_connection(name='text', host='localhost', port=27017, is_mock=False):
+def get_connection(name='', host='localhost', port=27017, is_mock=False):
     """ Create MongoDB using mongoengine
         use is_mock to Create a mock empty DB for testing
     """
     if is_mock:
         # mock connection for testing
-        connect('mongoenginetest', host='mongomock://localhost')
-    else:
+        return connect('mongoenginetest', host='mongomock://localhost')
+
+    if name:
         return connect(name, host=host, port=port)
+
+    return connect(host=host)
 
 
 def clear_libraries():
