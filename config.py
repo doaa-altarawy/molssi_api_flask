@@ -1,3 +1,6 @@
+"""Flask app configuration
+"""
+
 import os
 
 
@@ -20,14 +23,14 @@ elif SETTINGS == "TESTING":  # (fake pass)
     TESTING = False
     WORDPRESS_DOMAIN = 'http://molssi.org'
     API_DOMAIN = 'http://molssi-api.herokuapp.com'
-    DB_URI = "mongodb://ninja:fakePass@ds127173.mlab.com:27173/heroku_rzz9knz9"
+    DB_URI = "mongodb://ninja:fakePass@ds127163.mlab.com:27163/resources_website"
 
 elif SETTINGS == "PRODUCTION":   # (fake pass)
     DEBUG = True
     TESTING = False
     WORDPRESS_DOMAIN = 'http://molssi.org'
     API_DOMAIN = 'http://api.molssi.org'
-    DB_URI = "mongodb://ninja:fakePass@ds127173.mlab.com:27173/heroku_rzz9knz9"
+    DB_URI = "mongodb://ninja:fakePass@ds127163.mlab.com:27163/resources_website"
 
 
 ADMINS = frozenset(['daltarawy@vt.edu'])

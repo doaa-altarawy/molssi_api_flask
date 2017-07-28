@@ -4,7 +4,8 @@ import os
 import config as config
 
 #  MongoDB connection
-db.get_connection(config.DB_NAME, config.DB_HOST, config.DB_PORT)
+db.get_connection(config.DB_URI)
+print('Connecting to DB: ', config.DB_URI)
 
 #  Clear the DB
 db.clear_libraries()
