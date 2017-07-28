@@ -41,6 +41,11 @@ jQuery(document).ready(function() {
 
     } // show_pages
 
+    // keyup search
+    jQuery('#libraryName').keyup(function(event) {
+        jQuery('#search_quick').trigger('click');
+    });
+
     // add action listener
     jQuery('#search_quick, #search_adv').click(function(event) {
         jQuery('#advancedSearch').collapse('hide');
