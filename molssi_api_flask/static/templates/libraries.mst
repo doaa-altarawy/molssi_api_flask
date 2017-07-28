@@ -14,7 +14,7 @@
               <span class="bg-danger text-white mr-2 p-1 rounded">Langauges</span>{{languages}}
           </div> <!-- col-->
           <div class="col-md mb-2">
-              <span class="bg-primary text-white mr-2 p-1 rounded">Keywords</span>Keyword1, keyword2, keyword3
+              <span class="bg-primary text-white mr-2 p-1 rounded">Keywords</span>{{keywords}}
           </div> <!-- col-->
       </div> <!-- row -->
 
