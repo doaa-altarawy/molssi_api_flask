@@ -21,7 +21,7 @@
   </div><!-- card block -->
 
   <div class="card-footer" style="border-radius: 0 0 15px 15px">
-     <a class="card-link" href="http://{{website}}" target="_blank">Project homepage</a>
+     <a class="card-link" href="{{website}}" target="_blank">Project homepage</a>
      <a class="card-link disabled" href="http://{{source_code}}" target="_blank">Source code</a>
  </div> <!-- card footer -->
 
