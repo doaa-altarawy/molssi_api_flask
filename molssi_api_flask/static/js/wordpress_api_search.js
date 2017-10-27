@@ -17,7 +17,7 @@ jQuery(document).ready(function() {
         var perPage = 5;
         // Only show the first `per_page` items initially.
         items.slice(perPage).hide();
-        jQuery('p#results_count').html(numItems + ' results found')
+        jQuery('p#results_count').html(numItems + ' results found');
         //Pagination:
         jQuery('#pagination').twbsPagination('destroy');  // reset previous
         if (numItems == 0){

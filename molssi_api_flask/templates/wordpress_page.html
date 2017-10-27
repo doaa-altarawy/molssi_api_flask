@@ -3,7 +3,7 @@
 <head>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css' ) }}"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css' ) }}" />
 
 </head>
 
@@ -37,13 +37,13 @@
       </div>
     </div> <!-- form group -->
 
-    <!-- ********* Collapsed Advanced Search *********-->
+    <!-- ********* Collapsed Advanced Search ********* -->
 
     <div id="advancedSearch" class="collapse">
-    </hr>
+
         <!-- dropdown -->
         <div class="form-group row">
-          <label class="control-label col-md-2 form-control-label text-md-right" for="domain">Domain</label>
+          <label class="control-label col-md-2 col-form-label text-md-right" for="domain">Domain</label>
 
             <div class="form-check col-md-5">
                 <select id="domain" name="domain" class="form-control">
@@ -96,8 +96,8 @@
               <option value="2">Integral</option>
             </select>
           </div>
-        </div> <!-- form-group -->
-
+        </div>
+        -->
         <!-- Button -->
         <div class="form-group row">
           <div class="col-md-2 offset-md-2">
