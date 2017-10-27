@@ -76,7 +76,6 @@ def get_connection(name='', host='localhost', port=27017, is_mock=False):
     if is_mock:
         # mock connection for testing
         return connect('mongoenginetest', host='mongomock://localhost')
-
     if name:
         return connect(name, host=host, port=port)
 
@@ -176,9 +175,12 @@ def full_search(query='', languages=[], domains=[], verbose=False):
             results = Library.objects.search_text(query)
         if results:
             results = results.order_by('$text_score')
+    else:
+        if results:
+            results = results.order_by('name')
 
     if len(languages) == 0 and len(domains) == 0 and len(query) == 0: # return all libraries
-        results = Library.objects
+        results = Library.objects.order_by('name')
 
     if verbose:
         print_results(results)
