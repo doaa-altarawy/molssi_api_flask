@@ -1,5 +1,5 @@
 from __future__ import print_function
-from mongoengine import *
+from mongoengine import connect
 from molssi_api_flask.core.models.library import Library
 from mongoengine.queryset.visitor import Q
 import json
@@ -121,7 +121,7 @@ def find_domain(domain, verbose=False):
 
 def search_description(keyword, verbose=False):
     """Search descrption """
-    #TODO: fixme
+    # TODO: fixme
 
     results = Library.objects(description__contains(keyword))
     if verbose:
@@ -132,7 +132,7 @@ def search_description(keyword, verbose=False):
 
 
 def search_text(query, verbose=False):
-    '''search indexed text fields (defined with $ in meta)'''
+    """search indexed text fields (defined with $ in meta)"""
     results = Library.objects.search_text(query)
 
     if results:
@@ -161,7 +161,7 @@ def full_search(query='', languages=[], domains=[], verbose=False):
 
     results = None
 
-    if len(languages) != 0 and len(domains)!=0:
+    if len(languages) != 0 and len(domains) != 0:
         results = Library.objects(Q(languages__in=languages) & Q(domain__in=domains))
     elif len(languages) != 0:
         results = Library.objects(languages__in=languages)
@@ -179,7 +179,7 @@ def full_search(query='', languages=[], domains=[], verbose=False):
         if results:
             results = results.order_by('name')
 
-    if len(languages) == 0 and len(domains) == 0 and len(query) == 0: # return all libraries
+    if len(languages) == 0 and len(domains) == 0 and len(query) == 0:  # return all libraries
         results = Library.objects.order_by('name')
 
     if verbose:
@@ -199,12 +199,13 @@ def get_json(verbose=False):
 
 # ----------------------- Printing and Utils ------------------------- #
 
+
 def add_one(name, description='', languages='', domain='', verbose=False):
     my_lib = Library(
-        name = name,
-        description = description,
-        languages = languages,
-        domain = domain
+        name=name,
+        description=description,
+        languages=languages,
+        domain=domain
     )
 
     my_lib.save()
