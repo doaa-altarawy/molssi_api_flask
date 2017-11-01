@@ -1,6 +1,6 @@
 from __future__ import print_function
 from mongoengine import connect
-from molssi_api_flask.core.models.library import Library
+from molssi_api_flask.core.models.library import Library, MMLibrary, QMLibrary
 from mongoengine.queryset.visitor import Q
 import json
 
@@ -87,15 +87,17 @@ def clear_libraries():
     Library.objects().delete()
 
 
-def load_collection_from_json(filename):
+def load_collection_from_json(filename, lib_type=None):
     """Load DB from a Json file with list of JSON objects of libraries"""
 
     with open(filename) as f:
         json_list = json.load(f)
-
-    library_list = []
-    for json_data in json_list:
-        library_list.append(Library(**json_data))
+    if lib_type == 'MM':
+        library_list = [MMLibrary(**json_record) for json_record in json_list]
+    elif lib_type == 'QM':
+        library_list = [QMLibrary(**json_record) for json_record in json_list]
+    else:
+        library_list = [Library(**json_record) for json_record in json_list]
 
     Library.objects.insert(library_list)
 

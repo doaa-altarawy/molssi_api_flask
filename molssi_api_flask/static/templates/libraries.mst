@@ -3,7 +3,7 @@
   <!-- <img class="img-fluid w-25" src="http://localhost:5000/static/images/molssi.jpg" /> -->
   <div class="card-block">
       <h3 class="card-title text-danger">{{name}}</h3>
-      <h5 class='text-center text-white bg-info'>{{shortname}}</h5>
+      <!-- <h5 class='text-center text-white bg-info'>{{owner}}</h5> -->
       <p class="card-text text-justify my-md-4">{{description}}</p>
 
       <div class="row">
@@ -21,8 +21,8 @@
   </div><!-- card block -->
 
   <div class="card-footer" style="border-radius: 0 0 15px 15px">
-     <a class="card-link" href="{{website}}" target="_blank">Project homepage</a>
-     <a class="card-link disabled" href="http://{{source_code}}" target="_blank">Source code</a>
+     <a class="card-link" href="{{official_website}}" target="_blank">Offecial Website</a>
+     <a class="card-link disabled" href="{{source}}" target="_blank">Source code</a>
  </div> <!-- card footer -->
 
 </section> <!-- section card -->

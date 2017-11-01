@@ -67,7 +67,7 @@ jQuery(document).ready(function() {
                 domain: JSON.stringify(domain),
                 languages: JSON.stringify(languages)
             };
-        console.log(data);
+        console.log('Query data: ', data);
 
         // load JSON data and fill the template
         jQuery.getJSON(
