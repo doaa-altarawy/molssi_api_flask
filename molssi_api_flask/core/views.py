@@ -1,7 +1,8 @@
 from __future__ import print_function
-from flask import Blueprint, request, render_template, flash, g, session, \
-                    redirect, url_for, abort, jsonify, send_from_directory,\
-                    current_app
+from flask import Blueprint, request, render_template, flash, g, \
+                render_template_string, session, \
+                redirect, url_for, abort, jsonify, send_from_directory,\
+                current_app
 from molssi_api_flask.core.repository import *
 from flask_jsonpify import jsonpify
 import os
@@ -36,7 +37,18 @@ def test():
 
 
 @mod.route('/search')
-def search_libraries():
+def search_libraries_ui():
+    """Search MongoDB for the given query
+       Return: HTML formatted data with the results
+    """
+
+    results = search_libraries(to_json=False)
+
+    return render_template('libraries.html', libraries=results)
+
+
+@mod.route('/api/search')
+def search_libraries(to_json=True):
     """Search MongoDB for the given query
        Return: JSON (array of libraries)
     """
@@ -54,6 +66,10 @@ def search_libraries():
         domain = []
 
     results = db.full_search(query, languages, domain)
+
+    if not to_json:
+        return results
+
     if results:
         json_data = results.to_json()
     else:

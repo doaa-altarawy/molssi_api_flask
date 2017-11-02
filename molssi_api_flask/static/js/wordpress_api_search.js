@@ -69,30 +69,23 @@ jQuery(document).ready(function() {
             };
         console.log('Query data: ', data);
 
-        // load JSON data and fill the template
-        jQuery.getJSON(
+        // query the server and show the results
+        jQuery.ajax({
             // window.API_DOMAIN +"/contact?callback=?",
-            window.API_DOMAIN + "/search",  // URL
-            data,                           // Data
-            function(data) {                // callback
-                console.log("In getJSON contact..", data);
+            url: window.API_DOMAIN + "/search",
+            data: data,
+            contentType: "application/json",
+            //dataType: "json", # return is not JSON
+            success: function(data) {             // callback
+                console.log("Returned html data", data);
+                jQuery('#contacts').html(data);
 
-                jQuery.get(window.API_DOMAIN + '/static/templates/libraries.mst',
-                    function(template) {
-                        // var template = jQuery('#templates').html();
-                        console.log("Rendering Template libraries-------");
-                        // console.log("The Template is: ", template);
-                        var rendered = Mustache.render(template, {
-                            'libraries': data
-                        });
-                        // console.log('rendered is: ', rendered);
-                        jQuery('#contacts').html(rendered);
+                show_pages();
 
-                        show_pages();
-                    }); // get template
                 setTimeout(sendResizeToParent, 2000);
 
-        }); // getJSON
+            } // success
+        }); // ajax
     });
 
 }); // document ready
