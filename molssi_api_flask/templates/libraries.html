@@ -16,9 +16,9 @@
           </div> <!-- col-->
           <div class="col-md-8 mb-2">
               <span class="bg-danger text-white mr-2 p-1 rounded">Langauges</span>
-                    {% for lang in lib.languages %}
+                    {% for lang in lib.languages -%}
                         {{ lang }}
-                    {% endfor %}
+                    {%- endfor %}
           </div> <!-- col-->
           <div class="col-md mb-2">
               <span class="bg-primary text-white mr-2 p-1 rounded">Keywords</span>{{ lib.keywords }}
@@ -29,7 +29,7 @@
 
   <div class="card-footer" style="border-radius: 0 0 15px 15px">
      <a class="card-link" href="{{ lib.official_website }}" target="_blank">Offecial Website</a>
-     <a class="card-link" href="{{ lib.source or '#' }}" target="_blank">Source code</a>
+     <a class="card-link" href="{{ lib.source or 'http://' }}" target="_blank">Source code</a>
  </div> <!-- card footer -->
 
 </section> <!-- section card -->

@@ -12,7 +12,7 @@ jQuery(document).ready(function() {
         /** show correct slice of the results based on
             current active page
         **/
-        var items = jQuery("#contacts section");
+        var items = jQuery("#results section");
         var numItems = items.length;
         var perPage = 5;
         // Only show the first `per_page` items initially.
@@ -78,7 +78,7 @@ jQuery(document).ready(function() {
             //dataType: "json", # return is not JSON
             success: function(data) {             // callback
                 console.log("Returned html data", data);
-                jQuery('#contacts').html(data);
+                jQuery('#results').html(data);
 
                 show_pages();
 
