@@ -93,21 +93,21 @@ def load_collection_from_json(filename, lib_type=None):
     with open(filename) as f:
         json_list = json.load(f)
     if lib_type == 'MM':
-        library_list = [MMLibrary(**json_record) for json_record in json_list]
+        library_list = [MMLibrary(**json_record).save(validate=False) for json_record in json_list]
     elif lib_type == 'QM':
-        library_list = [QMLibrary(**json_record) for json_record in json_list]
+        library_list = [QMLibrary(**json_record).save(validate=False) for json_record in json_list]
     else:
-        library_list = [Library(**json_record) for json_record in json_list]
+        library_list = [Library(**json_record).save(validate=False) for json_record in json_list]
 
-    Library.objects.insert(library_list)
+    # Library.objects.insert(library_list) # doesn't call override save
 
 
 # ---------------------------   Query functions  ------------------------ #
 
 def find_language(lang, verbose=False):
-    results = Library.objects(languages__in=lang)
+    results = Library.objects(languages_lower__in=lang.lower())
     if verbose:
-        print('Num of results for {} is {}'.format(lang, results.count()))
+        print('Num of results for {} is {}'.format(lang.lower(), results.count()))
         print_results(results)
     return results
 
@@ -147,7 +147,8 @@ def search_text(query, verbose=False):
 
 
 def complex_query(languages=[], domains=[], verbose=False):
-    results = Library.objects(Q(languages__in=languages) & Q(domain__in=domains))
+    languages_lower = [lang.lower() for lang in languages]
+    results = Library.objects(Q(languages_lower__in=languages_lower) & Q(domain__in=domains))
     if verbose:
         print_results(results)
 
@@ -162,13 +163,15 @@ def full_search(query='', languages=[], domains=[], verbose=False):
     """
 
     results = None
+    languages_lower = [lang.lower() for lang in languages]
 
-    if len(languages) != 0 and len(domains) != 0:
-        results = Library.objects(Q(languages__in=languages) & Q(domain__in=domains))
-    elif len(languages) != 0:
-        results = Library.objects(languages__in=languages)
+    if len(languages_lower) != 0 and len(domains) != 0:
+        results = Library.objects(Q(languages_lower__in=languages_lower) & Q(domain__in=domains))
+    elif len(languages_lower) != 0:
+        results = Library.objects(languages_lower__in=languages_lower)
     elif len(domains) != 0:
         results = Library.objects(domain__in=domains)
+    # print(results)
 
     if len(query) != 0:
         if results:
@@ -181,7 +184,7 @@ def full_search(query='', languages=[], domains=[], verbose=False):
         if results:
             results = results.order_by('name')
 
-    if len(languages) == 0 and len(domains) == 0 and len(query) == 0:  # return all libraries
+    if len(languages_lower) == 0 and len(domains) == 0 and len(query) == 0:  # return all libraries
         results = Library.objects.order_by('name')
 
     if verbose:

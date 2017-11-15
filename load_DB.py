@@ -20,13 +20,13 @@ print('Initial DB size: {}'.format(db.full_search().count()))
 for filename in MM_files:
     full_path = os.path.join(config.APPLICATION_ROOT, 'data', filename)
     print('Loading file {} in DB....'.format(full_path))
-    db.load_collection_from_json(full_path, lib_type='MM')
+    db.load_collection_from_json(full_path)
 
     print('After insertion: {}'.format(db.full_search().count()))
 
 for filename in QM_files:
     full_path = os.path.join(config.APPLICATION_ROOT, 'data', filename)
     print('Loading file {} in DB....'.format(full_path))
-    db.load_collection_from_json(full_path, lib_type='QM')
+    db.load_collection_from_json(full_path)
 
     print('After insertion: {}'.format(db.full_search().count()))

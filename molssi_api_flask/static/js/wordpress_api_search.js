@@ -77,7 +77,7 @@ jQuery(document).ready(function() {
             contentType: "application/json",
             //dataType: "json", # return is not JSON
             success: function(data) {             // callback
-                console.log("Returned html data", data);
+                //console.log("Returned html data", data);
                 jQuery('#results').html(data);
 
                 show_pages();

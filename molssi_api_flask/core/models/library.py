@@ -1,6 +1,7 @@
 import datetime
 from mongoengine import DynamicDocument, StringField, \
-                    DateTimeField, BooleanField, ListField
+                    DateTimeField, BooleanField, ListField, \
+                    URLField, EmbeddedDocumentField
 
 
 """
@@ -25,23 +26,25 @@ class Library(DynamicDocument):     # flexible schema
     date = DateTimeField()      #
     principal_contact_name = StringField()
     principal_contact_email = StringField()
-    official_website = StringField()
+    official_website = URLField()
 
     # Others
-    description = StringField()
-    long_description = StringField()
+    description = StringField(required=True, default='')
+    long_description = StringField(required=True, default='')
     comments = StringField()
     required_citation = StringField()
-    domain = StringField()      # QM, MM, QM/MM, etc..
+    domain = StringField(required=True, default='MM')      # QM, MM, QM/MM, etc..
 
     # software engineering
 
-    source = StringField()
+    source = URLField()
     executables = StringField()
     code_management = StringField()
     continuous_integration = StringField()
     tests = StringField()
     languages = ListField(StringField())  #
+    # for search efficiency, repeat in lowercase, keep original case for display
+    languages_lower = ListField(StringField())
     compilers = StringField()
 
     # Performance
@@ -63,23 +66,37 @@ class Library(DynamicDocument):     # flexible schema
     added = DateTimeField(default=datetime.datetime.now)
     is_pending = BooleanField(default=False)
 
+    # special_fields = EmbeddedDocumentField(ExtrasFieldsAbstractClass)
+
     # Use the $ prefix to set a text index
     meta = {
-        'allow_inheritance': True,
-        # 'strict': False,  # allow extra fields
-        'indexes': [{
-                'fields': ['$name', "$description", "$long_description", "domain"],
+        # 'allow_inheritance': True,
+        'strict': False,    # allow extra fields
+        'indexes': [
+            "domain",
+            {
+                'fields': ['$name', "$description", "$long_description"],
                 'default_language': "en",
                 "language_override": "en",
-        }]
+            }
+        ]
     }
+
+    def save(self, *args, **kwargs):
+        """Override save to add languages_lower"""
+        self.add_language_lower()
+        return super(Library, self).save(*args, **kwargs)
 
     def __str__(self):
         return str(self.id) + ', name: ' + self.name + ', description: ' + \
                 self.description + ', Domain: ' + self.domain
 
+    def add_language_lower(self):
+        if self.languages:
+            self.languages_lower = [lang.lower() for lang in self.languages]
 
-class QMLibrary(Library):
+
+class QMLibrary():
     """QM specific features"""
 
     basis = StringField()
@@ -104,7 +121,7 @@ class QMLibrary(Library):
     symmetry = StringField()
 
 
-class MMLibrary(Library):
+class MMLibrary():
     """MM specific features"""
 
     periodicity_0_d = StringField()
