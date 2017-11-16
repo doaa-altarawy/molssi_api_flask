@@ -13,10 +13,7 @@ from ..models import mongo_database
 def resources_website():
     """Returns the search page for the resources website"""
 
-    return render_template('wordpress_page.html',
-            WORDPRESS_DOMAIN = current_app.config['WORDPRESS_DOMAIN'],
-            API_DOMAIN = current_app.config['API_DOMAIN']
-        )
+    return render_template('wordpress_page.html')
 
 
 @main.route('/test')
