@@ -85,6 +85,7 @@ def get_connection(name='', host='localhost', port=27017, is_mock=False):
 def clear_libraries():
     """Clear Libraries Collections"""
     Library.objects().delete()
+    # db.drop_database('resources_website')
 
 
 def load_collection_from_json(filename, lib_type=None):

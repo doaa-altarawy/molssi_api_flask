@@ -1,6 +1,7 @@
 from flask import Flask, render_template, send_from_directory
 from flask_cors import CORS, cross_origin
-import molssi_api_flask.core.mongo_database as db
+# import molssi_api_flask.core.mongo_database as db
+from flask_mongoengine import MongoEngine
 
 
 app = Flask(__name__)
@@ -12,7 +13,8 @@ app.config.from_object('config')
 print(app.config['APPLICATION_ROOT'])
 
 #  MongoDB connection
-db.get_connection(host=app.config['DB_URI'])
+# db.get_connection(host=app.config['DB_URI'])
+db = MongoEngine(app)       # flask_mongoengine
 
 
 @app.route('/static/<path:path>')
