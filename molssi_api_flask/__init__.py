@@ -1,40 +1,37 @@
 from flask import Flask, render_template, send_from_directory
 from flask_cors import CORS, cross_origin
-# import molssi_api_flask.core.mongo_database as db
+from config import config
 from flask_mongoengine import MongoEngine
+from flask_mail import Mail
+import os
 
 
-app = Flask(__name__)
-CORS(app)
+mail = Mail()
+db = MongoEngine()      # flask_mongoengine
+cors = CORS()
 # cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 # For: @app.route("/api/v1/users")
-
-app.config.from_object('config')
-print(app.config['APPLICATION_ROOT'])
-
-#  MongoDB connection
-# db.get_connection(host=app.config['DB_URI'])
-db = MongoEngine(app)       # flask_mongoengine
+# bootstrap = Bootstrap()
 
 
-@app.route('/static/<path:path>')
-def send_js(path):
-    return send_from_directory('static', path)
 
 
-@app.errorhandler(404)
-def not_found(error):
-    return render_template('404.html'), 404
 
+def create_app(config_name):
+    app = Flask(__name__)
+    app.config.from_object(config[config_name])
+    print(app.config['APPLICATION_ROOT'])
 
-from molssi_api_flask.core.views import mod as core
-app.register_blueprint(core)
+    # init
+    mail.init_app(app)
+    db.init_app(app)
+    cors.init_app(app)
 
+    from .core.views import mod as core
+    app.register_blueprint(core)
 
-# app.register_blueprint(core, url_prefix='/api')
+    # from .api import api as api_blueprint
+    # app.register_blueprint(api_blueprint, url_prefix='/api/v1')
 
-# Later on you'll import the other blueprints the same way:
-#from app.comments.views import mod as commentsModule
-#from app.posts.views import mod as postsModule
-#app.register_blueprint(commentsModule)
-#app.register_blueprint(postsModule)
+    return app
+

@@ -96,3 +96,13 @@ def contact():
     #               'name': 'Doaa Altarawy',
     #               'info': 'Research Scientist at MolSSI'
     #               })
+
+
+@mod.route('/static/<path:path>')
+def send_js(path):
+    return send_from_directory('static', path)
+
+
+@mod.errorhandler(404)
+def not_found(error):
+    return render_template('404.html'), 404
