@@ -1,6 +1,6 @@
 from __future__ import print_function
 from mongoengine import connect
-from molssi_api_flask.core.models.library import Library, MMLibrary, QMLibrary
+from .library import Library, MMLibrary, QMLibrary
 from mongoengine.queryset.visitor import Q
 import json
 

@@ -1,26 +1,15 @@
-from __future__ import print_function
-from flask import Blueprint, request, render_template, flash, g, \
+from flask import request, render_template, flash, g, \
                 render_template_string, session, \
                 redirect, url_for, abort, jsonify, send_from_directory,\
                 current_app
-from molssi_api_flask.core.repository import *
 from flask_jsonpify import jsonpify
 import os
 import json
-import mongo_database as db
+from . import main
+from ..models import mongo_database
 
 
-mod = Blueprint('core', __name__)
-
-@mod.route('/')
-def index():
-    """ Returns a test homepage for the API calls"""
-
-    repository = Repository()
-    return (render_template('core/index.html', resources=repository.getResources()))
-
-
-@mod.route('/resources_website')
+@main.route('/resources_website')
 def resources_website():
     """Returns the search page for the resources website"""
 
@@ -30,13 +19,13 @@ def resources_website():
         )
 
 
-@mod.route('/test')
+@main.route('/test')
 def test():
     # return json.dumps({'msg': "Hello from MolSSI api"})
     return jsonpify({'msg': 'Hello from MolSSI api jsonpify'})
 
 
-@mod.route('/search')
+@main.route('/search')
 def search_libraries_ui():
     """Search MongoDB for the given query
        Return: HTML formatted data with the results
@@ -47,7 +36,7 @@ def search_libraries_ui():
     return render_template('libraries.html', libraries=results)
 
 
-@mod.route('/api/search')
+@main.route('/api/search')
 def search_libraries(to_json=True):
     """Search MongoDB for the given query
        Return: JSON (array of libraries)
@@ -65,7 +54,7 @@ def search_libraries(to_json=True):
     if domain is None:
         domain = []
 
-    results = db.full_search(query, languages, domain)
+    results = mongo_database.full_search(query, languages, domain)
 
     if not to_json:
         return results
@@ -77,7 +66,7 @@ def search_libraries(to_json=True):
     return json_data
 
 
-@mod.route('/contact')
+@main.route('/contact')
 def contact():
     """Return a test JSON file
     """
@@ -86,8 +75,8 @@ def contact():
     print(json_url)
     # data = json.load(open(json_url))
 
-    with mod.open_resource(json_url) as f:
-      data = json.load(f)
+    with main.open_resource(json_url) as f:
+        data = json.load(f)
 
     return jsonify(data)
 
@@ -98,11 +87,7 @@ def contact():
     #               })
 
 
-@mod.route('/static/<path:path>')
+@main.route('/static/<path:path>')
 def send_js(path):
     return send_from_directory('static', path)
 
-
-@mod.errorhandler(404)
-def not_found(error):
-    return render_template('404.html'), 404
