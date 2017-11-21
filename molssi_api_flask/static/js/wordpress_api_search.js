@@ -3,7 +3,7 @@ jQuery(document).ready(function() {
     function sendResizeToParent() {
         var cur_height = jQuery('#page_wrapper').outerHeight(true) + 100 +
             jQuery('#advancedSearch').outerHeight(true);
-        console.log("Current hight inside getJSON: ", cur_height);
+        console.log("Current hight sendResizeToParent: ", cur_height);
         var parentOrigin = window.WORDPRESS_DOMAIN;
         parent.postMessage(cur_height, parentOrigin);
     }
@@ -14,7 +14,7 @@ jQuery(document).ready(function() {
         **/
         var items = jQuery("#results section");
         var numItems = items.length;
-        var perPage = 5;
+        var perPage = 7;
         // Only show the first `per_page` items initially.
         items.slice(perPage).hide();
         jQuery('p#results_count').html(numItems + ' results found');
@@ -53,19 +53,21 @@ jQuery(document).ready(function() {
         event.preventDefault();
 
         // Get search parameters:
-        var query = $('#libraryName').val();
-        var domain = $('#domain').find(":selected").val().split(',');
+        var query_text = jQuery('#libraryName').val();
+        var domain = jQuery('#domain').find(":selected").val();
+        var price = jQuery('#price').find(":selected").val();
         var languages = [];
-        $.each($("#languages input:checked"), function(){
-            languages.push.apply(languages,$(this).val().split(','));
+        jQuery.each(jQuery("#languages input:checked"), function(){
+            languages.push.apply(languages,jQuery(this).val().split(','));
         });
-        if (languages.indexOf('Any') != -1){
-            languages = [];     // set to any langauge
+        if (languages.indexOf('') != -1){
+            languages = [];     // set to any language
         }
         var data = {
-                query: query,
-                domain: JSON.stringify(domain),
-                languages: JSON.stringify(languages)
+                query_text: query_text,  // TODO: check escaping
+                domain: domain,
+                languages: JSON.stringify(languages),
+                price: price,
             };
         console.log('Query data: ', data);
 
@@ -88,4 +90,19 @@ jQuery(document).ready(function() {
         }); // ajax
     });
 
+    jQuery('#clear_search').on('click', function (e) {
+        event.preventDefault();
+
+        jQuery('#libraryName').val('');
+        jQuery("#domain")[0].selectedIndex = 0;
+        // unselect all languages, use prop. attr is deprecated in jQuery 1.6+
+        jQuery('#languages input').prop('checked', false);
+        jQuery('#languages input:first').prop('checked', true);
+        jQuery('#price')[0].selectedIndex = 0;
+
+
+        jQuery('p#results_count').html('');
+        jQuery('#results').html('');
+        jQuery('#pagination').twbsPagination('destroy');
+    });
 }); // document ready

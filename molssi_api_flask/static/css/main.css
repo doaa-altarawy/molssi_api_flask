@@ -1,7 +1,17 @@
 body {
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Helvetica Neue', 'Helvetica', 'Open Sans', sans-serif;
     font-size: 14px;
+    color: #666666;
+
 }
-div.form-group.row {
-    margin-bottom: 0;
+/*div.form-group.row {*/
+    /*margin-bottom: 0;*/
+/*}*/
+
+.card{
+    background: #fcfcfc;
+}
+
+.ligh_yellow{
+    background: #fadea3 !important;
 }

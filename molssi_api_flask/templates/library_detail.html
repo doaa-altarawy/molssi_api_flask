@@ -1,5 +1,9 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
 
-{% for lib in libraries %}
+{% block title %}Library Detail{% endblock %}
+
+{% block page_content %}
 <section class="card mb-3 card-outline-danger" style="border-radius: 15px">
     <!-- <img class="img-fluid w-25" src="http://localhost:5000/static/images/molssi.jpg" /> -->
     <div class="card-block">
@@ -50,4 +54,4 @@
     </div> <!-- card footer -->
 
     </section> <!-- section card -->
-{% endfor %}
+{% endblock %}

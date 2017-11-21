@@ -1,6 +1,6 @@
 from __future__ import print_function
 from mongoengine import connect
-from .library import Library, MMLibrary, QMLibrary
+from .library import Library, QMFeatures, MMFeatures
 from mongoengine.queryset.visitor import Q
 import json
 
@@ -93,12 +93,8 @@ def load_collection_from_json(filename, lib_type=None):
 
     with open(filename) as f:
         json_list = json.load(f)
-    if lib_type == 'MM':
-        library_list = [MMLibrary(**json_record).save(validate=False) for json_record in json_list]
-    elif lib_type == 'QM':
-        library_list = [QMLibrary(**json_record).save(validate=False) for json_record in json_list]
-    else:
-        library_list = [Library(**json_record).save(validate=False) for json_record in json_list]
+
+    [Library(**json_record).save(validate=False) for json_record in json_list]
 
     # Library.objects.insert(library_list) # doesn't call override save
 
@@ -156,7 +152,7 @@ def complex_query(languages=[], domains=[], verbose=False):
     return results
 
 
-def full_search(query='', languages=[], domains=[], verbose=False):
+def full_search(verbose=False, **kwargs):
     """Search the libraries collection using joint search of multiple fields
         any empty field will not be searched.
         if all fields are empty, then all documents are returned
@@ -164,29 +160,51 @@ def full_search(query='', languages=[], domains=[], verbose=False):
     """
 
     results = None
-    languages_lower = [lang.lower() for lang in languages]
+    query = {}
 
-    if len(languages_lower) != 0 and len(domains) != 0:
-        results = Library.objects(Q(languages_lower__in=languages_lower) & Q(domain__in=domains))
-    elif len(languages_lower) != 0:
-        results = Library.objects(languages_lower__in=languages_lower)
-    elif len(domains) != 0:
-        results = Library.objects(domain__in=domains)
+    query_text = kwargs.pop('query_text', '')
+
+    languages = json.loads(kwargs.pop('languages', ''))
+    if len(languages) != 0:
+        languages_lower = [lang.lower() for lang in languages]
+        query['languages_lower__in'] = languages_lower
+
+    price = kwargs.pop('price', '')
+    if price == 'free':
+        query['price__icontains'] = price
+    elif price == 'non-free':
+        query['price__nin'] = [price]
+
+    # add the rest of the keywords
+    for key, val in kwargs.items():
+        if val:
+            query[key] = val
+
+    print('Mongo query:', query)
+    results = Library.objects(**query)
+    print(len(results))
+
+    # if len(languages_lower) != 0 and len(domain) != 0:
+    #     results = Library.objects(Q(languages_lower__in=languages_lower) & Q(domain__in=domain))
+    # elif len(languages_lower) != 0:
+    #     results = Library.objects(languages_lower__in=languages_lower)
+    # elif len(domain) != 0:
+    #     results = Library.objects(domain__in=domain)
     # print(results)
 
-    if len(query) != 0:
+    if len(query_text) != 0:
         if results:
-            results = results.search_text(query)
+            results = results.search_text(query_text)
         else:
-            results = Library.objects.search_text(query)
+            results = Library.objects.search_text(query_text)
         if results:
             results = results.order_by('$text_score')
     else:
         if results:
             results = results.order_by('name')
 
-    if len(languages_lower) == 0 and len(domains) == 0 and len(query) == 0:  # return all libraries
-        results = Library.objects.order_by('name')
+    # if len(languages_lower) == 0 and len(domain) == 0 and len(query_text) == 0:  # return all libraries
+    #     results = Library.objects.order_by('name')
 
     if verbose:
         print_results(results)
@@ -203,6 +221,13 @@ def get_json(verbose=False):
 
     return json_data
 
+
+def get_library(lib_id):
+    libs = Library.objects(id=lib_id)
+    if libs:    # return first result
+        return libs[0]
+    else:
+        return None
 # ----------------------- Printing and Utils ------------------------- #
 
 
@@ -235,3 +260,7 @@ def print_all():
     all_libs = Library.objects
     print('Currently in DB: ', all_libs.count())
     print_results(all_libs)
+
+
+def get_DB_size():
+    return Library.objects.count()

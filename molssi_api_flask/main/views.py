@@ -7,6 +7,7 @@ import os
 import json
 from . import main
 from ..models import mongo_database
+from .forms import LibraryForm
 
 
 @main.route('/resources_website')
@@ -19,7 +20,7 @@ def resources_website():
 @main.route('/test')
 def test():
     # return json.dumps({'msg': "Hello from MolSSI api"})
-    return jsonpify({'msg': 'Hello from MolSSI api jsonpify'})
+    return jsonpify({'msg': 'Hello from MolSSI api'})
 
 
 @main.route('/search')
@@ -39,19 +40,18 @@ def search_libraries(to_json=True):
        Return: JSON (array of libraries)
     """
 
-    query = request.args.get('query')
-    if query is None:
-        query = ''
-    languages = json.loads(request.args.get('languages'))
-    if languages is None:
-        languages = []
+    # query_text = request.args.get('query_text', '', type=str)
 
-    domain = json.loads(request.args.get('domain'))
-    print('Search params: {}, {}, {}'.format(query, languages, domain))
-    if domain is None:
-        domain = []
+    # languages = json.loads(request.args.get('languages', '[]'))
+    # if languages is None:
+    #     languages = []
+    #
+    # domain = request.args.pop('domain', '')
+    # price = request.args.pop('price', '', type=str)
 
-    results = mongo_database.full_search(query, languages, domain)
+    print('Search params: {}'.format(request.args.to_dict()))
+
+    results = mongo_database.full_search(**request.args.to_dict())
 
     if not to_json:
         return results
@@ -61,6 +61,27 @@ def search_libraries(to_json=True):
     else:
         json_data = jsonify('')
     return json_data
+
+
+@main.route('/library_detail/<id>', methods=['GET'])
+def library_detail(id):
+    print('Find library with ID: ', id)
+    library = mongo_database.get_library(id)
+    print("This is library: ", library.name)
+    if library is None:
+        flash("Library not found")
+
+    return render_template('library_detail.html', lib=library)
+
+
+@main.route('/library/<id>', methods=['GET', 'POST'])
+def library_form(id):
+    library = mongo_database.get_library(id)
+    print("This is library: ", library.name)
+
+    form = LibraryForm()
+
+    return render_template('library_form.html', form=form)
 
 
 @main.route('/contact')

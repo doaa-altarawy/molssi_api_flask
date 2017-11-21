@@ -4,9 +4,8 @@
 
     <!-- Text Search input-->
     <div class="form-group row mb-0">
-      <label class="control-label col-md-2 form-control-label text-md-right" for="libraryName"></label>
-      <div class="form-group input-group col-md-7">
-          <input id="libraryName" type="text" class="form-control" name="libraryName" placeholder="Enter keywords..." >
+      <div class="form-group input-group col-md-8 mx-auto">
+          <input id="libraryName" type="text" class="form-control" name="libraryName" placeholder="Search library description..." >
           <span class="input-group-btn">
               <button id='search_quick' class="btn-sm btn-primary active">Search <i class="fa fa-search"></i></button>
           </span>
@@ -15,7 +14,7 @@
                   <i class="fa fa-caret-down"></i>
               </button>
           </span>
-          <!-- <span class="text-muted">Type the name or keywords of the library</span> -->
+          <span class=""><button id="clear_search" type="button" class="btn btn-link">Clear Search</button></span>
       </div>
     </div> <!-- form group -->
 
@@ -23,27 +22,27 @@
 
     <div id="advancedSearch" class="collapse">
 
-        <!-- dropdown -->
+        <!-- Domain dropdown -->
         <div class="form-group row">
           <label class="control-label col-md-2 col-form-label text-md-right" for="domain">Domain</label>
 
             <div class="form-check col-md-5">
                 <select id="domain" name="domain" class="form-control">
-                  <option value="QM,MM">Any</option>
+                  <option value="">Any</option>
                   <option value="QM">Quantum Mechanics</option>
                   <option value="MM">Molecular Mechanics</option>
                 </select>
             </div>
         </div> <!-- form-group -->
 
-        <!-- radio inline -->
+        <!-- Languages radio -->
         <div class="form-group row">
             <label class="control-label d-block col-md-2 col-form-label text-md-right">Languages</label>
 
             <div id='languages' class="form-group col-md-8">
                 <div class="form-check form-check-inline">
                     <label class="form-check-label">
-                        <input class="form-check-input" type="checkbox" value="Any" checked> Any
+                        <input class="form-check-input" type="checkbox" value="" checked> Any
                     </label>
                 </div>
                 <div class="form-check form-check-inline">
@@ -68,6 +67,21 @@
                 </div> <!-- form check -->
             </div> <!-- form group -->
         </div> <!-- form-group -->
+
+
+        <!-- License -->
+        <div class="form-group row">
+          <label class="control-label col-md-2 col-form-label text-md-right" for="price">Cost</label>
+
+            <div class="form-check col-md-5">
+                <select id="price" name="price" class="form-control">
+                  <option value="">Any</option>
+                  <option value="free">Free</option>
+                  <option value="non-free">Commercial</option>
+                </select>
+            </div>
+        </div> <!-- form-group -->
+
 
         <!-- Select Basic -->
         <!-- <div class="form-group row">

@@ -1,42 +1,19 @@
-<html>
+{% extends "base.html" %}
 
-<head>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css' ) }}" />
+{% block title %}{{title|default}}{% endblock title %}
 
-</head>
+{% block page_content -%}
+    <div id="page_wrapper">
 
-<body>
+        {% include 'search_form.html' %}
 
-<script type="text/javascript">
-    window.WORDPRESS_DOMAIN = '{{ config.WORDPRESS_DOMAIN }}';
-    window.API_DOMAIN = '{{ config.API_DOMAIN }}';
-</script>
+        <div class="container py-0">
+            <p id="results_count" class="font-weight-bold"></p>
+        </div>
 
-<div id="page_wrapper">
-
-    {% include 'search_form.html' %}
-
-    <div class="container py-0">
-        <p id="results_count" class="font-weight-bold"></p>
-    </div>
-
-    <div class="container p-0">
-        <ul id='pagination' class="pagination-md pt-3 justify-content-center"></ul>
-        <div id='results'></div>
-    </div>
-</div> <!-- page warapper -->
-
-</body>
-
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twbs-pagination/1.4.1/jquery.twbsPagination.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"></script>
-
-<script type="text/javascript" src="{{ url_for('static', filename='js/wordpress_api_search.js' ) }}"></script>
-
-</html>
+        <div class="container p-0">
+            <ul id='pagination' class="pagination-md pt-3 justify-content-center"></ul>
+            <div id='results'></div>
+        </div>
+    </div> <!-- page warapper -->
+{%- endblock page_content %}
