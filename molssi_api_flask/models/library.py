@@ -14,7 +14,90 @@ Field Options:
 """
 
 
-class Library(db.DynamicDocument):     # flexible schema
+class QMFeatures(db.EmbeddedDocument):
+    """QM specific features"""
+
+    basis = db.StringField()
+    coverage = db.StringField()
+    other = db.StringField()
+
+    tags = db.ListField(db.StringField())
+
+    # tags
+    TAG_NAMES = [
+                "semiempirical",  # fff
+                "dft",
+                "dft_u",
+                "hybrid",
+                "rohf",
+                "uhf",
+                "mcscf",
+                "ci",
+                "mp_or_mbpt",
+                "cc",
+                "rpa",
+                "gf",
+                "tddft",
+                "dmf",
+                "fequencies_phonons",
+                "nmr",
+                "symmetry"
+    ]
+
+    def add_tags(self, kwargs):
+        self.tags = []
+        for tag in self.TAG_NAMES:
+            if tag in kwargs:
+                tag_val = kwargs.pop(tag, '')
+                if tag_val and tag_val.lower() not in ['', 'no', 'false']:
+                    self.tags.append(tag)
+
+
+class MMFeatures(db.EmbeddedDocument):
+    """MM specific features"""
+
+    ensembles = db.StringField()
+    free_energy_methods = db.StringField()
+    advanced_sampling_methods = db.StringField()
+
+    forcefields = db.StringField()
+    file_formats = db.StringField()
+    qm_mm = db.StringField()
+
+    tags = db.ListField(db.StringField())
+
+    # tags
+    TAG_NAMES = [
+                "periodicity_0_d",
+                "periodicity_1_and_2_d",
+                "periodicity_3_d",
+                "constraints",
+                "rigid_bodies",
+                "restraints",
+                "monte_carlo",
+                "rnemd",     # RNMED
+                "analysis_tools",
+                "building_tools",
+                "implicit_solvent",
+
+                # forcefield
+                "class_i",
+                "class_ii",
+                "polarizable",
+                "reactive",
+                "inorganic_metals"
+    ]
+
+    def add_tags(self, kwargs):
+        self.tags = []
+        for tag in self.TAG_NAMES:
+            if tag in kwargs:
+                tag_val = kwargs.pop(tag, '')
+                if tag_val and tag_val.lower() not in ['', 'no', 'false']:
+                    self.tags.append(tag)
+
+
+class Library(db.DynamicDocument):     # flexible schema, can have extra attributes
 
     # availability
     name = db.StringField(required=True)
@@ -22,7 +105,7 @@ class Library(db.DynamicDocument):     # flexible schema
     license = db.StringField()
     price = db.StringField()
     latest_version = db.StringField()
-    date = db.DateTimeField()      #
+    date = db.DateTimeField()                   # Date of latest version
     principal_contact_name = db.StringField()
     principal_contact_email = db.StringField()
     official_website = db.URLField()
@@ -65,7 +148,9 @@ class Library(db.DynamicDocument):     # flexible schema
     added = db.DateTimeField(default=datetime.datetime.now)
     is_pending = db.BooleanField(default=False)
 
-    # special_fields = EmbeddedDocumentField(ExtrasFieldsAbstractClass)
+    mm_features = db.EmbeddedDocumentField(MMFeatures)
+
+    qm_features = db.EmbeddedDocumentField(QMFeatures)
 
     # Use the $ prefix to set a text index
     meta = {
@@ -81,7 +166,7 @@ class Library(db.DynamicDocument):     # flexible schema
         ]
     }
 
-    def __unicode__(self):  # ?
+    def __unicode__(self):
         return self.name
 
     @property
@@ -101,57 +186,42 @@ class Library(db.DynamicDocument):     # flexible schema
         if self.languages:
             self.languages_lower = [lang.lower() for lang in self.languages]
 
-
-class QMLibrary():
-    """QM specific features"""
-
-    basis = db.StringField()
-    semiempirical = db.StringField()
-    dft = db.StringField()
-    dft_u = db.StringField()
-    hybrid = db.StringField()
-    rohf = db.StringField()
-    uhf = db.StringField()
-    mcscf = db.StringField()
-    ci = db.StringField()
-    mp_or_mbpt = db.StringField()
-    cc = db.StringField()
-    rpa = db.StringField()
-    gf = db.StringField()
-    tddft = db.StringField()
-    dmf = db.StringField()
-    coverage = db.StringField()
-    fequencies_phonons = db.StringField()
-    nmr = db.StringField()
-    other = db.StringField()
-    symmetry = db.StringField()
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-class MMLibrary():
-    """MM specific features"""
+def props(cls):
+    all_props = [i for i in cls.__dict__.keys() if i[:1] != '_']
+    all_props.remove('tags')
+    all_props.remove('TAG_NAMES')
+    all_props.remove('add_tags')
+    return all_props
 
-    periodicity_0_d = db.StringField()
-    periodicity_1_and_2_d = db.StringField()
-    periodicity_3_d = db.StringField()
-    constraints = db.StringField()
-    rigid_bodies = db.StringField()
-    restraints = db.StringField()
-    ensembles = db.StringField()
-    monte_carlo = db.StringField()
-    free_energy_methods = db.StringField()
-    advanced_sampling_methods = db.StringField()
-    rnemd = db.StringField()
-    analysis_tools = db.StringField()
-    building_tools = db.StringField()
-    implicit_solvent = db.StringField()
 
-    # Forcefields
+def set_props_values(cls, obj, prop_values):
+    for prop in props(cls):
+            if prop in prop_values:
+                tag_val = prop_values.pop(prop, '')
+                if tag_val:  # and tag_val.lower() not in ['', 'no', 'false']:
+                    setattr(obj, prop, tag_val)
 
-    class_i = db.StringField()
-    class_ii = db.StringField()
-    polarizable = db.StringField()
-    reactive = db.StringField()
-    inorganic_metals = db.StringField()
-    forcefields = db.StringField()
-    file_formats = db.StringField()
-    qm_mm = db.StringField()
+
+def create_library(lib_type='', **kwargs):
+    """Create a Library object from a set of params
+       A Builder Design Pattern"""
+
+    if lib_type == 'MM':
+        mm_features = MMFeatures()
+        set_props_values(MMFeatures, mm_features, kwargs)
+        mm_features.add_tags(kwargs)
+        lib = Library(mm_features=mm_features, **kwargs)
+
+    elif lib_type == 'QM':
+        qm_features = QMFeatures()
+        set_props_values(QMFeatures, qm_features, kwargs)
+        qm_features.add_tags(kwargs)
+        lib = Library(qm_features=qm_features, **kwargs)
+
+    else:
+        lib = Library(**kwargs)
+
+    return lib

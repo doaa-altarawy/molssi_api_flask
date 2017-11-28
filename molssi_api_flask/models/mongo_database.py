@@ -1,6 +1,6 @@
 from __future__ import print_function
 from mongoengine import connect
-from .library import Library, QMFeatures, MMFeatures
+from .library import Library, QMFeatures, MMFeatures, create_library
 from mongoengine.queryset.visitor import Q
 import json
 
@@ -94,7 +94,11 @@ def load_collection_from_json(filename, lib_type=None):
     with open(filename) as f:
         json_list = json.load(f)
 
-    [Library(**json_record).save(validate=False) for json_record in json_list]
+    for json_record in json_list:
+        library = create_library(lib_type, **json_record)
+        library.save(validate=False)
+
+    # [Library(**json_record).save(validate=False) for json_record in json_list]
 
     # Library.objects.insert(library_list) # doesn't call override save
 
@@ -180,9 +184,9 @@ def full_search(verbose=False, **kwargs):
         if val:
             query[key] = val
 
-    print('Mongo query:', query)
+    print('MongoDB query:', query)
     results = Library.objects(**query)
-    print(len(results))
+    print('Results length: ', len(results))
 
     # if len(languages_lower) != 0 and len(domain) != 0:
     #     results = Library.objects(Q(languages_lower__in=languages_lower) & Q(domain__in=domain))

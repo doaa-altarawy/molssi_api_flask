@@ -5,18 +5,18 @@
     <div class="card-block">
         <h3 class="card-title text-danger"><a href="/library_detail/{{ lib.id }}"> {{ lib.name }}</a></h3>
         <p class="card-text text-justify my-md-4">
-        {% if lib.log_description -%}
-            {{ lib.long_description | safe }}
-        {% else %}
+        {% if lib.description -%}
             {{ lib.description | safe }}
+        {% else %}
+            {{ lib.long_description | safe }}
         {% endif %}
         </p>
 
-    <div class="row mb-3">
+    <div class="row mb-4">
             <div class="col-md-6"><b>Owner: </b> {{ lib.owner }}</div>
 
             <div class="col-md-6">
-                <b>License: </b> {{ lib.license }}
+                <b>License: </b> {{ lib.license or 'unknown' }}
                 {% if lib.price %} ({{ lib.price }}){% endif %}
             </div>
 
@@ -24,21 +24,59 @@
                 <b>Latest version: </b> {{ lib.latest_version or "unkown" }}
                 {% if lib.date %} ({{ lib.date }})   {% endif %}
             </div>
+
+            <div class="col-md-6">
+                <b>Documentation: </b>
+                {% if lib.documentation %} <a class="card-link" href="{{ lib.documentation }}" target="_blank">here</a>
+                {% endif %}
+            </div>
     </div>
 
-    <div class="row">
-      <div class="col-md-4 mb-2">
+    <div class="row mb-2">
+        <div class="col-md-12">
           <span class="bg-inverse text-white mr-2 p-1 rounded">Domain</span>{{ lib.domain }}
-      </div> <!-- col-->
-      <div class="col-md-8 mb-2">
+        </div> <!-- col-->
+    </div>
+    <!-- MM -->
+    {%  if lib.mm_features %}
+    <div class="row mb-4">
+         <div class="col-md-6"><b>Ensembles: </b> {{ lib.mm_features.ensembles or '' }}</div>
+         <div class="col-md-6"><b>Free Energy Methods: </b> {{ lib.mm_features.free_energy_methods or '' }}</div>
+         <div class="col-md-6"><b>Advanced Sampling Methods: </b> {{ lib.mm_features.advanced_sampling_methods or '' }}</div>
+         <div class="col-md-6"><b>Forcefields: </b> {{ lib.mm_features.forcefields or '' }}</div>
+         <div class="col-md-6"><b>File Formats: </b> {{ lib.mm_features.file_formats or '' }}</div>
+
+        <div class="col-md-6"><b>QM/MM: </b> {{ lib.qm_mm or '' }}</div>
+    </div>
+    {% endif %}
+
+
+    <!-- QM -->
+    {%  if lib.qm_features %}
+    <div class="row mb-4">
+         <div class="col-md-6"><b>Basis: </b> {{ lib.qm_features.basis or ''}}</div>
+         <div class="col-md-6"><b>Coverage: </b> {{ lib.qm_features.coverage or ''}}</div>
+         <div class="col-md-6"><b>Other: </b> {{ lib.qm_features.other or '' }}</div>
+    </div>
+    {% endif %}
+
+
+    <div class="row">
+      <div class="col-md-12 mb-3">
           <span class="bg-danger text-white mr-2 p-1 rounded">Langauges</span>
                 {% for lang in lib.languages -%}
                     {{ lang + " " }}
                 {%- endfor %}
       </div> <!-- col-->
 
-      <div class="col-md mb-2">
-          <span class="bg-primary text-white mr-2 p-1 rounded">Keywords</span>{{ lib.keywords }}
+      <div class="col-md mb-3">
+          <span class="bg-primary text-white mr-2 p-1 rounded"> Tags </span>
+          {% for tag in lib.qm_features.tags -%}
+                    {{ tag + ", " }}
+          {%- endfor %}
+         {% for tag in lib.mm_features.tags -%}
+                    {{ tag + ", " }}
+          {%- endfor %}
       </div> <!-- col-->
     </div> <!-- row -->
 
