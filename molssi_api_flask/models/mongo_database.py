@@ -177,7 +177,10 @@ def full_search(verbose=False, **kwargs):
     if price == 'free':
         query['price__icontains'] = price
     elif price == 'non-free':
-        query['price__nin'] = [price]
+        query['price__nin'] = ['free']
+        query['price__exists'] = True
+    elif price == 'unknown':
+        query['price__exists'] = False
 
     # add the rest of the keywords
     for key, val in kwargs.items():
