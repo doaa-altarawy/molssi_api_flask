@@ -4,92 +4,225 @@
 {% block title %}Library Detail{% endblock %}
 
 {% block page_content %}
-<section class="card mb-3 card-outline-danger" style="border-radius: 15px">
+<div class="container mb-3 border border-secondary" style="border-radius: 15px; max-width: 80%">
     <!-- <img class="img-fluid w-25" src="http://localhost:5000/static/images/molssi.jpg" /> -->
-    <div class="card-block">
-        <h3 class="card-title text-danger"><a href="/library_detail/{{ lib.id }}"> {{ lib.name }}</a></h3>
-        <p class="card-text text-justify my-md-4">
+    <div>
+        <h3 class="text-danger">{{ lib.name }}</h3>
+        <p class="text-justify my-md-4">
         {% if lib.long_description -%}
             {{ lib.long_description | safe }}
         {% else %}
             {{ lib.description | safe }}
         {% endif %}
         </p>
+    </div>
 
-    <div class="row mb-4">
-            <div class="col-md-6"><b>Owner: </b> {{ lib.owner }}</div>
 
-            <div class="col-md-6">
-                <b>License: </b> {{ lib.license or 'unknown' }}
-                {% if lib.price %} ({{ lib.price }}){% endif %}
-            </div>
+    <!-- Availability -->
+    <div class="card mb-3" data-toggle="collapse" >
+        <div class="card-header card-header" role="tab" id="heading1">
+            <h6 class="mb-0"><a data-toggle="collapse" href="#availability" aria-expanded="true" aria-controls="availability">
+              Availability
+            </a></h6>
+        </div>
 
-            <div class="col-md-6">
-                <b>Latest version: </b> {{ lib.latest_version or "unkown" }}
+        <div id="availability" class="collapse show" role="tabpanel" aria-labelledby="heading1">
+        <div class="card-block">
+        <dl class="row">
+            <dt class="col-sm-2">Owner:</dt>
+            <dd class="col-sm-4"> {{ lib.owner }}</dd>
+
+            <dt class="col-sm-2">Latest version:</dt>
+            <dd class="col-sm-4">    {{ lib.latest_version or "unkown" }}
                 {% if lib.date %} ({{ lib.date }})   {% endif %}
-            </div>
+            </dd>
 
-            <div class="col-md-6">
-                <b>Documentation: </b>
-                {% if lib.documentation %} <a class="card-link" href="{{ lib.documentation }}" target="_blank">here</a>
+            <dt class="col-sm-2">License: </dt>
+            <dd class="col-sm-10">
+                {{ lib.license or 'unknown' }} {% if lib.price %} {{ ' (' + lib.price + ')'}}
                 {% endif %}
-            </div>
+            </dd>
+
+            <dt class="col-sm-2">Principal Contact: </dt>
+            <dd class="col-sm-10">
+                {{ lib.principal_contact_name or '' }}
+                {% if lib.principal_contact_email %}
+                {{ ' (' + lib.principal_contact_email + ')' }}
+                {% endif %}
+            </dd>
+        </dl>
+        </div>
+        <div class="card-footer">
+            <a class="card-link" href="{{ lib.official_website }}" target="_blank">Offecial Website</a>
+            <a class="card-link" href="{{ lib.source or 'http://' }}" target="_blank">Source code</a>
+        </div> <!-- card footer -->
+        </div>
     </div>
 
-    <div class="row mb-2">
-        <div class="col-md-12">
-          <span class="bg-inverse text-white mr-2 p-1 rounded">Domain</span>{{ lib.domain }}
-        </div> <!-- col-->
-    </div>
-    <!-- MM -->
-    {%  if lib.mm_features %}
-    <div class="row mb-4">
-         <div class="col-md-6"><b>Ensembles: </b> {{ lib.mm_features.ensembles or '' }}</div>
-         <div class="col-md-6"><b>Free Energy Methods: </b> {{ lib.mm_features.free_energy_methods or '' }}</div>
-         <div class="col-md-6"><b>Advanced Sampling Methods: </b> {{ lib.mm_features.advanced_sampling_methods or '' }}</div>
-         <div class="col-md-6"><b>Forcefields: </b> {{ lib.mm_features.forcefields or '' }}</div>
-         <div class="col-md-6"><b>File Formats: </b> {{ lib.mm_features.file_formats or '' }}</div>
+    <!-- Domain Features -->
+    <div class="card mb-3" data-toggle="collapse">
+        <div class="card-header card-header-yellow" role="tab" id="heading2">
+            <h6 class="mb-0"><a data-toggle="collapse" href="#features" aria-expanded="true" aria-controls="features">
+              Domain Features
+            </a></h6>
+        </div>
 
-        <div class="col-md-6"><b>QM/MM: </b> {{ lib.qm_mm or '' }}</div>
-    </div>
-    {% endif %}
+        <div id="features" class="collapse show" role="tabpanel" aria-labelledby="heading2">
+        <div class="card-block">
+            <!-- MM -->
+            {%  if lib.mm_features %}
+            <dl class="row mb-3">
+                <dt class="col-sm-4">Ensembles: </dt>
+                <dd class="col-sm-8">{{ lib.mm_features.ensembles or '' }}</dd>
+                <dt class="col-sm-4">QM/MM: </dt>
+                <dd class="col-sm-8">{{ lib.qm_mm or '' }}</dd>
+                <dt class="col-sm-4">Free Energy Methods: </dt>
+                <dd class="col-sm-8">{{ lib.mm_features.free_energy_methods or '' }}</dd>
+                <dt class="col-sm-4">Advanced Sampling Methods: </dt>
+                <dd class="col-sm-8">{{ lib.mm_features.advanced_sampling_methods or '' }}</dd>
+                <dt class="col-sm-4">Forcefields: </dt>
+                <dd class="col-sm-8">{{ lib.mm_features.forcefields or '' }}</dd>
+                <dt class="col-sm-4">File Formats: </dt>
+                <dd class="col-sm-8">{{ lib.mm_features.file_formats or '' }}</dd>
+
+            </dl>
+            {% endif %}
 
 
-    <!-- QM -->
-    {%  if lib.qm_features %}
-    <div class="row mb-4">
-         <div class="col-md-6"><b>Basis: </b> {{ lib.qm_features.basis or ''}}</div>
-         <div class="col-md-6"><b>Coverage: </b> {{ lib.qm_features.coverage or ''}}</div>
-         <div class="col-md-6"><b>Other: </b> {{ lib.qm_features.other or '' }}</div>
-    </div>
-    {% endif %}
+            <!-- QM -->
+            {%  if lib.qm_features %}
+            <dl class="row mb-3">
+                <dt class="col-sm-2">Basis: </dt>
+                <dd class="col-sm-4"> {{ lib.qm_features.basis or ''}}</dd>
+                <dt class="col-sm-2">Coverage: </dt>
+                <dd class="col-sm-4"> {{ lib.qm_features.coverage or ''}}</dd>
+                <dt class="col-sm-2">Other: </dt>
+                <dd>{{ lib.qm_features.other or '' }}</dd>
+            </dl>
+            {% endif %}
 
 
-    <div class="row">
-      <div class="col-md-12 mb-3">
-          <span class="bg-danger text-white mr-2 p-1 rounded">Langauges</span>
-                {% for lang in lib.languages -%}
-                    {{ lang + " " }}
+            <div>
+                <span class="bg-primary text-white mr-3 p-1 rounded"> Tags </span>
+                <span class="badge badge-pill badge-primary"> Tags2 </span>
+                {% for tag in lib.qm_features.tags -%}
+                    <mark>{{ tag | upper}}</mark> &nbsp;
                 {%- endfor %}
-      </div> <!-- col-->
+                {% for tag in lib.mm_features.tags -%}
+                    <mark>{{ tag | upper }}</mark> &nbsp;
+                {%- endfor %}
+            </div>
+        </div>
+        </div>
+    </div> <!-- end Domain Features -->
 
-      <div class="col-md mb-3">
-          <span class="bg-primary text-white mr-2 p-1 rounded"> Tags </span>
-          {% for tag in lib.qm_features.tags -%}
-                    {{ tag + ", " }}
-          {%- endfor %}
-         {% for tag in lib.mm_features.tags -%}
-                    {{ tag + ", " }}
-          {%- endfor %}
-      </div> <!-- col-->
-    </div> <!-- row -->
 
-    </div><!-- card block -->
 
-    <div class="card-footer" style="border-radius: 0 0 15px 15px">
-     <a class="card-link" href="{{ lib.official_website }}" target="_blank">Offecial Website</a>
-     <a class="card-link" href="{{ lib.source or 'http://' }}" target="_blank">Source code</a>
-    </div> <!-- card footer -->
 
-    </section> <!-- section card -->
+
+    <!-- Performance -->
+    <div class="card mb-3" data-toggle="collapse">
+        <div class="card-header card-header-blue" role="tab" id="heading3">
+            <h6 class="mb-0"><a data-toggle="collapse" href="#performance" aria-expanded="true" aria-controls="performance">
+              Performance
+            </a></h6>
+        </div>
+
+        <div id="performance" class="collapse show" role="tabpanel" aria-labelledby="heading3">
+        <div class="card-block">
+            <dl class="row mb-0">
+                <dt class="col-sm-2">Parallel:</dt> <dd class="col-sm-10">{{ lib.parallel or ''}}</dd>
+                <dt class="col-sm-2">GPU: </dt> <dd class="col-sm-10">{{ lib.gpu or ''}}</dd>
+                <dt class="col-sm-2">KNL: </dt> <dd class="col-sm-10">{{ lib.knl or '' }}</dd>
+            </dl>
+        </div>
+        </div>
+    </div> <!-- SE card -->
+
+
+
+
+    <!-- Support -->
+    <div class="card mb-3" data-toggle="collapse">
+        <div class="card-header card-header-green" role="tab" id="heading4">
+            <h6 class="mb-0"><a data-toggle="collapse" href="#support" aria-expanded="true" aria-controls="support">
+              Support
+            </a></h6>
+        </div>
+
+        <div id="support" class="collapse show" role="tabpanel" aria-labelledby="heading4">
+        <div class="card-block">
+            <dl class="row mb-0">
+                <dt class="col-sm-2">Support Line</dt>
+                <dd class="col-sm-4">{{ lib.support_line | urlize(40, true, '_blank') or 'unknown' }} </dd>
+                <dt class="col-sm-2">Documentation</dt>
+                <dd class="col-sm-4">{{ lib.documentation | urlize(40, true, '_blank') or 'unknown' }} </dd>
+                <dt class="col-sm-2">Tutorials</dt>
+                <dd class="col-sm-4">{{ lib.tutorials or 'unknown' }} </dd>
+                <dt class="col-sm-2">Wiki</dt>
+                <dd class="col-sm-4">{{ lib.wiki | urlize(40, true, '_blank') or 'unknown' }} </dd>
+                <dt class="col-sm-2">Forum</dt>
+                <dd class="col-sm-4">{{ lib.forum | urlize(40, true, '_blank') or 'unknown' }} </dd>
+                <dt class="col-sm-2">Mail List</dt>
+                <dd class="col-sm-4">{{ lib.mail_list | urlize(40, true, '_blank') or 'unknown' }} </dd>
+            </dl>
+        </div>
+        </div>
+    </div> <!-- SE card -->
+
+
+    <!-- SE -->
+    <div class="card mb-3" data-toggle="collapse">
+        <div class="card-header card-header-purple" role="tab" id="heading5">
+            <h6 class="mb-0"><a data-toggle="collapse" href="#se" aria-expanded="true" aria-controls="se">
+              Software Engineering
+            </a></h6>
+        </div>
+
+        <div id="se" class="collapse show" role="tabpanel" aria-labelledby="heading5">
+        <div class="card-block">
+            <dl class="row mb-0">
+                <dt class="col-sm-2">Langauges</dt>
+                <dd class="col-sm-4">
+                    {% for lang in lib.languages -%}
+                        {{ lang + " " }}
+                    {%- endfor %}
+                </dd>
+                <dt class="col-sm-2">Source Code:</dt>
+                <dd class="col-sm-4">{{ lib.source | urlize(40, true, '_blank') or 'unknown' }}</dd>
+
+                <dt class="col-sm-2">Code Management</dt>
+                <dd class="col-sm-4">{{ lib.code_management or 'unknown' }} </dd>
+
+                <dt class="col-sm-2">Continuous Integration</dt>
+                <dd class="col-sm-4">{{ lib.continuous_integration or 'unknown' }} </dd>
+                <dt class="col-sm-2">Executables</dt>
+                <dd class="col-sm-4">{{ lib.excutables or 'unknown' }} </dd>
+                <dt class="col-sm-2">Tests</dt>
+                <dd class="col-sm-4">{{ lib.tests or 'unknown' }} </dd>
+                <dt class="col-sm-2">Compilers</dt>
+                <dd class="col-sm-4">{{ lib.compilers or 'unknown' }} </dd>
+            </dl>
+        </div>
+        </div>
+    </div> <!-- SE card -->
+
+    <div>
+        <hr/>
+        <a href="javascript:window.history.back()" target="_top" class="card-link">
+            <h5 class="d-inline-block"><i class="fa fa-arrow-left" aria-hidden="true"></i> Back</h5>
+        </a>
+    </div>
+
+
+</div> <!-- container library_details  -->
 {% endblock %}
+
+{% block scripts %}
+{{ super() }}
+    <script type="application/javascript">
+        jQuery(document).ready(function() {
+            setTimeout(window.sendResizeToParent, 2000);
+        });
+    </script>
+{% endblock scripts%}

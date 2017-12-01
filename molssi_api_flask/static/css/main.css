@@ -8,10 +8,63 @@ body {
     /*margin-bottom: 0;*/
 /*}*/
 
-.card{
-    background: #fcfcfc;
+/*.card{*/
+    /*background: #fcfcfc;*/
+/*}*/
+
+
+.card-header-sm {
+    min-height: 40px;
 }
 
-.ligh_yellow{
-    background: #fadea3 !important;
+.light-green {
+    color: #9C3;
+}
+
+/*.card .card-header {*/
+    /*background: #fbf6ee;*/
+/*}*/
+
+.card-header-yellow {
+    background: #fbf6ee  !important;
+}
+
+.card-header-pink {
+    background: #F2EDED  !important;
+}
+
+.card-header-blue {
+    background: #ECF4FA  !important;
+}
+
+.card-header-green {
+    background: #F0F6ED !important;
+}
+
+.card-header-purple {
+    background: #F0EDF6 !important;
+}
+
+mark {
+    color: #07C !important;
+    padding: 5px;
+    font-size: .9em;
+    line-height: 2em;
+}
+
+.card-header>h6 > a:before {
+    float: right !important;
+    font-family: FontAwesome;
+    content:"\f056";
+    font-size: 1.25em;
+    padding-right: 5px;
+}
+.card-header>h6 > a.collapsed:before {
+    float: right !important;
+    content:"\f055";
+}
+.card-header>h6 > a:hover,
+.card-header>h6 > a:active,
+.card-header>h6 > a:focus  {
+    text-decoration:none;
 }
