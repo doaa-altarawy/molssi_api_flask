@@ -1,9 +1,10 @@
 {% extends "bootstrap/base.html" %}
 
-{% block title %}{{title|default}}{% endblock title %}
+{% block title %}{{ title|default }}{% endblock title %}
 
 {%- block styles %}
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" />
+    {# <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" /> #}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css' ) }}" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css' ) }}" />
 
@@ -33,7 +34,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twbs-pagination/1.4.1/jquery.twbsPagination.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"></script>
+{#  <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"></script> #}
+    <script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap.min.js' ) }}"></script>
 
     <script type="text/javascript" src="{{ url_for('static', filename='js/wordpress_api_search.js' ) }}"></script>
 {%- endblock scripts %}
