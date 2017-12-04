@@ -1,0 +1,47 @@
+
+<!-- ********* Collapsed Advanced Search ********* -->
+
+<div id="qm_search_form" class="form-group" style="display: None">
+    <hr/>
+
+    <div class="form-group row">
+        <label class="col-form-label col-md-2 text-md-right" for="basis">Basis</label>
+
+        <div class="form-check col-md-4">
+            <select id='basis' name="ensembles" class="form-control">
+                <option value="">Any</option>
+                <option>Planewave</option>
+                <option>Gaussian</option>
+                <option>Slater</option>
+                <option value="Daubechies_wavelets">Daubechies wavelets</option>
+            </select>
+        </div>
+    </div> <!-- form-group -->
+
+    <div class="form-group row">
+        <label class="col-form-label col-md-2 text-md-right" for="coverage">Coverage</label>
+
+        <div class="form-check col-md-4">
+            <select id='coverage' name="qm_mm" class="form-control">
+                <option value="">Any</option>
+                <option>H..Lu</option>
+                <option>H..Hg</option>
+                <option>H..Lr</option>
+                <option>H..118</option>
+            </select>
+        </div>
+    </div> <!-- form-group -->
+
+    <div class="form-group row">
+        <label class="col-form-label col-md-2 text-md-right" for="qm_tags">Tags</label>
+        <select id="qm_tags" multiple class="selectpicker col-md-5" id="mm_tags" data-live-search="true"
+                data-actions-box="true" title="Any" data-size="50">
+            {% for tag in lib.qm_props.TAG_NAMES -%}
+                <option>{{ tag | upper | replace('_', ' ')}}</option>
+            {%- endfor %}
+        </select>
+    </div>
+
+    <hr/>
+</div> <!-- form group collapse -->
+

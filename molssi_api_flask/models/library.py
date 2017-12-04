@@ -68,9 +68,9 @@ class MMFeatures(db.EmbeddedDocument):
 
     # tags
     TAG_NAMES = [
-                "periodicity_0_d",
-                "periodicity_1_and_2_d",
-                "periodicity_3_d",
+                "periodicity_0d",
+                "periodicity_1_and_2d",
+                "periodicity_3d",
                 "constraints",
                 "rigid_bodies",
                 "restraints",

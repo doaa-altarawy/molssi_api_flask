@@ -13,8 +13,9 @@ from .forms import LibraryForm
 @main.route('/resources_website')
 def resources_website():
     """Returns the search page for the resources website"""
+    lib = mongo_database.get_lib_features()
 
-    return render_template('wordpress_page.html')
+    return render_template('wordpress_page.html', lib=lib)
 
 
 @main.route('/test')

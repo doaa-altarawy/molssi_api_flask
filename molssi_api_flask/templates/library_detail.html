@@ -4,7 +4,7 @@
 {% block title %}Library Detail{% endblock %}
 
 {% block page_content %}
-<div class="container mb-3 border border-secondary" style="border-radius: 15px; max-width: 80%">
+<div class="container mb-3 border border-secondary" style="border-radius: 15px; max-width: 90%">
     <!-- <img class="img-fluid w-25" src="http://localhost:5000/static/images/molssi.jpg" /> -->
     <div>
         <h3 class="text-danger">{{ lib.name }}</h3>
@@ -16,7 +16,6 @@
         {% endif %}
         </p>
     </div>
-
 
     <!-- Availability -->
     <div class="card mb-3" data-toggle="collapse" >
@@ -104,12 +103,12 @@
 
             <div>
                 <span class="bg-primary text-white mr-3 p-1 rounded"> Tags </span>
-                <span class="badge badge-pill badge-primary"> Tags2 </span>
+{#                <span class="badge badge-pill badge-primary"> Tags2 </span>#}
                 {% for tag in lib.qm_features.tags -%}
-                    <mark>{{ tag | upper}}</mark> &nbsp;
+                    <mark>{{ tag | upper | replace('_', ' ') }}</mark> &nbsp;
                 {%- endfor %}
                 {% for tag in lib.mm_features.tags -%}
-                    <mark>{{ tag | upper }}</mark> &nbsp;
+                    <mark>{{ tag | upper | replace('_', ' ') }}</mark> &nbsp;
                 {%- endfor %}
             </div>
         </div>

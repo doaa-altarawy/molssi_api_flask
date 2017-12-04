@@ -1,0 +1,57 @@
+
+<!-- ********* Collapsed Advanced Search ********* -->
+
+<div id="mm_search_form" class="form-group" style="display: None">
+    <hr/>
+
+    <div class="form-group row">
+        <label class="col-form-label col-md-2 text-md-right" for="file_formats">File Formats</label>
+
+        <div class="form-check col-md-4">
+            <select id='file_formats' name="file_formats" class="form-control">
+              <option value="">Any</option>
+              <option value="free">Free</option>
+              <option value="non-free">Commercial</option>
+              <option value="unknown">Unknown</option>
+            </select>
+        </div>
+    </div> <!-- form-group -->
+
+    <div class="form-group row">
+        <label class="col-form-label col-md-2 text-md-right" for="ensembles">Ensembles</label>
+
+        <div class="form-check col-md-4">
+            <select id='ensembles' name="ensembles" class="form-control">
+                <option value="">Any</option>
+                <option>NVE</option>
+                <option>NVT</option>
+                <option>NPT</option>
+            </select>
+        </div>
+    </div> <!-- form-group -->
+
+    <div class="form-group row">
+        <label class="col-form-label col-md-2 text-md-right" for="qm_mm">QM/MM</label>
+
+        <div class="form-check col-md-4">
+            <select id='qm_mm' name="qm_mm" class="form-control">
+                <option value="">Any</option>
+                <option>Yes</option>
+                <option>No</option>
+            </select>
+        </div>
+    </div> <!-- form-group -->
+
+    <div class="form-group row">
+        <label class="col-form-label col-md-2 text-md-right" for="mm_tags">Tags</label>
+        <select id="mm_tags" multiple class="selectpicker col-md-5" id="mm_tags" data-live-search="true"
+                data-actions-box="true" title="Any" data-size="50">
+            {% for tag in lib.mm_props.TAG_NAMES -%}
+                <option>{{ tag | upper | replace('_', ' ')}}</option>
+            {%- endfor %}
+        </select>
+    </div>
+
+    <hr/>
+</div> <!-- form group collapse -->
+

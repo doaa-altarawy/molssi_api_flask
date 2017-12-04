@@ -235,6 +235,20 @@ def get_library(lib_id):
         return libs[0]
     else:
         return None
+
+
+def get_lib_features():
+    """Get different values for Library properties values
+        Used for search queries."""
+    lib = {
+        'mm_props': {},
+        'qm_props': {}
+    }
+    lib['mm_props']['TAG_NAMES'] = MMFeatures.TAG_NAMES
+    lib['qm_props']['TAG_NAMES'] = QMFeatures.TAG_NAMES
+
+    return lib
+
 # ----------------------- Printing and Utils ------------------------- #
 
 

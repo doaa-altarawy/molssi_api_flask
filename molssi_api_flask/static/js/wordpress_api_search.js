@@ -1,5 +1,6 @@
 jQuery(document).ready(function() {
 
+
     function sendResizeToParent() {
         var cur_height = jQuery('#page_wrapper').outerHeight(true) + 100 +
             jQuery('#advancedSearch').outerHeight(true);
@@ -54,7 +55,7 @@ jQuery(document).ready(function() {
 
         // Get search parameters:
         var query_text = jQuery('#libraryName').val();
-        var domain = jQuery('#domain').find(":selected").val();
+        var domain = jQuery('#domain').find(":checked").val();
         var price = jQuery('#price').find(":selected").val();
         var languages = [];
         jQuery.each(jQuery("#languages input:checked"), function(){
@@ -67,7 +68,7 @@ jQuery(document).ready(function() {
                 query_text: query_text,  // TODO: check escaping
                 domain: domain,
                 languages: JSON.stringify(languages),
-                price: price,
+                price: price
             };
         console.log('Query data: ', data);
 
@@ -90,16 +91,36 @@ jQuery(document).ready(function() {
         }); // ajax
     });
 
+
+    jQuery('#domain').change(function () {
+        var domain = jQuery('#domain').find(":checked").val();
+        console.log('Domainnnnn', domain);
+
+        if (domain == 'MM'){
+            jQuery('#mm_search_form').show();
+            jQuery('#qm_search_form').hide();
+        } else if (domain == 'QM') {
+            jQuery('#mm_search_form').hide();
+            jQuery('#qm_search_form').show();
+        } else {
+            jQuery('#mm_search_form').hide();
+            jQuery('#qm_search_form').hide();
+        }
+
+    });
+
     jQuery('#clear_search').on('click', function (e) {
         event.preventDefault();
 
         jQuery('#libraryName').val('');
-        jQuery("#domain")[0].selectedIndex = 0;
+        jQuery("#domain input:radio:first").prop('checked', true);
         // unselect all languages, use prop. attr is deprecated in jQuery 1.6+
         jQuery('#languages input').prop('checked', false);
         jQuery('#languages input:first').prop('checked', true);
         jQuery('#price')[0].selectedIndex = 0;
 
+        jQuery('#mm_search_form').hide();
+        jQuery('#qm_search_form').hide();
 
         jQuery('p#results_count').html('');
         jQuery('#results').html('');
