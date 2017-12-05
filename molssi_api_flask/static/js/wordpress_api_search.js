@@ -13,7 +13,7 @@ jQuery(document).ready(function() {
         /** show correct slice of the results based on
             current active page
         **/
-        var items = jQuery("#results section");
+        var items = jQuery('#results').find('section');
         var numItems = items.length;
         var perPage = 7;
         // Only show the first `per_page` items initially.
@@ -58,17 +58,44 @@ jQuery(document).ready(function() {
         var domain = jQuery('#domain').find(":checked").val();
         var price = jQuery('#price').find(":selected").val();
         var languages = [];
-        jQuery.each(jQuery("#languages input:checked"), function(){
-            languages.push.apply(languages,jQuery(this).val().split(','));
+        jQuery.each(jQuery('#languages').find('input:checked'), function(){
+            languages.push.apply(languages, jQuery(this).val().split(','));
         });
         if (languages.indexOf('') != -1){
             languages = [];     // set to any language
         }
+
+        // QM Filters
+        var qm_filters = {};
+        if (domain == 'QM') {
+            if (jQuery('#basis').find(":selected").val()) {
+                qm_filters['basis'] = jQuery('#basis').find(":selected").val();
+            }
+
+            if (jQuery('#qm_tags').find(":selected").val()) {
+                console.log('tags:', jQuery('#qm_tags').val());
+                qm_filters['tags'] = jQuery('#qm_tags').val();
+            }
+        } // QM domain
+        else if (domain == 'MM') {
+            // MM filters
+            var mm_filters = {};
+            if (jQuery('#ensembles').find(":selected").val()) {
+                mm_filters['basis'] = jQuery('#ensembles').find(":selected").val();
+            }
+            if (jQuery('#mm_tags').find(":selected").val()) {
+                console.log('tags:', jQuery('#mm_tags').val());
+                mm_filters['tags'] = jQuery('#mm_tags').val();
+            }
+        } // MM domain
+
         var data = {
                 query_text: query_text,  // TODO: check escaping
                 domain: domain,
                 languages: JSON.stringify(languages),
-                price: price
+                price: price,
+                qm_filters: JSON.stringify(qm_filters),
+                mm_filters: JSON.stringify(mm_filters)
             };
         console.log('Query data: ', data);
 
@@ -94,7 +121,6 @@ jQuery(document).ready(function() {
 
     jQuery('#domain').change(function () {
         var domain = jQuery('#domain').find(":checked").val();
-        console.log('Domainnnnn', domain);
 
         if (domain == 'MM'){
             jQuery('#mm_search_form').show();
@@ -109,14 +135,24 @@ jQuery(document).ready(function() {
 
     });
 
-    jQuery('#clear_search').on('click', function (e) {
-        event.preventDefault();
+    jQuery('#languages').change(function (e) {
+        var lang = jQuery(event.target);
 
+        if (lang.val() && lang.prop('checked')) {
+            jQuery('#languages').find('input:first').prop('checked', false);
+        }
+        else if (lang.val() && lang.prop('checked')) {
+            jQuery('#languages').find('input').not(':first').prop('checked', false);
+        }
+    });
+
+    function clear_search_panels(){
+        // Clear basic and advanced search
         jQuery('#libraryName').val('');
-        jQuery("#domain input:radio:first").prop('checked', true);
+        jQuery('#domain').find('input:radio:first').prop('checked', true);
         // unselect all languages, use prop. attr is deprecated in jQuery 1.6+
-        jQuery('#languages input').prop('checked', false);
-        jQuery('#languages input:first').prop('checked', true);
+        jQuery('#languages').find('input').not(':first').prop('checked', false);
+        jQuery('#languages').find('input:first').prop('checked', true);
         jQuery('#price')[0].selectedIndex = 0;
 
         jQuery('#mm_search_form').hide();
@@ -125,5 +161,17 @@ jQuery(document).ready(function() {
         jQuery('p#results_count').html('');
         jQuery('#results').html('');
         jQuery('#pagination').twbsPagination('destroy');
+
+
+        // Clear MM search panel
+
+        // Clear QM search panel
+    }
+
+    jQuery('#clear_search').on('click', function (e) {
+        event.preventDefault();
+
+        clear_search_panels();
     });
+
 }); // document ready
