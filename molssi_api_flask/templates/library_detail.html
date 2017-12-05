@@ -4,8 +4,8 @@
 {% block title %}Library Detail{% endblock %}
 
 {% block page_content %}
-<div class="container mb-3 border border-secondary" style="border-radius: 15px; max-width: 90%">
-    <!-- <img class="img-fluid w-25" src="http://localhost:5000/static/images/molssi.jpg" /> -->
+<div class="container mb-3" style="max-width: 90%">
+
     <div>
         <h3 class="text-danger">{{ lib.name }}</h3>
         <p class="text-justify my-md-4">
@@ -117,8 +117,6 @@
 
 
 
-
-
     <!-- Performance -->
     <div class="card mb-3" data-toggle="collapse">
         <div class="card-header card-header-blue" role="tab" id="heading3">
@@ -209,7 +207,7 @@
     <div>
         <hr/>
         <a href="javascript:window.history.back()" target="_top" class="card-link">
-            <h5 class="d-inline-block"><i class="fa fa-arrow-left" aria-hidden="true"></i> Back</h5>
+            <h5 class="d-inline-block"><i class="fa fa-arrow-left" aria-hidden="true"></i> &nbsp;Back</h5>
         </a>
     </div>
 
