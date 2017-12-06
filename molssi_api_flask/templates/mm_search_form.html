@@ -8,25 +8,19 @@
         <label class="col-form-label col-md-2 text-md-right" for="file_formats">File Formats</label>
 
         <div class="form-check col-md-4">
-            <select id='file_formats' name="file_formats" class="form-control">
-              <option value="">Any</option>
-              <option value="free">Free</option>
-              <option value="non-free">Commercial</option>
-              <option value="unknown">Unknown</option>
+            <select id='file_formats' name="file_formats" class="selectpicker form-control" multiple>
+                {% for val in ['pdb', 'pdbx/mmCIF', 'DCD', 'csv', 'txt', 'xml', 'prmtop', 'inpcrd', 'mdcrd', 'mdvel', 'parm'] %}
+                    <option>{{ val | upper}}</option>
+                {% endfor %}
             </select>
         </div>
     </div> <!-- form-group -->
 
     <div class="form-group row">
         <label class="col-form-label col-md-2 text-md-right" for="ensembles">Ensembles</label>
-
         <div class="form-check col-md-4">
-            <select id='ensembles' name="ensembles" class="form-control">
-                <option value="">Any</option>
-                <option>NVE</option>
-                <option>NVT</option>
-                <option>NPT</option>
-            </select>
+            <input id="ensembles" type="text" class="form-control" name="ensembles"
+                   placeholder="Enter space seperated terms.." >
         </div>
     </div> <!-- form-group -->
 

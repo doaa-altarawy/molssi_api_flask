@@ -3,6 +3,7 @@ from mongoengine import connect
 from .library import Library, QMFeatures, MMFeatures, create_library
 from mongoengine.queryset.visitor import Q
 import json
+import re
 
 
 '''
@@ -164,14 +165,35 @@ def full_search(verbose=False, **kwargs):
     """
 
     results = None
-    query = {}
+    query, qm_filters, mm_filters = {}, {}, {}
 
     query_text = kwargs.pop('query_text', '')
 
+    if kwargs.get('qm_filters'):
+        qm_filters = json.loads(kwargs.pop('qm_filters', ''))
+    if kwargs.get('mm_filters'):
+        mm_filters = json.loads(kwargs.pop('mm_filters', ''))
+
+    # ----------- MM filters ------------
+    if 'qm_mm' in mm_filters:
+        if mm_filters['qm_mm'] == 'Yes':
+            query['mm_features__qm_mm__exists'] = True
+        else:
+            query['mm_features__qm_mm__exists'] = False
+
+    if 'ensembles' in mm_filters:
+        query['mm_features__ensembles'] = get_compiled_regex(mm_filters['ensembles'])
+
+    # ----------- QM filters ------------
+    if 'basis' in qm_filters:
+        query['qm_features__basis__icontains'] = qm_filters['basis']
+    if 'coverage' in qm_filters:
+        query['qm_features__coverage__icontains'] = qm_filters['coverage']
+
+    # ------------ other filters -----------
     languages = json.loads(kwargs.pop('languages', ''))
     if len(languages) != 0:
-        languages_lower = [lang.lower() for lang in languages]
-        query['languages_lower__in'] = languages_lower
+        query['languages_lower__in'] = [lang.lower() for lang in languages]
 
     price = kwargs.pop('price', '')
     if price == 'free':
@@ -217,6 +239,16 @@ def full_search(verbose=False, **kwargs):
         print_results(results)
 
     return results
+
+
+def get_compiled_regex(search_string):
+    """Returns a complied regular expression string
+    from a query string of space-separated terms"""
+
+    w_list = ['.*' + term + '.*' for term in search_string.split()]
+    regex = re.compile('|'.join(w_list), re.IGNORECASE)
+
+    return regex
 
 
 def get_json(verbose=False):

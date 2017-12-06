@@ -154,7 +154,7 @@ class Library(db.DynamicDocument):     # flexible schema, can have extra attribu
 
     # Use the $ prefix to set a text index
     meta = {
-        # 'allow_inheritance': True,
+        # 'allow_inheritance': True,  # known issue with text search
         'strict': False,    # allow extra fields
         'indexes': [
             "domain",

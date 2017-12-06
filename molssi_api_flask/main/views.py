@@ -50,7 +50,7 @@ def search_libraries(to_json=True):
     # domain = request.args.pop('domain', '')
     # price = request.args.pop('price', '', type=str)
 
-    print('Search params: {}'.format(request.args.to_dict()))
+    print('Flask received Search params: {}'.format(request.args.to_dict()))
 
     results = mongo_database.full_search(**request.args.to_dict())
 
