@@ -51,7 +51,7 @@ jQuery(document).ready(function() {
 
     // keyup search
     jQuery('#libraryName').keyup(function(event) {
-        jQuery('#search_quick').trigger('click');
+            jQuery('#search_quick').trigger('click');
     });
 
     // add action listener
@@ -66,7 +66,7 @@ jQuery(document).ready(function() {
 
     function search(scroll_top) {
         // Get search parameters:
-        var query_text = jQuery('#libraryName').val();
+        var query_text = jQuery.trim(jQuery('#libraryName').val());
         var domain = jQuery('#domain').find(":checked").val();
         var price = jQuery('#price').find(":selected").val();
         var languages = [];
