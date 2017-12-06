@@ -4,7 +4,7 @@
 {% block title %}Library Detail{% endblock %}
 
 {% block page_content %}
-<div class="container mb-3" style="max-width: 90%">
+<div id="page_wrapper" class="container mb-3" style="max-width: 90%">
 
     <div>
         <h3 class="text-danger">{{ lib.name }}</h3>
@@ -219,7 +219,7 @@
 {{ super() }}
     <script type="application/javascript">
         jQuery(document).ready(function() {
-            setTimeout(window.send_resize_to_parent, 1500);
+            console.log('Library details..');
         });
     </script>
 {% endblock scripts%}

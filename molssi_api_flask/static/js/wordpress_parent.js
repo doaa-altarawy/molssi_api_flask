@@ -2,7 +2,7 @@
 function handleMessage(event) {
     var apiOrigins = ['http://api.molssi.org', 'http://localhost:5000'];
     if (jQuery.inArray(event.origin, apiOrigins)) {
-        console.log("Event:", event);
+        console.log("Event:", event.data['task']);
         if (event.data['task'] == 'resize') {
             jQuery('#pageContent').get(0).height = event.data['height'] + 'px';   // adjust height
         }else if (event.data['task'] == 'scroll_top'){

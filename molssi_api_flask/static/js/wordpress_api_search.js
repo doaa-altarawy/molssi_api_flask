@@ -6,14 +6,15 @@ jQuery(document).ready(function() {
     }
 
     function send_resize_to_parent() {
-        var cur_height = jQuery('#page_wrapper').outerHeight(true) + 100 +
-            jQuery('#advancedSearch').outerHeight(true);
+        var search_height = jQuery('#advancedSearch').outerHeight(true);
+        if (! search_height) { search_height = 0; }
+        var cur_height = jQuery('#page_wrapper').outerHeight(true) + 100 + search_height;
         console.log("Current hight sendResizeToParent: ", cur_height);
         var parentOrigin = window.WORDPRESS_DOMAIN;
         parent.postMessage({'task': 'resize', 'height': cur_height}, parentOrigin);
     }
 
-    window.onload = send_scroll_to_parent();
+    window.onload = search(true);
 
     function show_pages() {
         /** show correct slice of the results based on
@@ -59,6 +60,11 @@ jQuery(document).ready(function() {
         console.log('Form submitted');
         event.preventDefault();
 
+        search(true);
+
+    });
+
+    function search(scroll_top) {
         // Get search parameters:
         var query_text = jQuery('#libraryName').val();
         var domain = jQuery('#domain').find(":checked").val();
@@ -126,12 +132,14 @@ jQuery(document).ready(function() {
 
                 show_pages();
 
-                send_scroll_to_parent();
+                if (scroll_top){
+                    send_scroll_to_parent();
+                }
                 setTimeout(send_resize_to_parent, 1500);
 
             } // success
         }); // ajax
-    });
+    } // search
 
 
     jQuery('#domain').change(function () {
