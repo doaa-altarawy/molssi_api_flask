@@ -1,13 +1,19 @@
 jQuery(document).ready(function() {
 
+    function send_scroll_to_parent(){
+        var parentOrigin = window.WORDPRESS_DOMAIN;
+        parent.postMessage({'task': 'scroll_top'}, parentOrigin);
+    }
 
-    function sendResizeToParent() {
+    function send_resize_to_parent() {
         var cur_height = jQuery('#page_wrapper').outerHeight(true) + 100 +
             jQuery('#advancedSearch').outerHeight(true);
         console.log("Current hight sendResizeToParent: ", cur_height);
         var parentOrigin = window.WORDPRESS_DOMAIN;
-        parent.postMessage(cur_height, parentOrigin);
+        parent.postMessage({'task': 'resize', 'height': cur_height}, parentOrigin);
     }
+
+    window.onload = send_scroll_to_parent();
 
     function show_pages() {
         /** show correct slice of the results based on
@@ -120,7 +126,8 @@ jQuery(document).ready(function() {
 
                 show_pages();
 
-                setTimeout(sendResizeToParent, 2000);
+                send_scroll_to_parent();
+                setTimeout(send_resize_to_parent, 1500);
 
             } // success
         }); // ajax
