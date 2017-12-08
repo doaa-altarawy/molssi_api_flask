@@ -4,6 +4,7 @@ from config import config
 from flask_mongoengine import MongoEngine
 from flask_mail import Mail
 from flask_bootstrap import Bootstrap
+from template_filters import replace_empty
 
 
 mail = Mail()
@@ -24,6 +25,9 @@ def create_app(config_name):
     db.init_app(app)
     cors.init_app(app)
     bootstrap.init_app(app)
+
+    # jinja template
+    app.jinja_env.filters['empty'] = replace_empty
 
     from .main import main as main_blueprint
     app.register_blueprint(main_blueprint)

@@ -28,17 +28,14 @@
         <div id="availability" class="collapse show" role="tabpanel" aria-labelledby="heading1">
         <div class="card-block">
         <dl class="row">
-            <dt class="col-sm-2">Owner:</dt>
-            <dd class="col-sm-4"> {{ lib.owner }}</dd>
-
             <dt class="col-sm-2">Latest version:</dt>
-            <dd class="col-sm-4">    {{ lib.latest_version or "unkown" }}
+            <dd class="col-sm-4">    {{ lib.latest_version | empty }}
                 {% if lib.date %} ({{ lib.date }})   {% endif %}
             </dd>
 
             <dt class="col-sm-2">License: </dt>
-            <dd class="col-sm-10">
-                {{ lib.license or 'unknown' }} {% if lib.price %} {{ ' (' + lib.price + ')'}}
+            <dd class="col-sm-4">
+                {{ lib.license | empty }} {% if lib.price %} {{ ' (' + lib.price + ')'}}
                 {% endif %}
             </dd>
 
@@ -52,8 +49,8 @@
         </dl>
         </div>
         <div class="card-footer">
-            <a class="card-link" href="{{ lib.official_website }}" target="_blank">Offecial Website</a>
-            <a class="card-link" href="{{ lib.source or 'http://' }}" target="_blank">Source code</a>
+            <a class="card-link" href="{{ lib.official_website }}" target="_blank">Official Website</a>
+        <a class="card-link" href="{{ lib.source or 'http://' }}" target="_blank">Source code</a>
         </div> <!-- card footer -->
         </div>
     </div>
@@ -72,17 +69,17 @@
             {%  if lib.mm_features %}
             <dl class="row mb-3">
                 <dt class="col-sm-4">Ensembles: </dt>
-                <dd class="col-sm-8">{{ lib.mm_features.ensembles or '' }}</dd>
+                <dd class="col-sm-8">{{ lib.mm_features.ensembles | empty }}</dd>
                 <dt class="col-sm-4">QM/MM: </dt>
-                <dd class="col-sm-8">{{ lib.qm_mm or '' }}</dd>
+                <dd class="col-sm-8">{{ lib.qm_mm | empty }}</dd>
                 <dt class="col-sm-4">Free Energy Methods: </dt>
-                <dd class="col-sm-8">{{ lib.mm_features.free_energy_methods or '' }}</dd>
+                <dd class="col-sm-8">{{ lib.mm_features.free_energy_methods | empty }}</dd>
                 <dt class="col-sm-4">Advanced Sampling Methods: </dt>
-                <dd class="col-sm-8">{{ lib.mm_features.advanced_sampling_methods or '' }}</dd>
+                <dd class="col-sm-8">{{ lib.mm_features.advanced_sampling_methods | empty }}</dd>
                 <dt class="col-sm-4">Forcefields: </dt>
-                <dd class="col-sm-8">{{ lib.mm_features.forcefields or '' }}</dd>
+                <dd class="col-sm-8">{{ lib.mm_features.forcefields | empty }}</dd>
                 <dt class="col-sm-4">File Formats: </dt>
-                <dd class="col-sm-8">{{ lib.mm_features.file_formats or '' }}</dd>
+                <dd class="col-sm-8">{{ lib.mm_features.file_formats | empty }}</dd>
 
             </dl>
             {% endif %}
@@ -92,11 +89,11 @@
             {%  if lib.qm_features %}
             <dl class="row mb-3">
                 <dt class="col-sm-2">Basis: </dt>
-                <dd class="col-sm-4"> {{ lib.qm_features.basis or ''}}</dd>
+                <dd class="col-sm-4"> {{ lib.qm_features.basis | empty}}</dd>
                 <dt class="col-sm-2">Coverage: </dt>
-                <dd class="col-sm-4"> {{ lib.qm_features.coverage or ''}}</dd>
+                <dd class="col-sm-4"> {{ lib.qm_features.coverage | empty}}</dd>
                 <dt class="col-sm-2">Other: </dt>
-                <dd>{{ lib.qm_features.other or '' }}</dd>
+                <dd>{{ lib.qm_features.other | empty }}</dd>
             </dl>
             {% endif %}
 
@@ -128,9 +125,9 @@
         <div id="performance" class="collapse show" role="tabpanel" aria-labelledby="heading3">
         <div class="card-block">
             <dl class="row mb-0">
-                <dt class="col-sm-2">Parallel:</dt> <dd class="col-sm-10">{{ lib.parallel or ''}}</dd>
-                <dt class="col-sm-2">GPU: </dt> <dd class="col-sm-10">{{ lib.gpu or ''}}</dd>
-                <dt class="col-sm-2">KNL: </dt> <dd class="col-sm-10">{{ lib.knl or '' }}</dd>
+                <dt class="col-sm-2">Parallel:</dt> <dd class="col-sm-10">{{ lib.parallel | empty}}</dd>
+                <dt class="col-sm-2">GPU: </dt> <dd class="col-sm-10">{{ lib.gpu | empty}}</dd>
+                <dt class="col-sm-2">KNL: </dt> <dd class="col-sm-10">{{ lib.knl | empty }}</dd>
             </dl>
         </div>
         </div>
@@ -151,17 +148,17 @@
         <div class="card-block">
             <dl class="row mb-0">
                 <dt class="col-sm-2">Support Line</dt>
-                <dd class="col-sm-4">{{ lib.support_line | urlize(30, true, '_blank') or 'unknown' }} </dd>
+                <dd class="col-sm-4">{{ lib.support_line | urlize(30, true, '_blank') | empty }} </dd>
                 <dt class="col-sm-2">Documentation</dt>
-                <dd class="col-sm-4">{{ lib.documentation | urlize(30, true, '_blank') or 'unknown' }} </dd>
+                <dd class="col-sm-4">{{ lib.documentation | urlize(30, true, '_blank') | empty }} </dd>
                 <dt class="col-sm-2">Tutorials</dt>
-                <dd class="col-sm-4">{{ lib.tutorials or 'unknown' }} </dd>
+                <dd class="col-sm-4">{{ lib.tutorials | empty }} </dd>
                 <dt class="col-sm-2">Wiki</dt>
-                <dd class="col-sm-4">{{ lib.wiki | urlize(30, true, '_blank') or 'unknown' }} </dd>
+                <dd class="col-sm-4">{{ lib.wiki | urlize(30, true, '_blank') | empty }} </dd>
                 <dt class="col-sm-2">Forum</dt>
-                <dd class="col-sm-4">{{ lib.forum | urlize(30, true, '_blank') or 'unknown' }} </dd>
+                <dd class="col-sm-4">{{ lib.forum | urlize(30, true, '_blank') | empty }} </dd>
                 <dt class="col-sm-2">Mail List</dt>
-                <dd class="col-sm-4">{{ lib.mail_list | urlize(30, true, '_blank') or 'unknown' }} </dd>
+                <dd class="col-sm-4">{{ lib.mail_list | urlize(30, true, '_blank') | empty }} </dd>
             </dl>
         </div>
         </div>
@@ -179,26 +176,26 @@
         <div id="se" class="collapse show" role="tabpanel" aria-labelledby="heading5">
         <div class="card-block">
             <dl class="row mb-0">
-                <dt class="col-sm-2">Langauges</dt>
+                <dt class="col-sm-2">Languages</dt>
                 <dd class="col-sm-4">
                     {% for lang in lib.languages -%}
                         {{ lang + " " }}
                     {%- endfor %}
                 </dd>
                 <dt class="col-sm-2">Source Code:</dt>
-                <dd class="col-sm-4">{{ lib.source | urlize(40, true, '_blank') or 'unknown' }}</dd>
+                <dd class="col-sm-4">{{ lib.source | urlize(40, true, '_blank') | empty }}</dd>
 
                 <dt class="col-sm-2">Code Management</dt>
-                <dd class="col-sm-4">{{ lib.code_management or 'unknown' }} </dd>
+                <dd class="col-sm-4">{{ lib.code_management | empty }} </dd>
 
                 <dt class="col-sm-2">Continuous Integration</dt>
-                <dd class="col-sm-4">{{ lib.continuous_integration or 'unknown' }} </dd>
+                <dd class="col-sm-4">{{ lib.continuous_integration | empty }} </dd>
                 <dt class="col-sm-2">Executables</dt>
-                <dd class="col-sm-4">{{ lib.excutables or 'unknown' }} </dd>
+                <dd class="col-sm-4">{{ lib.excutables | empty }} </dd>
                 <dt class="col-sm-2">Tests</dt>
-                <dd class="col-sm-4">{{ lib.tests or 'unknown' }} </dd>
+                <dd class="col-sm-4">{{ lib.tests | empty }} </dd>
                 <dt class="col-sm-2">Compilers</dt>
-                <dd class="col-sm-4">{{ lib.compilers or 'unknown' }} </dd>
+                <dd class="col-sm-4">{{ lib.compilers | empty }} </dd>
             </dl>
         </div>
         </div>

@@ -14,15 +14,14 @@
     </p>
 
     <div class="row mb-4">
-            <div class="col-md-6"><b>Owner: </b> {{ lib.owner }}</div>
 
             <div class="col-md-6">
-                <b>License: </b> {{ lib.license or 'unknown' }}
+                <b>License: </b> {{ lib.license | empty }}
                 {% if lib.price %} ({{ lib.price }}){% endif %}
             </div>
 
             <div class="col-md-6">
-                <b>Latest version: </b> {{ lib.latest_version or "unkown" }}
+                <b>Latest version: </b> {{ lib.latest_version | empty }}
                 {% if lib.date %} ({{ lib.date }})   {% endif %}
             </div>
 
@@ -41,13 +40,13 @@
     <!-- MM -->
     {%  if lib.mm_features %}
     <div class="row mb-4">
-         <div class="col-md-6"><b>Ensembles: </b> {{ lib.mm_features.ensembles or '' }}</div>
-         <div class="col-md-6"><b>Free Energy Methods: </b> {{ lib.mm_features.free_energy_methods or '' }}</div>
-         <div class="col-md-6"><b>Advanced Sampling Methods: </b> {{ lib.mm_features.advanced_sampling_methods or '' }}</div>
-         <div class="col-md-6"><b>Forcefields: </b> {{ lib.mm_features.forcefields or '' }}</div>
-         <div class="col-md-6"><b>File Formats: </b> {{ lib.mm_features.file_formats or '' }}</div>
+         <div class="col-md-6"><b>Ensembles: </b> {{ lib.mm_features.ensembles | empty }}</div>
+         <div class="col-md-6"><b>Free Energy Methods: </b> {{ lib.mm_features.free_energy_methods | empty }}</div>
+         <div class="col-md-6"><b>Advanced Sampling Methods: </b> {{ lib.mm_features.advanced_sampling_methods | empty }}</div>
+         <div class="col-md-6"><b>Forcefields: </b> {{ lib.mm_features.forcefields | empty }}</div>
+         <div class="col-md-6"><b>File Formats: </b> {{ lib.mm_features.file_formats | empty }}</div>
 
-        <div class="col-md-6"><b>QM/MM: </b> {{ lib.qm_mm or '' }}</div>
+        <div class="col-md-6"><b>QM/MM: </b> {{ lib.qm_mm | empty }}</div>
     </div>
     {% endif %}
 
@@ -55,9 +54,9 @@
     <!-- QM -->
     {%  if lib.qm_features %}
     <div class="row mb-4">
-         <div class="col-md-6"><b>Basis: </b> {{ lib.qm_features.basis or ''}}</div>
-         <div class="col-md-6"><b>Coverage: </b> {{ lib.qm_features.coverage or ''}}</div>
-         <div class="col-md-6"><b>Other: </b> {{ lib.qm_features.other or '' }}</div>
+         <div class="col-md-6"><b>Basis: </b> {{ lib.qm_features.basis | empty }}</div>
+         <div class="col-md-6"><b>Coverage: </b> {{ lib.qm_features.coverage | empty }}</div>
+         <div class="col-md-6"><b>Other: </b> {{ lib.qm_features.other | empty }}</div>
     </div>
     {% endif %}
 
