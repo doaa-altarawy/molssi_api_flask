@@ -7,9 +7,9 @@
     <h3 class="card-title text-danger"><a href="/library_detail/{{ lib.id }}">{{ lib.name }}</a></h3>
     <p class="card-text text-justify my-md-4">
         {% if lib.description -%}
-            {{ lib.description | safe }}
+            {{ lib.description | safe | truncate(512) }}
         {% else %}
-            {{ lib.long_description | safe }}
+            {{ lib.long_description | safe | truncate(512) }}
         {% endif %}
     </p>
 
