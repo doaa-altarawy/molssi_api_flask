@@ -22,7 +22,7 @@
 
             <div class="col-md-6">
                 <b>Latest version: </b> {{ lib.latest_version | empty }}
-                {% if lib.date %} ({{ lib.date }})   {% endif %}
+                {% if lib.date %} ({{ lib.date.strftime('%Y-%m-%d') }})   {% endif %}
             </div>
 
             <div class="col-md-6">
