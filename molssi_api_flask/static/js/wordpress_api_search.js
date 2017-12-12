@@ -1,17 +1,24 @@
 jQuery(document).ready(function() {
 
     function send_scroll_to_parent(){
-        var parentOrigin = window.WORDPRESS_DOMAIN;
-        parent.postMessage({'task': 'scroll_top'}, parentOrigin);
+         if ( top !== self ) { // if inside iFrame
+             console.log('Top is: ', top, top.location);
+             var parentOrigin = window.WORDPRESS_DOMAIN;
+             parent.postMessage({'task': 'scroll_top'}, parentOrigin);
+         }
     }
 
     function send_resize_to_parent() {
-        var search_height = jQuery('#advancedSearch').outerHeight(true);
-        if (! search_height) { search_height = 0; }
-        var cur_height = jQuery('#page_wrapper').outerHeight(true) + 100 + search_height;
-        console.log("Current hight sendResizeToParent: ", cur_height);
-        var parentOrigin = window.WORDPRESS_DOMAIN;
-        parent.postMessage({'task': 'resize', 'height': cur_height}, parentOrigin);
+        if ( top !== self ) { // if inside iFrame
+            var search_height = jQuery('#advancedSearch').outerHeight(true);
+            if (!search_height) {
+                search_height = 0;
+            }
+            var cur_height = jQuery('#page_wrapper').outerHeight(true) + 100 + search_height;
+            console.log("Current hight sendResizeToParent: ", cur_height);
+            var parentOrigin = window.WORDPRESS_DOMAIN;
+            parent.postMessage({'task': 'resize', 'height': cur_height}, parentOrigin);
+        }
     }
 
     window.onload = search(true);
