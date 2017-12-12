@@ -35,10 +35,13 @@ class BaseConfig:
     # Client-side config
     API_RESULTS_PER_PAGE = 5
 
+    # Jinia template
+    REPLACE_NONE = '?'
+
 
 class DevelopmentConfig(BaseConfig):
     DEBUG = True
-    TESTING = False
+    TESTING = True
     WORDPRESS_DOMAIN = 'http://localhost:8888'
     API_DOMAIN = 'http://localhost:5000'
     MONGODB_SETTINGS = {
