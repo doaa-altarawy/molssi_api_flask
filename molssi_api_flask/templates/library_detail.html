@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-{% import "bootstrap/wtf.html" as wtf %}
 
 {% block title %}Library Detail{% endblock %}
 
@@ -18,7 +17,7 @@
     </div>
 
     <!-- Availability -->
-    <div class="card mb-3" data-toggle="collapse" >
+    <div class="card mb-3">
         <div class="card-header card-header" role="tab" id="heading1">
             <h6 class="mb-0"><a data-toggle="collapse" href="#availability" aria-expanded="true" aria-controls="availability">
               Availability
@@ -50,13 +49,13 @@
         </div>
         <div class="card-footer">
             <a class="card-link" href="{{ lib.official_website }}" target="_blank">Official Website</a>
-        <a class="card-link" href="{{ lib.source or 'http://' }}" target="_blank">Source code</a>
+            <a class="card-link" href="{{ lib.source or 'http://' }}" target="_blank">Source code</a>
         </div> <!-- card footer -->
         </div>
     </div>
 
     <!-- Domain Features -->
-    <div class="card mb-3" data-toggle="collapse">
+    <div class="card mb-3">
         <div class="card-header card-header-yellow" role="tab" id="heading2">
             <h6 class="mb-0"><a data-toggle="collapse" href="#features" aria-expanded="true" aria-controls="features">
               Domain Features
@@ -115,7 +114,7 @@
 
 
     <!-- Performance -->
-    <div class="card mb-3" data-toggle="collapse">
+    <div class="card mb-3">
         <div class="card-header card-header-blue" role="tab" id="heading3">
             <h6 class="mb-0"><a data-toggle="collapse" href="#performance" aria-expanded="true" aria-controls="performance">
               Performance
@@ -137,7 +136,7 @@
 
 
     <!-- Support -->
-    <div class="card mb-3" data-toggle="collapse">
+    <div class="card mb-3">
         <div class="card-header card-header-green" role="tab" id="heading4">
             <h6 class="mb-0"><a data-toggle="collapse" href="#support" aria-expanded="true" aria-controls="support">
               Support
@@ -166,7 +165,7 @@
 
 
     <!-- SE -->
-    <div class="card mb-3" data-toggle="collapse">
+    <div class="card mb-3">
         <div class="card-header card-header-purple" role="tab" id="heading5">
             <h6 class="mb-0"><a data-toggle="collapse" href="#se" aria-expanded="true" aria-controls="se">
               Software Engineering
@@ -211,12 +210,3 @@
 
 </div> <!-- container library_details  -->
 {% endblock %}
-
-{% block scripts %}
-{{ super() }}
-    <script type="application/javascript">
-        jQuery(document).ready(function() {
-            console.log('Library details..');
-        });
-    </script>
-{% endblock scripts%}
