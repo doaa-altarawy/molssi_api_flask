@@ -13,7 +13,7 @@ jQuery(document).ready(function() {
             if (!search_height) {
                 search_height = 0;
             }
-            var cur_height = jQuery('#page_wrapper').outerHeight(true) + 300 + search_height;
+            var cur_height = jQuery('#page_wrapper').outerHeight(true) + 600 + search_height;
             console.log("Current hight sendResizeToParent: ", cur_height);
             var parentOrigin = window.WORDPRESS_DOMAIN;
             parent.postMessage({'task': 'resize', 'height': cur_height}, parentOrigin);

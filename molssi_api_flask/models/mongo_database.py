@@ -166,7 +166,7 @@ def full_search(exec_empty_lib=False, verbose=False, **kwargs):
 
     results = None
     query, qm_filters, mm_filters = {}, {}, {}
-    arg_query = ''
+    arg_query = ()
 
     query_text = kwargs.pop('query_text', '')
 
@@ -183,13 +183,21 @@ def full_search(exec_empty_lib=False, verbose=False, **kwargs):
             query['mm_features__qm_mm__exists'] = False
 
     if 'ensembles' in mm_filters:
-        query['mm_features__ensembles'] = get_compiled_regex(mm_filters['ensembles'])
+        query['mm_features__ensembles'] = get_compiled_regex(mm_filters['ensembles'], sep='&')
+
+    if 'file_formats' in mm_filters:
+        query['mm_features__file_formats'] = get_compiled_regex(mm_filters['file_formats'], sep='|')
+
+    if 'tags' in mm_filters:
+        query['mm_features__tags__in'] = [tag.lower().replace(' ', '_') for tag in mm_filters['tags']]
 
     # ----------- QM filters ------------
     if 'basis' in qm_filters:
         query['qm_features__basis__icontains'] = qm_filters['basis']
     if 'coverage' in qm_filters:
         query['qm_features__coverage__icontains'] = qm_filters['coverage']
+    if 'tags' in qm_filters:
+        query['qm_features__tags__in'] = [tag.lower().replace(' ', '_') for tag in qm_filters['tags']]
 
     # ------------ other filters -----------
     languages = json.loads(kwargs.pop('languages', ''))
@@ -212,10 +220,10 @@ def full_search(exec_empty_lib=False, verbose=False, **kwargs):
 
     if exec_empty_lib:
         # non_empty = {'$or': [{'description__ne': ''}, {'long_description__ne': ''}]}
-        arg_query = (Q(description__ne='') | Q(long_description__ne=''))
+        arg_query += (Q(description__ne='') | Q(long_description__ne=''),)
 
     print('MongoDB query:', query)
-    results = Library.objects(arg_query, **query)
+    results = Library.objects(*arg_query, **query)
 
     print('Results length: ', len(results))
 
@@ -247,12 +255,19 @@ def full_search(exec_empty_lib=False, verbose=False, **kwargs):
     return results
 
 
-def get_compiled_regex(search_string):
+def get_compiled_regex(search_keys, sep='|'):
     """Returns a complied regular expression string
     from a query string of space-separated terms"""
 
-    w_list = ['.*' + term + '.*' for term in search_string.split()]
-    regex = re.compile('|'.join(w_list), re.IGNORECASE)
+    print('tttytpe: ', type(search_keys))
+    if isinstance(search_keys, str) or isinstance(search_keys, unicode):
+        w_list = ['.*' + term + '.*' for term in search_keys.split()]
+    elif isinstance(search_keys, list):
+        w_list = ['.*' + term + '.*' for term in search_keys]
+    else:
+        w_list = []
+    print('w_list: ', w_list)
+    regex = re.compile(sep.join(w_list), re.IGNORECASE)
 
     return regex
 
