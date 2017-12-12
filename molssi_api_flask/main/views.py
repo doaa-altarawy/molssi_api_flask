@@ -52,7 +52,8 @@ def search_libraries(to_json=True):
 
     print('Flask received Search params: {}'.format(request.args.to_dict()))
 
-    results = mongo_database.full_search(**request.args.to_dict())
+    exec_empty_lib = current_app.config['EXECLUDE_EMPTY_LIB']
+    results = mongo_database.full_search(exec_empty_lib, **request.args.to_dict())
 
     if not to_json:
         return results
