@@ -157,7 +157,7 @@ def complex_query(languages=[], domains=[], verbose=False):
     return results
 
 
-def full_search(verbose=False, **kwargs):
+def full_search(exec_empty_lib=False, verbose=False, **kwargs):
     """Search the libraries collection using joint search of multiple fields
         any empty field will not be searched.
         if all fields are empty, then all documents are returned
@@ -166,6 +166,7 @@ def full_search(verbose=False, **kwargs):
 
     results = None
     query, qm_filters, mm_filters = {}, {}, {}
+    arg_query = ''
 
     query_text = kwargs.pop('query_text', '')
 
@@ -209,8 +210,13 @@ def full_search(verbose=False, **kwargs):
         if val:
             query[key] = val
 
+    if exec_empty_lib:
+        # non_empty = {'$or': [{'description__ne': ''}, {'long_description__ne': ''}]}
+        arg_query = (Q(description__ne='') | Q(long_description__ne=''))
+
     print('MongoDB query:', query)
-    results = Library.objects(**query)
+    results = Library.objects(arg_query, **query)
+
     print('Results length: ', len(results))
 
     # if len(languages_lower) != 0 and len(domain) != 0:

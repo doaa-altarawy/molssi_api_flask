@@ -2,7 +2,6 @@ jQuery(document).ready(function() {
 
     function send_scroll_to_parent(){
          if ( top !== self ) { // if inside iFrame
-             console.log('Top is: ', top, top.location);
              var parentOrigin = window.WORDPRESS_DOMAIN;
              parent.postMessage({'task': 'scroll_top'}, parentOrigin);
          }

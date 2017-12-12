@@ -34,7 +34,8 @@ class BaseConfig:
 
     # Client-side config
     API_RESULTS_PER_PAGE = 5
-
+    EXECLUDE_EMPTY_LIB = True
+    
     # Jinia template
     REPLACE_NONE = '?'
 
