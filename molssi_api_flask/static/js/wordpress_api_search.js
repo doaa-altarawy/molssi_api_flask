@@ -20,7 +20,13 @@ jQuery(document).ready(function() {
         }
     }
 
-    window.onload = search(true);
+    var onload = function(){
+        search(true);
+        // check which domain is selected and make it's panel visible
+        show_hide_domain_panel();
+    };
+
+    window.onload = onload();
 
     function show_pages() {
         /** show correct slice of the results based on
@@ -49,7 +55,7 @@ jQuery(document).ready(function() {
                     // ... and then only show the appropriate rows.
                     .slice(showFrom, showTo).show();
                 // Scroll to the top!
-                //window.scrollTo(0, 0);
+                // window.scrollTo(0, 0);
             }
         });
 
@@ -149,7 +155,12 @@ jQuery(document).ready(function() {
 
 
     jQuery('#domain').change(function () {
+        show_hide_domain_panel();
+    });
+
+    function show_hide_domain_panel() {
         var domain = jQuery('#domain').find(":checked").val();
+        console.log('Selected domain: ', domain);
 
         if (domain == 'MM'){
             jQuery('#mm_search_form').show();
@@ -162,7 +173,7 @@ jQuery(document).ready(function() {
             jQuery('#qm_search_form').hide();
         }
 
-    });
+    }
 
     jQuery('#languages').change(function (e) {
         var lang = jQuery(event.target);
