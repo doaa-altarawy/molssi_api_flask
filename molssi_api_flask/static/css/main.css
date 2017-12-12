@@ -126,3 +126,11 @@ https://github.com/silviomoreto/bootstrap-select/issues/1135
     display: inline !important;
 }
 /*------------------------------------ */
+
+#pageContent {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    display: block;
+    position: absolute;
+}

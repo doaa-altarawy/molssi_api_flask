@@ -142,7 +142,7 @@ jQuery(document).ready(function() {
                 if (scroll_top){
                     send_scroll_to_parent();
                 }
-                setTimeout(send_resize_to_parent, 1500);
+                //setTimeout(send_resize_to_parent, 1500);
 
             } // success
         }); // ajax
