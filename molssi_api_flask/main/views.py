@@ -10,6 +10,7 @@ from ..models import mongo_database
 from .forms import LibraryForm
 
 
+@main.route('/')
 @main.route('/resources_website')
 def resources_website():
     """Returns the search page for the resources website"""
