@@ -10,4 +10,4 @@ sys.path.append('molssi_api_flask')
 
 # create the production app
 from molssi_api_flask import create_app
-app = create_app('production')
+application = create_app('production')
