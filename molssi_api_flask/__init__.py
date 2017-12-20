@@ -1,11 +1,10 @@
-from flask import Flask, render_template, send_from_directory
+from flask import Flask
 from flask_cors import CORS, cross_origin
 from config import config
 from flask_mongoengine import MongoEngine
 from flask_mail import Mail
 from flask_bootstrap import Bootstrap
 from template_filters import replace_empty
-
 
 mail = Mail()
 db = MongoEngine()      # flask_mongoengine
@@ -37,5 +36,3 @@ def create_app(config_name):
 
     return app
 
-
-# app = create_app('production')

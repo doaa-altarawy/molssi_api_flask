@@ -1,5 +1,3 @@
-#!venv/bin/python
-
 from molssi_api_flask import create_app, db
 from werkzeug.contrib.profiler import ProfilerMiddleware
 # from flask_migrate import Migrate, upgrade
@@ -12,4 +10,6 @@ app = create_app('development')
 
 # migrate = Migrate(app, db)
 
-app.run()
+
+if __name__ == "__main__":
+    app.run()
