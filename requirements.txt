@@ -5,9 +5,11 @@ chardet==3.0.4
 click==6.7
 dominate==2.3.1
 Flask==0.12.2
+Flask-Admin==1.5.0
 Flask-Bootstrap==3.3.7.1
 Flask-Cors==3.0.3
 Flask-Jsonpify==1.5.0
+Flask-Login==0.4.1
 Flask-Mail==0.9.1
 flask-mongoengine==0.9.3
 Flask-WTF==0.14.2
@@ -19,8 +21,6 @@ MarkupSafe==1.0
 mock==2.0.0
 mongoengine==0.13.0
 mongomock==3.8.0
-numpy==1.13.3
-pandas==0.20.3
 pbr==3.1.1
 py==1.4.34
 pymongo==3.4.0
