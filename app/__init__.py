@@ -6,6 +6,7 @@ from flask_mail import Mail
 from flask_bootstrap import Bootstrap
 from template_filters import replace_empty
 
+
 mail = Mail()
 db = MongoEngine()      # flask_mongoengine
 cors = CORS()

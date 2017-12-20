@@ -8,6 +8,6 @@ sys.path.append(os.getcwd())
 sys.path.append('molssi_api_flask')
 
 
-# create the production app
-from molssi_api_flask import create_app
-application = create_app('production')
+# create the production app for wsgi
+os.environ['FLASK_CONFIG'] = 'production'
+from molssi_api_flask import app as application

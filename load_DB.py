@@ -1,7 +1,7 @@
 #!venv/bin/python
 
 from __future__ import print_function
-from molssi_api_flask.models import mongo_database
+from app.models import mongo_database
 import os
 import config as config
 
