@@ -4,8 +4,8 @@ from werkzeug.contrib.profiler import ProfilerMiddleware
 import os
 
 
-# app = create_app('development')
 app = create_app(os.getenv('FLASK_CONFIG') or 'default')
+
 # if app.config['TESTING']:
 #     app.wsgi_app = ProfilerMiddleware(app.wsgi_app, restrictions=[30])
 

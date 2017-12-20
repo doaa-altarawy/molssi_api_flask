@@ -1,6 +1,6 @@
 import datetime
 from flask_mongoengine.wtf import model_form
-from molssi_api_flask import db
+from .. import db
 
 
 """
