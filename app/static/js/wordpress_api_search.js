@@ -97,7 +97,7 @@ jQuery(document).ready(function() {
             }
 
             if (jQuery('#coverage').find(":selected").val()) {
-                qm_filters['coverage'] = jQuery('#coverage').find(":selected").val();
+                qm_filters['element_coverage'] = jQuery('#coverage').find(":selected").val();
             }
 
             if (jQuery('#qm_tags').find(":selected").val()) {
