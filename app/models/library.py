@@ -4,6 +4,9 @@ from .. import db
 
 
 """
+Fields: http://docs.mongoengine.org/apireference.html
+mongoengine.fields.
+
 Field Options:
 -------------
     db_field: Specify a different field name
@@ -17,11 +20,9 @@ Field Options:
 class QMFeatures(db.EmbeddedDocument):
     """QM specific features"""
 
-    basis = db.StringField()
-    coverage = db.StringField()
-    other = db.StringField()
-
-    tags = db.ListField(db.StringField())
+    basis = db.StringField(max_length=200)
+    element_coverage = db.StringField(max_length=200)
+    other = db.StringField(max_length=250)
 
     # tags
     TAG_NAMES = [
@@ -44,6 +45,8 @@ class QMFeatures(db.EmbeddedDocument):
                 "symmetry"
     ]
 
+    tags = db.ListField(db.StringField(max_length=20, choices=TAG_NAMES))
+
     def add_tags(self, kwargs):
         self.tags = []
         for tag in self.TAG_NAMES:
@@ -56,15 +59,13 @@ class QMFeatures(db.EmbeddedDocument):
 class MMFeatures(db.EmbeddedDocument):
     """MM specific features"""
 
-    ensembles = db.StringField()
-    free_energy_methods = db.StringField()
-    advanced_sampling_methods = db.StringField()
+    ensembles = db.StringField(max_length=200)
+    free_energy_methods = db.StringField(max_length=200)
+    advanced_sampling_methods = db.StringField(max_length=200)
 
-    forcefields = db.StringField()
-    file_formats = db.StringField()
-    qm_mm = db.StringField()
-
-    tags = db.ListField(db.StringField())
+    forcefields = db.StringField(max_length=200)
+    file_formats = db.StringField(max_length=100)
+    qm_mm = db.BooleanField()
 
     # tags
     TAG_NAMES = [
@@ -88,6 +89,8 @@ class MMFeatures(db.EmbeddedDocument):
                 "inorganic_metals"
     ]
 
+    tags = db.ListField(db.StringField(max_length=20, choices=TAG_NAMES))
+
     def add_tags(self, kwargs):
         self.tags = []
         for tag in self.TAG_NAMES:
@@ -99,15 +102,19 @@ class MMFeatures(db.EmbeddedDocument):
 
 class Library(db.DynamicDocument):     # flexible schema, can have extra attributes
 
+    # added by
+    add_by_name = db.StringField(max_length=100, required=True)
+    add_by_email = db.EmailField(required=True)
+    is_lib_owner = db.BooleanField(required=True)
+
     # availability
-    name = db.StringField(required=True)
-    owner = db.StringField()
-    license = db.StringField()
-    price = db.StringField()
-    latest_version = db.StringField()
+    name = db.StringField(max_length=100, required=True)
+    license = db.StringField(max_length=200)
+    price = db.StringField(max_length=200)
+    latest_version = db.StringField(max_length=100)
     date = db.DateTimeField()                   # Date of latest version
-    principal_contact_name = db.StringField()
-    principal_contact_email = db.StringField()
+    principal_contact_name = db.StringField(max_length=100)
+    principal_contact_email = db.EmailField()
     official_website = db.URLField()
 
     # Others
@@ -115,38 +122,39 @@ class Library(db.DynamicDocument):     # flexible schema, can have extra attribu
     long_description = db.StringField(required=True, default='')
     comments = db.StringField()
     required_citation = db.StringField()
-    domain = db.StringField(required=True, default='MM')      # QM, MM, QM/MM, etc..
+    domain = db.StringField(required=True, default='MM', choices=['MM', 'QM'])      # QM, MM, QM/MM, etc..
 
     # software engineering
+    LANGUAGES = ['C', 'C++', 'Python', 'FORTRAN', 'FORTRAN2003', 'FORTRAN77', 'FORTRAN90', 'Java', 'JavaScript']
 
     source = db.URLField()
-    executables = db.StringField()
-    code_management = db.StringField()
-    continuous_integration = db.StringField()
-    tests = db.StringField()
-    languages = db.ListField(db.StringField())  #
+    executables = db.StringField(max_length=100)
+    code_management = db.StringField(max_length=100)
+    continuous_integration = db.StringField(max_length=100)
+    tests = db.StringField(max_length=100)
+    languages = db.ListField(db.StringField(max_length=20, choices=LANGUAGES))
     # for search efficiency, repeat in lowercase, keep original case for display
-    languages_lower = db.ListField(db.StringField())
-    compilers = db.StringField()
+    languages_lower = db.ListField(db.StringField(max_length=20))
+    compilers = db.StringField(max_length=100)
 
     # Performance
-    parallel = db.StringField()
-    gpu = db.StringField()
-    knl = db.StringField()
+    parallel = db.StringField(max_length=50)
+    gpu = db.StringField(max_length=50)
+    knl = db.StringField(max_length=50)
 
     # support
-    support_line = db.StringField()
-    documentation = db.StringField()
-    tutorials = db.StringField()
-    wiki = db.StringField()
-    forum = db.StringField()
-    mail_list = db.StringField()
-    ui = db.StringField()
+    support_line = db.StringField(max_length=250)  # url or email
+    documentation = db.URLField()
+    tutorials = db.IntField()
+    wiki = db.URLField()
+    forum = db.URLField()
+    mail_list = db.URLField()
+    ui = db.BooleanField()
 
     # Local
     # published = DateTimeField()
     added = db.DateTimeField(default=datetime.datetime.now)
-    is_pending = db.BooleanField(default=False)
+    is_pending = db.BooleanField(default=True)
 
     mm_features = db.EmbeddedDocumentField(MMFeatures)
 
@@ -179,8 +187,8 @@ class Library(db.DynamicDocument):     # flexible schema, can have extra attribu
         return super(Library, self).save(*args, **kwargs)
 
     def __str__(self):
-        return str(self.id) + ', name: ' + self.name + ', description: ' + \
-                self.description + ', Domain: ' + self.domain
+        return str(self.id) + ', name: ' + self.name + ', is_pending: ' + \
+                str(self.is_pending) + ', Domain: ' + self.domain
 
     def add_language_lower(self):
         if self.languages:
