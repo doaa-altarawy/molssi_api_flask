@@ -134,3 +134,7 @@ https://github.com/silviomoreto/bootstrap-select/issues/1135
     display: block;
     position: absolute;
 }
+
+#libraryName{
+    min-width: 150px;
+}

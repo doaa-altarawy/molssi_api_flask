@@ -3,21 +3,23 @@
     <fieldset>
 
     <!-- Text Search input-->
-    <div class="form-group row mb-0">
-      <div class="form-group input-group col-md-8 mx-auto">
-          <input id="libraryName" type="text" class="form-control" name="libraryName" placeholder="Search library description..." >
-          <span class="input-group-btn">
+    <div class="form-group row px-2"><div class="col-lg-9 mx-auto">
+      <div class="input-group row">
+          <input id="libraryName" class="form-control col-auto" type="text" name="libraryName" placeholder="Search library description..." >
+          <div class="input-group-btn col-auto">
               <button id='search_quick' class="btn-sm btn-primary active">Search <i class="fa fa-search"></i></button>
-          </span>
-          <span class="input-group-btn">
+          </div>
+          <div class="input-group-btn col-auto">
               <button class="btn-sm btn-danger collapsed" data-toggle="collapse" data-target="#advancedSearch">Advanced
                   <i class="fa fa-caret-down"></i>
               </button>
-          </span>
-          <span class=""><button id="clear_search" type="button" class="btn btn-link">Clear Search</button></span>
-{#          <span class=""><a href="{{ url_for('submit_library.index_view') }}" class="btn btn-link">Submit your Code</a></span>#}
+          </div>
+          <div class="col-auto">
+              <button id="clear_search" type="button" class="btn btn-link">Clear Search</button>
+{#              <a href="{{ url_for('submit_library.index_view') }}" class="btn btn-link">Submit your Code</a>#}
+          </div>
       </div>
-    </div> <!-- form group -->
+    </div></div> <!-- form group -->
 
     <!-- ********* Collapsed Advanced Search ********* -->
 

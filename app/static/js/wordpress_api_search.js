@@ -46,7 +46,9 @@ jQuery(document).ready(function() {
         jQuery('#pagination').twbsPagination({
             totalPages: Math.ceil(numItems / perPage),
             itemOnPage: perPage,
-            visiblePages: 7,
+            visiblePages: 4,
+            prev: '<span aria-hidden="true">&laquo;</span>',
+            next: '<span aria-hidden="true">&raquo;</span>',
             onPageClick: function(event, pageNumber) {
                 var showFrom = perPage * (pageNumber - 1);
                 var showTo = showFrom + perPage;
