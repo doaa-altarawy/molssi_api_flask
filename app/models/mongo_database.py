@@ -194,8 +194,8 @@ def full_search(exec_empty_lib=False, verbose=False, **kwargs):
     # ----------- QM filters ------------
     if 'basis' in qm_filters:
         query['qm_features__basis__icontains'] = qm_filters['basis']
-    if 'coverage' in qm_filters:
-        query['qm_features__coverage__icontains'] = qm_filters['coverage']
+    if 'element_coverage' in qm_filters:
+        query['qm_features__element_coverage__icontains'] = qm_filters['element_coverage']
     if 'tags' in qm_filters:
         query['qm_features__tags__in'] = [tag.lower().replace(' ', '_') for tag in qm_filters['tags']]
 

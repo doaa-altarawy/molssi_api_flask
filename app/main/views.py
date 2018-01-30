@@ -18,13 +18,6 @@ def resources_website():
 
     return render_template('wordpress_page.html', lib=lib)
 
-
-@main.route('/test')
-def test():
-    # return json.dumps({'msg': "Hello from MolSSI api"})
-    return jsonpify({'msg': 'Hello from MolSSI api'})
-
-
 @main.route('/search')
 def search_libraries_ui():
     """Search MongoDB for the given query
