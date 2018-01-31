@@ -7,11 +7,12 @@ import os
 import json
 from . import main
 from ..models import mongo_database
-from .forms import LibraryForm
+from .forms import SoftwareForm
 
 
 @main.route('/')
 @main.route('/resources_website')
+@main.route('/cms_software_db')
 def resources_website():
     """Returns the search page for the resources website"""
     lib = mongo_database.get_lib_features()
@@ -26,7 +27,7 @@ def search_libraries_ui():
 
     results = search_libraries(to_json=False)
 
-    return render_template('libraries.html', libraries=results)
+    return render_template('software_list.html', libraries=results)
 
 
 @main.route('/api/search')
@@ -46,8 +47,8 @@ def search_libraries(to_json=True):
 
     print('Flask received Search params: {}'.format(request.args.to_dict()))
 
-    exec_empty_lib = current_app.config['EXECLUDE_EMPTY_LIB']
-    results = mongo_database.full_search(exec_empty_lib, **request.args.to_dict())
+    exec_empty_sw = current_app.config['EXECLUDE_EMPTY_SW']
+    results = mongo_database.full_search(exec_empty_sw, **request.args.to_dict())
 
     if not to_json:
         return results
@@ -59,25 +60,25 @@ def search_libraries(to_json=True):
     return json_data
 
 
-@main.route('/library_detail/<id>', methods=['GET'])
-def library_detail(id):
-    print('Find library with ID: ', id)
-    library = mongo_database.get_library(id)
-    print("This is library: ", library.name)
-    if library is None:
+@main.route('/software_detail/<id>', methods=['GET'])
+def software_detail(id):
+    print('Find software with ID: ', id)
+    software = mongo_database.get_software(id)
+    print("This is software: ", software.software_name)
+    if software is None:
         flash("Library not found")
 
-    return render_template('library_detail.html', lib=library)
+    return render_template('software_detail.html', lib=software)
 
 
-@main.route('/library/<id>', methods=['GET', 'POST'])
-def library_form(id):
-    library = mongo_database.get_library(id)
-    print("This is library: ", library.name)
+@main.route('/software/<id>', methods=['GET', 'POST'])
+def software_form(id):
+    software = mongo_database.get_software(id)
+    print("This is software: ", software.software_name)
 
-    form = LibraryForm()
+    form = SoftwareForm()
 
-    return render_template('library_form.html', form=form)
+    return render_template('software_form.html', form=form)
 
 
 @main.route('/contact')

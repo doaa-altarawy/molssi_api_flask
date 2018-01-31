@@ -3,9 +3,9 @@
     <fieldset>
 
     <!-- Text Search input-->
-    <div class="form-group row px-2"><div class="col-lg-9 mx-auto">
+    <div class="form-group row px-2"><div class="col-lg-10 mx-auto">
       <div class="input-group row">
-          <input id="libraryName" class="form-control col-auto" type="text" name="libraryName" placeholder="Search library description..." >
+          <input id="softwareName" class="form-control col-auto" type="text" name="softwareName" placeholder="Search software description..." >
           <div class="input-group-btn col-auto">
               <button id='search_quick' class="btn-sm btn-primary active">Search <i class="fa fa-search"></i></button>
           </div>
@@ -16,7 +16,7 @@
           </div>
           <div class="col-auto">
               <button id="clear_search" type="button" class="btn btn-link">Clear Search</button>
-{#              <a href="{{ url_for('submit_library.index_view') }}" class="btn btn-link">Submit your Code</a>#}
+              <a href="{{ url_for('submit_software.index_view') }}" class="btn btn-link">Add your Software</a>
           </div>
       </div>
     </div></div> <!-- form group -->
@@ -97,7 +97,6 @@
                   <option value="">Any</option>
                   <option value="free">Free</option>
                   <option value="non-free">Commercial</option>
-                  <option value="unknown">Unknown</option>
                 </select>
             </div>
         </div> <!-- form-group -->

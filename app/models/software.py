@@ -100,19 +100,19 @@ class MMFeatures(db.EmbeddedDocument):
                     self.tags.append(tag)
 
 
-class Library(db.DynamicDocument):     # flexible schema, can have extra attributes
+class Software(db.DynamicDocument):     # flexible schema, can have extra attributes
 
     # added by
-    add_by_name = db.StringField(max_length=100, required=True)
-    add_by_email = db.EmailField(required=True)
-    is_lib_owner = db.BooleanField(required=True)
+    added_by_name = db.StringField(max_length=100, required=True)
+    added_by_email = db.EmailField(required=True)
+    is_SW_owner = db.BooleanField(required=True, default=False)
 
     # availability
-    name = db.StringField(max_length=100, required=True)
+    software_name = db.StringField(max_length=100, required=True)
     license = db.StringField(max_length=200)
     price = db.StringField(max_length=200)
     latest_version = db.StringField(max_length=100)
-    date = db.DateTimeField()                   # Date of latest version
+    date_of_latest_version = db.DateTimeField()                   # Date of latest version
     principal_contact_name = db.StringField(max_length=100)
     principal_contact_email = db.EmailField()
     official_website = db.URLField()
@@ -125,9 +125,10 @@ class Library(db.DynamicDocument):     # flexible schema, can have extra attribu
     domain = db.StringField(required=True, default='MM', choices=['MM', 'QM'])      # QM, MM, QM/MM, etc..
 
     # software engineering
-    LANGUAGES = ['C', 'C++', 'Python', 'FORTRAN', 'FORTRAN2003', 'FORTRAN77', 'FORTRAN90', 'Java', 'JavaScript']
+    LANGUAGES = ['C', 'C++', 'Python', 'FORTRAN', 'FORTRAN2003', 'FORTRAN77',
+                 'FORTRAN90', 'Java', 'JavaScript', 'Other']
 
-    source = db.URLField()
+    source_code = db.URLField()
     executables = db.StringField(max_length=100)
     code_management = db.StringField(max_length=100)
     continuous_integration = db.StringField(max_length=100)
@@ -138,14 +139,14 @@ class Library(db.DynamicDocument):     # flexible schema, can have extra attribu
     compilers = db.StringField(max_length=100)
 
     # Performance
-    parallel = db.StringField(max_length=50)
-    gpu = db.StringField(max_length=50)
-    knl = db.StringField(max_length=50)
+    parallel = db.StringField(max_length=50, choices=['', 'Yes', 'No'])
+    gpu = db.StringField(max_length=50, choices=['', 'Yes', 'No'])
+    knl = db.StringField(max_length=50, choices=['', 'Yes', 'No'])
 
     # support
     support_line = db.StringField(max_length=250)  # url or email
     documentation = db.URLField()
-    tutorials = db.IntField()
+    number_of_tutorials = db.IntField()
     wiki = db.URLField()
     forum = db.URLField()
     mail_list = db.URLField()
@@ -153,7 +154,7 @@ class Library(db.DynamicDocument):     # flexible schema, can have extra attribu
 
     # Local
     # published = DateTimeField()
-    added = db.DateTimeField(default=datetime.datetime.now)
+    date_added = db.DateTimeField(default=datetime.datetime.now)
     is_pending = db.BooleanField(default=True)
 
     mm_features = db.EmbeddedDocumentField(MMFeatures)
@@ -167,7 +168,7 @@ class Library(db.DynamicDocument):     # flexible schema, can have extra attribu
         'indexes': [
             "domain",
             {
-                'fields': ['$name', "$description", "$long_description"],
+                'fields': ['$software_name', "$description", "$long_description"],
                 'default_language': "en",
                 "language_override": "en",
             }
@@ -175,7 +176,7 @@ class Library(db.DynamicDocument):     # flexible schema, can have extra attribu
     }
 
     def __unicode__(self):
-        return self.name
+        return self.software_name
 
     @property
     def library_type(self):
@@ -184,10 +185,10 @@ class Library(db.DynamicDocument):     # flexible schema, can have extra attribu
     def save(self, *args, **kwargs):
         """Override save to add languages_lower"""
         self.add_language_lower()
-        return super(Library, self).save(*args, **kwargs)
+        return super(Software, self).save(*args, **kwargs)
 
     def __str__(self):
-        return str(self.id) + ', name: ' + self.name + ', is_pending: ' + \
+        return str(self.id) + ', name: ' + self.software_name + ', is_pending: ' + \
                 str(self.is_pending) + ', Domain: ' + self.domain
 
     def add_language_lower(self):
@@ -213,7 +214,7 @@ def set_props_values(cls, obj, prop_values):
                     setattr(obj, prop, tag_val)
 
 
-def create_library(lib_type='', **kwargs):
+def create_software(lib_type='', **kwargs):
     """Create a Library object from a set of params
        A Builder Design Pattern"""
 
@@ -221,15 +222,15 @@ def create_library(lib_type='', **kwargs):
         mm_features = MMFeatures()
         set_props_values(MMFeatures, mm_features, kwargs)
         mm_features.add_tags(kwargs)
-        lib = Library(mm_features=mm_features, **kwargs)
+        lib = Software(mm_features=mm_features, **kwargs)
 
     elif lib_type == 'QM':
         qm_features = QMFeatures()
         set_props_values(QMFeatures, qm_features, kwargs)
         qm_features.add_tags(kwargs)
-        lib = Library(qm_features=qm_features, **kwargs)
+        lib = Software(qm_features=qm_features, **kwargs)
 
     else:
-        lib = Library(**kwargs)
+        lib = Software(**kwargs)
 
     return lib

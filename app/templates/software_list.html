@@ -4,7 +4,7 @@
     <!-- <img class="img-fluid w-25" src="http://localhost:5000/static/images/molssi.jpg" /> -->
 <div class="card-block">
 
-    <h3 class="card-title text-danger"><a href="/library_detail/{{ lib.id }}">{{ lib.name }}</a></h3>
+    <h3 class="card-title text-danger"><a href="/software_detail/{{ lib.id }}">{{ lib.software_name }}</a></h3>
     <p class="card-text text-justify my-md-4">
         {% if lib.description -%}
             {{ lib.description | safe | truncate(512) }}
@@ -83,9 +83,9 @@
 
     <div class="card-footer" style="border-radius: 0 0 15px 15px">
         <a class="card-link" href="{{ lib.official_website }}" target="_blank">Official Website</a>
-        <a class="card-link" href="{{ lib.source or 'http://' }}" target="_blank">Source code</a>
+        <a class="card-link" href="{{ lib.source_code or 'http://' }}" target="_blank">Source code</a>
 
-        <a href="/library_detail/{{ lib.id }}" class="card-link float-right">
+        <a href="/software_detail/{{ lib.id }}" class="card-link float-right">
             <h5 class="d-inline-block">Read more <i class="fa fa-chevron-right"></i></h5>
         </a>
     </div> <!-- card footer -->

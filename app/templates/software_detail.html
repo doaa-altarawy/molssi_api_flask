@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 
-{% block title %}Library Detail{% endblock %}
+{% block title %}Software Detail{% endblock %}
 
 {% block page_content %}
 <div id="page_wrapper" class="container mb-3" style="max-width: 90%">
 
     <div>
-        <h3 class="text-danger">{{ lib.name }}</h3>
+        <h3 class="text-danger">{{ lib.software_name }}</h3>
         <p class="text-justify my-md-4">
         {% if lib.long_description -%}
             {{ lib.long_description | safe }}
@@ -151,7 +151,7 @@
                 <dt class="col-sm-2">Documentation</dt>
                 <dd class="col-sm-4">{{ lib.documentation | urlize(30, true, '_blank') | empty }} </dd>
                 <dt class="col-sm-2">Tutorials</dt>
-                <dd class="col-sm-4">{{ lib.tutorials | empty }} </dd>
+                <dd class="col-sm-4">{{ lib.number_of_tutorials | empty }} </dd>
                 <dt class="col-sm-2">Wiki</dt>
                 <dd class="col-sm-4">{{ lib.wiki | urlize(30, true, '_blank') | empty }} </dd>
                 <dt class="col-sm-2">Forum</dt>
@@ -181,7 +181,7 @@
                         {{ lang + " " }}
                     {%- endfor %}
                 </dd>
-                <dt class="col-sm-2">Source Code:</dt>
+                <dt class="col-sm-2">Source Code</dt>
                 <dd class="col-sm-4">{{ lib.source | urlize(40, true, '_blank') | empty }}</dd>
 
                 <dt class="col-sm-2">Code Management</dt>

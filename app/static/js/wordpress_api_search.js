@@ -64,7 +64,7 @@ jQuery(document).ready(function() {
     } // show_pages
 
     // keyup search
-    jQuery('#libraryName').keyup(function(event) {
+    jQuery('#softwareName').keyup(function(event) {
             jQuery('#search_quick').trigger('click');
     });
 
@@ -80,7 +80,7 @@ jQuery(document).ready(function() {
 
     function search(scroll_top) {
         // Get search parameters:
-        var query_text = jQuery.trim(jQuery('#libraryName').val());
+        var query_text = jQuery.trim(jQuery('#softwareName').val());
         var domain = jQuery('#domain').find(":checked").val();
         var price = jQuery('#price').find(":selected").val();
         var languages = [];
@@ -190,7 +190,7 @@ jQuery(document).ready(function() {
 
     function clear_search_panels(){
         // Clear basic and advanced search
-        jQuery('#libraryName').val('');
+        jQuery('#softwareName').val('');
         jQuery('#domain').find('input:radio:first').prop('checked', true);
         // unselect all languages, use prop. attr is deprecated in jQuery 1.6+
         jQuery('#languages').find('input').not(':first').prop('checked', false);

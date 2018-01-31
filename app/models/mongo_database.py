@@ -1,6 +1,6 @@
 from __future__ import print_function
 from mongoengine import connect
-from .library import Library, QMFeatures, MMFeatures, create_library
+from .software import Software, QMFeatures, MMFeatures, create_software
 from mongoengine.queryset.visitor import Q
 import json
 import re
@@ -41,8 +41,8 @@ b) Strings:
 
 
 Query with:
-Library.object(..) --> no exception, can return 0+, returns a queryset
-Library.get(..) --> return exactly one, raises exception otherwise
+Software.object(..) --> no exception, can return 0+, returns a queryset
+Software.get(..) --> return exactly one, raises exception otherwise
                     (DoesNotExist, MultipleObjectsReturned)
 
 queryset Functions:
@@ -53,19 +53,19 @@ queryset Functions:
 
 Create Objects:
 ---------------
-Library.objects.insert(my_lib_object)
-Library.objects.insert(  Library(**my_lib_json)  )
+Software.objects.insert(my_lib_object)
+Software.objects.insert(  Software(**my_lib_json)  )
 
 Multiple:
-Library.objects.insert([mylib1, mylib2, mylib3])
+Software.objects.insert([mylib1, mylib2, mylib3])
 
-my_library.save()
-my_library.update(params)
+my_Software.save()
+my_Software.update(params)
 
-Library.objects(..).delete()
+Software.objects(..).delete()
 
 
-json_list = Library.objects(..).to_json()
+json_list = Software.objects(..).to_json()
 from_json??
 '''
 
@@ -85,7 +85,7 @@ def get_connection(name='', host='localhost', port=27017, is_mock=False):
 
 def clear_libraries():
     """Clear Libraries Collections"""
-    Library.objects().delete()
+    Software.objects().delete()
     # db.drop_database('resources_website')
 
 
@@ -96,18 +96,18 @@ def load_collection_from_json(filename, lib_type=None):
         json_list = json.load(f)
 
     for json_record in json_list:
-        library = create_library(lib_type, **json_record)
-        library.save(validate=False)
+        software = create_software(lib_type, **json_record)
+        software.save(validate=False)
 
-    # [Library(**json_record).save(validate=False) for json_record in json_list]
+    # [Software(**json_record).save(validate=False) for json_record in json_list]
 
-    # Library.objects.insert(library_list) # doesn't call override save
+    # Software.objects.insert(software_list) # doesn't call override save
 
 
 # ---------------------------   Query functions  ------------------------ #
 
 def find_language(lang, verbose=False):
-    results = Library.objects(languages_lower__in=lang.lower())
+    results = Software.objects(languages_lower__in=lang.lower())
     if verbose:
         print('Num of results for {} is {}'.format(lang.lower(), results.count()))
         print_results(results)
@@ -115,7 +115,7 @@ def find_language(lang, verbose=False):
 
 
 def find_domain(domain, verbose=False):
-    results = Library.objects(domain__in=domain)
+    results = Software.objects(domain__in=domain)
     if verbose:
         print('Num of results for {} is {}'.format(domain, results.count()))
         print_results(results)
@@ -127,7 +127,7 @@ def search_description(keyword, verbose=False):
     """Search descrption """
     # TODO: fixme
 
-    results = Library.objects(description__contains(keyword))
+    results = Software.objects(description__contains(keyword))
     if verbose:
         print('Num of results for {} is {}'.format(keyword, results.count()))
         print_results(results)
@@ -137,7 +137,7 @@ def search_description(keyword, verbose=False):
 
 def search_text(query, verbose=False):
     """search indexed text fields (defined with $ in meta)"""
-    results = Library.objects.search_text(query)
+    results = Software.objects.search_text(query)
 
     if results:
         results = results.order_by('$text_score')
@@ -150,14 +150,14 @@ def search_text(query, verbose=False):
 
 def complex_query(languages=[], domains=[], verbose=False):
     languages_lower = [lang.lower() for lang in languages]
-    results = Library.objects(Q(languages_lower__in=languages_lower) & Q(domain__in=domains))
+    results = Software.objects(Q(languages_lower__in=languages_lower) & Q(domain__in=domains))
     if verbose:
         print_results(results)
 
     return results
 
 
-def full_search(exec_empty_lib=False, verbose=False, **kwargs):
+def full_search(exec_empty_sw=False, verbose=False, **kwargs):
     """Search the libraries collection using joint search of multiple fields
         any empty field will not be searched.
         if all fields are empty, then all documents are returned
@@ -218,28 +218,28 @@ def full_search(exec_empty_lib=False, verbose=False, **kwargs):
         if val:
             query[key] = val
 
-    if exec_empty_lib:
+    if exec_empty_sw:
         # non_empty = {'$or': [{'description__ne': ''}, {'long_description__ne': ''}]}
         arg_query += (Q(description__ne='') | Q(long_description__ne=''),)
 
     print('MongoDB query:', query)
-    results = Library.objects(*arg_query, **query)
+    results = Software.objects(*arg_query, **query)
 
     print('Results length: ', len(results))
 
     # if len(languages_lower) != 0 and len(domain) != 0:
-    #     results = Library.objects(Q(languages_lower__in=languages_lower) & Q(domain__in=domain))
+    #     results = Software.objects(Q(languages_lower__in=languages_lower) & Q(domain__in=domain))
     # elif len(languages_lower) != 0:
-    #     results = Library.objects(languages_lower__in=languages_lower)
+    #     results = Software.objects(languages_lower__in=languages_lower)
     # elif len(domain) != 0:
-    #     results = Library.objects(domain__in=domain)
+    #     results = Software.objects(domain__in=domain)
     # print(results)
 
     if len(query_text) != 0:
         if results:
             results = results.search_text(query_text)
         else:
-            results = Library.objects.search_text(query_text)
+            results = Software.objects.search_text(query_text)
         if results:
             results = results.order_by('$text_score')
     else:
@@ -247,7 +247,7 @@ def full_search(exec_empty_lib=False, verbose=False, **kwargs):
             results = results.order_by('name')
 
     # if len(languages_lower) == 0 and len(domain) == 0 and len(query_text) == 0:  # return all libraries
-    #     results = Library.objects.order_by('name')
+    #     results = Software.objects.order_by('name')
 
     if verbose:
         print_results(results)
@@ -275,15 +275,15 @@ def get_compiled_regex(search_keys, sep='|'):
 def get_json(verbose=False):
     """Get json data of the DB"""
 
-    json_data = Library.objects().to_json()
+    json_data = Software.objects().to_json()
     if verbose:
         print(json_data)
 
     return json_data
 
 
-def get_library(lib_id):
-    libs = Library.objects(id=lib_id)
+def get_software(lib_id):
+    libs = Software.objects(id=lib_id)
     if libs:    # return first result
         return libs[0]
     else:
@@ -291,7 +291,7 @@ def get_library(lib_id):
 
 
 def get_lib_features():
-    """Get different values for Library properties values
+    """Get different values for Software properties values
         Used for search queries."""
     lib = {
         'mm_props': {},
@@ -306,7 +306,7 @@ def get_lib_features():
 
 
 def add_one(name, description='', languages='', domain='', verbose=False):
-    my_lib = Library(
+    my_lib = Software(
         name=name,
         description=description,
         languages=languages,
@@ -331,10 +331,10 @@ def print_results(results):
 def print_all():
     """Print all Documents in the Libraries collection"""
 
-    all_libs = Library.objects
+    all_libs = Software.objects
     print('Currently in DB: ', all_libs.count())
     print_results(all_libs)
 
 
 def get_DB_size():
-    return Library.objects.count()
+    return Software.objects.count()
