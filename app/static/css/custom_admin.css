@@ -32,6 +32,22 @@
     float: none;
 }
 
+@media (max-width: 800px) {
+	.logo {
+		display: table-cell;
+		vertical-align: middle;
+		text-align: center;
+		margin-bottom: 10px;
+		width: 50%;
+		float: left;
+	}
+	.ad-728x90 {
+		width: 100%;
+		text-align: center;
+		float: right;
+	}
+}
+
 img {
     height: auto !important;
     max-width: 100%;
