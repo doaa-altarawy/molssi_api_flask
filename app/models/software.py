@@ -65,7 +65,7 @@ class MMFeatures(db.EmbeddedDocument):
 
     forcefields = db.StringField(max_length=200)
     file_formats = db.StringField(max_length=100)
-    qm_mm = db.BooleanField()
+    qm_mm = db.BooleanField(verbose_name='QM/MM')
 
     # tags
     TAG_NAMES = [
@@ -105,7 +105,7 @@ class Software(db.DynamicDocument):     # flexible schema, can have extra attrib
     # added by
     added_by_name = db.StringField(max_length=100, required=True)
     added_by_email = db.EmailField(required=True)
-    is_SW_owner = db.BooleanField(required=True, default=False)
+    is_SW_owner = db.BooleanField(default=False)
 
     # availability
     software_name = db.StringField(max_length=100, required=True)
@@ -118,11 +118,12 @@ class Software(db.DynamicDocument):     # flexible schema, can have extra attrib
     official_website = db.URLField()
 
     # Others
-    description = db.StringField(required=True, default='')
+    description = db.StringField(max_length=500, required=True, default='',
+                                 help_text='A short description of max 500 characters')
     long_description = db.StringField(required=True, default='')
     comments = db.StringField()
     required_citation = db.StringField()
-    domain = db.StringField(required=True, default='MM', choices=['MM', 'QM'])      # QM, MM, QM/MM, etc..
+    domain = db.StringField(required=True, default='MM', choices=['MM', 'QM', 'other'])
 
     # software engineering
     LANGUAGES = ['C', 'C++', 'Python', 'FORTRAN', 'FORTRAN2003', 'FORTRAN77',
@@ -130,8 +131,8 @@ class Software(db.DynamicDocument):     # flexible schema, can have extra attrib
 
     source_code = db.URLField()
     executables = db.StringField(max_length=100)
-    code_management = db.StringField(max_length=100)
-    continuous_integration = db.StringField(max_length=100)
+    code_management = db.StringField(max_length=10, choices=['', 'git', 'SVN', 'CVS', 'other'])
+    continuous_integration = db.StringField(max_length=20, choices=['', 'Yes', 'No'])
     tests = db.StringField(max_length=100)
     languages = db.ListField(db.StringField(max_length=20, choices=LANGUAGES))
     # for search efficiency, repeat in lowercase, keep original case for display
@@ -140,8 +141,8 @@ class Software(db.DynamicDocument):     # flexible schema, can have extra attrib
 
     # Performance
     parallel = db.StringField(max_length=50, choices=['', 'Yes', 'No'])
-    gpu = db.StringField(max_length=50, choices=['', 'Yes', 'No'])
-    knl = db.StringField(max_length=50, choices=['', 'Yes', 'No'])
+    gpu = db.StringField(max_length=50, choices=['', 'Yes', 'No'], verbose_name='GPU')
+    knl = db.StringField(max_length=50, choices=['', 'Yes', 'No'], verbose_name='KNL')
 
     # support
     support_line = db.StringField(max_length=250)  # url or email
@@ -150,16 +151,17 @@ class Software(db.DynamicDocument):     # flexible schema, can have extra attrib
     wiki = db.URLField()
     forum = db.URLField()
     mail_list = db.URLField()
-    ui = db.BooleanField()
+    ui = db.BooleanField(verbose_name='UI')
 
     # Local
     # published = DateTimeField()
     date_added = db.DateTimeField(default=datetime.datetime.now)
+    last_updated = db.DateTimeField()
     is_pending = db.BooleanField(default=True)
 
-    mm_features = db.EmbeddedDocumentField(MMFeatures)
+    mm_features = db.EmbeddedDocumentField(MMFeatures, verbose_name='MM Features')
 
-    qm_features = db.EmbeddedDocumentField(QMFeatures)
+    qm_features = db.EmbeddedDocumentField(QMFeatures, verbose_name='QM Features')
 
     # Use the $ prefix to set a text index
     meta = {
@@ -179,12 +181,13 @@ class Software(db.DynamicDocument):     # flexible schema, can have extra attrib
         return self.software_name
 
     @property
-    def library_type(self):
+    def software_type(self):
         return self.__class__.__name__
 
     def save(self, *args, **kwargs):
         """Override save to add languages_lower"""
         self.add_language_lower()
+        self.last_updated = datetime.datetime.now
         return super(Software, self).save(*args, **kwargs)
 
     def __str__(self):

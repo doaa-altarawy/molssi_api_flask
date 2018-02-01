@@ -14,7 +14,8 @@ cors = CORS()
 # cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 # For: @app.route("/api/v1/users")
 bootstrap = Bootstrap()
-admin = Admin()
+app_admin = Admin(name='MolSSI CMS Software DB Admin', template_mode='bootstrap3',
+                  base_template='admin/custom_base.html')
 
 
 def create_app(config_name):
@@ -27,9 +28,9 @@ def create_app(config_name):
     db.init_app(app)
     cors.init_app(app)
     bootstrap.init_app(app)
-    admin.init_app(app)
+    app_admin.init_app(app)
     # To avoid circular import
-    from app.main.admin import add_admin_views
+    from app.admin import add_admin_views
     add_admin_views()
 
     # jinja template

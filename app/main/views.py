@@ -8,12 +8,13 @@ import json
 from . import main
 from ..models import mongo_database
 from .forms import SoftwareForm
-
+from ..admin.admin import SoftwareView
 
 @main.route('/')
 @main.route('/resources_website')
 @main.route('/cms_software_db')
-def resources_website():
+@main.route('/software-search')  # preferred name
+def software_search():
     """Returns the search page for the resources website"""
     lib = mongo_database.get_lib_features()
 
@@ -106,3 +107,9 @@ def contact():
 def send_js(path):
     return send_from_directory('static', path)
 
+
+@main.route('/success')
+def add_software_success():
+    """Success page after adding a new software"""
+
+    return render_template('software_added_success.html')

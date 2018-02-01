@@ -1,0 +1,22 @@
+{% extends 'admin/base.html' %}
+
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-select.min.css' ) }}" type="text/css"/>
+
+{% endblock %}
+
+{% block tail %}
+    {{ super() }}
+    <script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap-select.min.js' ) }}"></script>
+
+    <script type="text/javascript">
+        jQuery(document).ready(function(){
+            $('select[multiple]').selectpicker({
+                'liveSearch': true,
+                'actionsBox': true,
+                'size': 7
+            });
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends 'admin/master.html' %}
+{% import 'admin/lib.html' as lib with context %}
+{% from 'admin/lib.html' import extra with context %} {# backward compatible #}
+
+{% block head %}
+    {{ super() }}
+    {{ lib.form_css() }}
+{% endblock %}
+
+{% block page_body %}
+    <div class="container">
+        <nav class="navbar navbar-default" role="navigation">
+            {% include 'molssi_header.html' %}
+            <!-- navbar content -->
+            <div class="collapse navbar-collapse" id="admin-navbar-collapse">
+
+              {% block access_control %}
+              {% endblock %}
+            </div>
+        </nav>
+
+        <h3>Submit Software for review</h3>
+      {% block messages %}
+      {{ layout.messages() }}
+      {% endblock %}
+
+      {# store the jinja2 context for form_rules rendering logic #}
+      {% set render_ctx = h.resolve_ctx() %}
+
+      {% block body %}
+        {% block create_form %}
+            {{ lib.render_form(form, return_url, None, form_opts) }}
+        {% endblock %}
+      {% endblock %}
+    </div>
+{% endblock %}
+
+
+{% block tail %}
+    {{ super() }}
+    {{ lib.form_js() }}
+{% endblock %}
