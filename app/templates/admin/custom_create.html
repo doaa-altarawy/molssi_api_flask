@@ -9,6 +9,7 @@
 
 {% block page_body %}
     <div class="container">
+        {% if 'molssi.org' not in request.base_url  %}
         <nav class="navbar navbar-default" role="navigation">
             {% include 'molssi_header.html' %}
             <!-- navbar content -->
@@ -18,6 +19,7 @@
               {% endblock %}
             </div>
         </nav>
+        {% endif %}
 
         <h3>Submit Software for review</h3>
       {% block messages %}

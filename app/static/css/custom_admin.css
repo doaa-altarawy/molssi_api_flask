@@ -17,7 +17,7 @@
     display: table-cell;
     vertical-align: middle;
     text-align: left;
-    width: 250px;
+    width: 240px;
 
 }
 
@@ -32,24 +32,13 @@
     float: none;
 }
 
-@media (max-width: 1000px) {
-	.logo {
-		display: table-cell;
-		vertical-align: middle;
-		text-align: center;
-		margin-bottom: 10px;
-		width: 50%;
-		float: left;
-	}
-	.ad-728x90 {
-		width: 100%;
-		text-align: center;
-		float: right;
-	}
-}
-
 img {
     height: auto !important;
     max-width: 100%;
     height: auto;
+}
+
+.admin-form{
+	width: 70%;
+	margin: 0 auto;
 }
