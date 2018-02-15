@@ -17,6 +17,7 @@ class SoftwareView(ModelView):
 
     column_labels = {
         'added_by_name': 'Added By',
+        'is_pending': 'Pending',
     }
 
     column_filters = ['added_by_name', 'software_name', 'domain', 'is_pending']
@@ -58,6 +59,7 @@ class SoftwareView(ModelView):
         'mm_features': {'label': ''},  # remove label
         # 'mm_features.qm_mm': {'label': 'QM/MM'},  # not here, in form_subdocument
         'qm_features': {'label': ''},
+        'is_pending': {'label': 'Pending'}
     }
 
     form_widget_args = {
