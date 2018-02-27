@@ -10,7 +10,7 @@ class BaseConfig:
     # SETTINGS = "PRODUCTION"
 
     _basedir = os.path.abspath(os.path.dirname(__file__))
-    APPLICATION_ROOT = os.path.join(_basedir, 'molssi_api_flask')
+    APPLICATION_ROOT = os.path.join(_basedir, 'app')
     STATIC_FOLDER = 'static'
 
     ADMINS = frozenset(['daltarawy@vt.edu'])
@@ -34,10 +34,10 @@ class BaseConfig:
 
     # Client-side config
     API_RESULTS_PER_PAGE = 5
-    EXECLUDE_EMPTY_LIB = True
-    
+    EXECLUDE_EMPTY_SW = True
+
     # Jinia template
-    REPLACE_NONE = '?'
+    REPLACE_NONE = ''
 
 
 class DevelopmentConfig(BaseConfig):
@@ -47,7 +47,6 @@ class DevelopmentConfig(BaseConfig):
     API_DOMAIN = 'http://localhost:5000'
     MONGODB_SETTINGS = {
         'host': "mongodb://user:123@localhost:27017/resources_website",  # URI
-        # 'host': "mongodb://user:123@ds127163.mlab.com:27163/resources_website",
         # 'db': 'project1',
         # 'host': 'localhost',
         # 'port': 12345,

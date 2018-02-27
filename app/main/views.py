@@ -9,6 +9,8 @@ from . import main
 from ..models import mongo_database
 from .forms import SoftwareForm
 from ..admin.admin import SoftwareView
+import logging
+
 
 @main.route('/')
 @main.route('/resources_website')
@@ -19,6 +21,7 @@ def software_search():
     lib = mongo_database.get_lib_features()
 
     return render_template('wordpress_page.html', lib=lib)
+
 
 @main.route('/search')
 def search_libraries_ui():
@@ -46,7 +49,7 @@ def search_libraries(to_json=True):
     # domain = request.args.pop('domain', '')
     # price = request.args.pop('price', '', type=str)
 
-    print('Flask received Search params: {}'.format(request.args.to_dict()))
+    logging.info('Flask received Search params: {}'.format(request.args.to_dict()))
 
     exec_empty_sw = current_app.config['EXECLUDE_EMPTY_SW']
     results = mongo_database.full_search(exec_empty_sw, **request.args.to_dict())
@@ -61,21 +64,21 @@ def search_libraries(to_json=True):
     return json_data
 
 
-@main.route('/software_detail/<id>', methods=['GET'])
-def software_detail(id):
-    print('Find software with ID: ', id)
-    software = mongo_database.get_software(id)
-    print("This is software: ", software.software_name)
+@main.route('/software_detail/<sw_id>', methods=['GET'])
+def software_detail(sw_id):
+    logging.info('Find software with ID: %s', sw_id)
+    software = mongo_database.get_software(sw_id)
+    logging.debug("This is software: %s", software.software_name)
     if software is None:
         flash("Library not found")
 
     return render_template('software_detail.html', lib=software)
 
 
-@main.route('/software/<id>', methods=['GET', 'POST'])
-def software_form(id):
-    software = mongo_database.get_software(id)
-    print("This is software: ", software.software_name)
+@main.route('/software/<sw_id>', methods=['GET', 'POST'])
+def software_form(sw_id):
+    software = mongo_database.get_software(sw_id)
+    logging.debug("This is software: ", software.software_name)
 
     form = SoftwareForm()
 
@@ -88,7 +91,7 @@ def contact():
     """
     json_url = os.path.join(current_app.config['APPLICATION_ROOT'], 'static',
                     'data', 'test.json')
-    print(json_url)
+    logging.debug(json_url)
     # data = json.load(open(json_url))
 
     with main.open_resource(json_url) as f:
