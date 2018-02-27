@@ -50,7 +50,7 @@ def setup_logging(config_name):
                                '%(levelname)-8s - %(message)s',
                         datefmt='%Y-%m-%d %H:%M:%S',
                         filename=log_filename,
-                        filemode='w',
+                        filemode='a',
                         level=log_lvl_file)
 
     # Create a handler that writes INFO messages or higher to sys.stderr
