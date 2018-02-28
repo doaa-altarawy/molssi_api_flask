@@ -7,6 +7,8 @@ dominate==2.3.1
 Flask==0.12.2
 Flask-Admin==1.5.0
 Flask-Bootstrap==3.3.7.1
+#git+git://github.com/mbr/flask-bootstrap@master#egg=flask_bootstrap
+#git+git://github.com/beenje/flask-bootstrap@bootstrap-v4#egg=flask_bootstrap
 Flask-Cors==3.0.3
 Flask-Jsonpify==1.5.0
 Flask-Login==0.4.1
@@ -36,3 +38,6 @@ Werkzeug==0.12.2
 wikipedia==1.4.0
 WTForms==2.1
 xlrd==1.0.0
+Flask-DebugToolbar
+
+
