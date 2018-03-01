@@ -4,7 +4,7 @@ from config import config
 from flask_mongoengine import MongoEngine
 from flask_mail import Mail
 from flask_bootstrap import Bootstrap
-from template_filters import replace_empty
+from .template_filters import replace_empty
 from flask_admin import Admin
 from flask_login import LoginManager
 from flask_debugtoolbar import DebugToolbarExtension
@@ -43,7 +43,7 @@ def create_app(config_name):
     # To avoid circular import
     from app.admin import add_admin_views
     add_admin_views()
-    toolbar.init_app(app)
+    # toolbar.init_app(app)
 
     # jinja template
     app.jinja_env.filters['empty'] = replace_empty
