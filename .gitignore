@@ -52,4 +52,5 @@ log
 .DS_Store
 .cache
 
-
+logs/
+app/templates/admin2/

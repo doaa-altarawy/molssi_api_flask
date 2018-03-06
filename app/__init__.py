@@ -8,10 +8,11 @@ from .template_filters import replace_empty
 from flask_admin import Admin
 from flask_login import LoginManager
 from flask_debugtoolbar import DebugToolbarExtension
+from flask_moment import Moment
 
 
 mail = Mail()
-db = MongoEngine()      # flask_mongoengine
+db = MongoEngine()
 cors = CORS()
 # cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 # For: @app.route("/api/v1/users")
@@ -21,7 +22,7 @@ app_admin = Admin(name='MolSSI CMS Software DB Admin', template_mode='bootstrap3
 
 login_manager = LoginManager()
 login_manager.login_view = 'auth.login'   # endpoint name for the login view
-
+moment = Moment()
 toolbar = DebugToolbarExtension()
 
 
@@ -40,22 +41,24 @@ def create_app(config_name):
     bootstrap.init_app(app)
     login_manager.init_app(app)
     app_admin.init_app(app)
-    # To avoid circular import
-    from app.admin import add_admin_views
-    add_admin_views()
-    # toolbar.init_app(app)
+    moment.init_app(app)
+    toolbar.init_app(app)
 
     # jinja template
     app.jinja_env.filters['empty'] = replace_empty
 
+    from .auth import auth as auth_blueprint
+    app.register_blueprint(auth_blueprint, url_prefix='/auth')
+
     from .main import main as main_blueprint
     app.register_blueprint(main_blueprint)
 
-    # from .auth import auth as auth_blueprint
-    # app.register_blueprint(auth_blueprint, url_prefix='/auth')
-
     # from .api import api as api_blueprint
     # app.register_blueprint(api_blueprint, url_prefix='/api/v1')
+
+    # To avoid circular import
+    from app.admin import add_admin_views
+    add_admin_views()
 
     return app
 

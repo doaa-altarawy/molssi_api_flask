@@ -6,6 +6,7 @@ from ..models.software import Software
 import wtforms as wf
 from flask import url_for
 from flask_admin.babel import gettext
+import flask_login as login
 
 
 class SoftwareView(ModelView):
@@ -140,6 +141,9 @@ class SoftwareView(ModelView):
         #                       ('cpp', 'CPP'), ('py', 'Python')])
         # form_class.tests = wf.DecimalField('Number of Tests')
         return form_class
+
+    def is_accessible(self):
+        return login.current_user.is_authenticated
 
 
 class SoftwareViewPublic(SoftwareView):

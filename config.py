@@ -5,48 +5,44 @@ import os
 
 class BaseConfig:
 
-    SETTINGS = "DEVELOP"
-    # SETTINGS = "TESTING"
-    # SETTINGS = "PRODUCTION"
-
     _basedir = os.path.abspath(os.path.dirname(__file__))
-    APPLICATION_ROOT = os.path.join(_basedir, 'app')
     STATIC_FOLDER = 'static'
-
     ADMINS = frozenset(['daltarawy@vt.edu'])
     SECRET_KEY = 'SecretKeyForSessionSigning'
 
     SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(_basedir, 'app.db')
-    DATABASE_CONNECT_OPTIONS = {}
 
     THREADS_PER_PAGE = 8
 
-    CSRF_ENABLED = True
-    CSRF_SESSION_KEY = "somethingimpossibletoguess"
 
     # email
     MAIL_SERVER = os.environ.get('MAIL_SERVER', 'smtp.googlemail.com')
     MAIL_PORT = int(os.environ.get('MAIL_PORT', '587'))
     MAIL_USE_TLS = os.environ.get('MAIL_USE_TLS', 'true').lower() in \
         ['true', 'on', '1']
-    MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
-    MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
-
+    MAIL_USERNAME = os.environ.get('MAIL_USERNAME', 'userhere')
+    MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD', 'passhere')
+    MAIL_SUBJECT_PREFIX = '[MolSSI CMS Software DB]'
+    MAIL_SENDER = 'MolSSI CMS DB Admin <info@molssi.org>'
+    APP_ADMIN = os.environ.get('APP_ADMIN', 'daltarawy@vt.edu')
+    EMAIL_CONFIRMATION_ENABLED = False
     # Client-side config
     API_RESULTS_PER_PAGE = 5
-    EXECLUDE_EMPTY_SW = True
+    EXCLUDE_EMPTY_SW = True
 
     # Jinia template
     REPLACE_NONE = ''
 
+    WTF_CSRF_ENABLED = True   # it's true by default, important to prevent CSRF attacks
+
 
 class DevelopmentConfig(BaseConfig):
     DEBUG = True
-    TESTING = True
+    TESTING = False
     WORDPRESS_DOMAIN = 'http://localhost:8888'
     API_DOMAIN = 'http://localhost:5000'
     MONGODB_SETTINGS = {
-        'host': "mongodb://user:123@localhost:27017/resources_website",  # URI
+        'host': "mongodb://ninja:fakePass@localhost:27017/resources_website",  # URI
         # 'db': 'project1',
         # 'host': 'localhost',
         # 'port': 12345,
@@ -54,23 +50,24 @@ class DevelopmentConfig(BaseConfig):
         # 'password': '123'
     }
 
+
 class TestingConfig(BaseConfig):
     DEBUG = True
     TESTING = True
     WORDPRESS_DOMAIN = 'http://molssi.org'
     API_DOMAIN = 'http://molssi-api.herokuapp.com'
     MONGODB_SETTINGS = {
-        'host': "mongodb://user:123@ds127163.mlab.com:27163/resources_website"
+        'host': "mongodb://ninja:fakePass@ds127163.mlab.com:27163/resources_website"
     }
 
 
 class ProductionConfig(BaseConfig):
-    DEBUG = True
+    DEBUG = False
     TESTING = False
     WORDPRESS_DOMAIN = 'http://molssi.org'
     API_DOMAIN = 'http://api.molssi.org'
     MONGODB_SETTINGS = {
-        'host': "mongodb://user:123@ds127163.mlab.com:27163/resources_website",
+        'host': "mongodb://ninja:fakePass@ds127163.mlab.com:27163/resources_website",
     }
 
 

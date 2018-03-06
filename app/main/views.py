@@ -10,13 +10,14 @@ from ..models import mongo_database
 from .forms import SoftwareForm
 from ..admin.admin import SoftwareView
 import logging
+from flask_login import login_required, current_user
 
 
 @main.route('/')
 @main.route('/resources_website')
 @main.route('/cms_software_db')
 @main.route('/software-search')  # preferred name
-def software_search():
+def index():
     """Returns the search page for the resources website"""
     lib = mongo_database.get_lib_features()
 
@@ -51,7 +52,7 @@ def search_libraries(to_json=True):
 
     logging.info('Flask received Search params: {}'.format(request.args.to_dict()))
 
-    exec_empty_sw = current_app.config['EXECLUDE_EMPTY_SW']
+    exec_empty_sw = current_app.config['EXCLUDE_EMPTY_SW']
     results = mongo_database.full_search(exec_empty_sw, **request.args.to_dict())
 
     if not to_json:
@@ -65,6 +66,9 @@ def search_libraries(to_json=True):
 
 
 @main.route('/software_detail/<sw_id>', methods=['GET'])
+# @login_required
+# @admin_required
+# @permission_required(Permission.MODERATE)
 def software_detail(sw_id):
     logging.info('Find software with ID: %s', sw_id)
     software = mongo_database.get_software(sw_id)

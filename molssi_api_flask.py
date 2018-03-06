@@ -6,7 +6,7 @@ from app import logger
 
 
 # Determine config settings from environment variables.
-config_name = os.getenv('FLASK_CONFIG') or 'default'
+config_name = os.getenv('FLASK_CONFIG') or 'development'
 
 # Setup logging levels
 logger.setup_logging(config_name=config_name)
@@ -20,4 +20,4 @@ app = create_app(config_name)
 
 
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)  # , use_reloader=False)
