@@ -4,6 +4,7 @@ from .software import Software, QMFeatures, MMFeatures, create_software
 from mongoengine.queryset.visitor import Q
 import json
 import re
+import logging
 
 
 '''
@@ -69,6 +70,8 @@ json_list = Software.objects(..).to_json()
 from_json??
 '''
 
+logger = logging.getLogger(__name__)
+
 
 def get_connection(name='', host='localhost', port=27017, is_mock=False):
     """ Create MongoDB using mongoengine
@@ -109,7 +112,7 @@ def load_collection_from_json(filename, lib_type=None):
 def find_language(lang, verbose=False):
     results = Software.objects(languages_lower__in=lang.lower())
     if verbose:
-        print('Num of results for {} is {}'.format(lang.lower(), results.count()))
+        logger.debug('Num of results for {} is {}'.format(lang.lower(), results.count()))
         print_results(results)
     return results
 
@@ -129,7 +132,7 @@ def search_description(keyword, verbose=False):
 
     results = Software.objects(description__contains(keyword))
     if verbose:
-        print('Num of results for {} is {}'.format(keyword, results.count()))
+        logger.debug('Num of results for {} is {}'.format(keyword, results.count()))
         print_results(results)
 
     return results
@@ -218,14 +221,17 @@ def full_search(exec_empty_sw=False, verbose=False, **kwargs):
         if val:
             query[key] = val
 
-    if exec_empty_sw:
+    if exec_empty_sw: # exclude empty sw
         # non_empty = {'$or': [{'description__ne': ''}, {'long_description__ne': ''}]}
         arg_query += (Q(description__ne='') | Q(long_description__ne=''),)
 
-    print('MongoDB query:', query)
+    # exclude pending sw
+    query['is_pending'] = False
+
+    logger.info('MongoDB Search query: %s', query)
     results = Software.objects(*arg_query, **query)
 
-    print('Results length: ', len(results))
+    logger.info('Results length: %s', len(results))
 
     # if len(languages_lower) != 0 and len(domain) != 0:
     #     results = Software.objects(Q(languages_lower__in=languages_lower) & Q(domain__in=domain))
@@ -235,22 +241,17 @@ def full_search(exec_empty_sw=False, verbose=False, **kwargs):
     #     results = Software.objects(domain__in=domain)
     # print(results)
 
-    if len(query_text) != 0:
-        if results:
-            results = results.search_text(query_text)
-        else:
-            results = Software.objects.search_text(query_text)
+    if len(query_text) != 0 and results:
+        results = results.search_text(query_text)
         if results:
             results = results.order_by('$text_score')
-    else:
-        if results:
-            results = results.order_by('name')
-
-    # if len(languages_lower) == 0 and len(domain) == 0 and len(query_text) == 0:  # return all libraries
-    #     results = Software.objects.order_by('name')
+    elif len(query_text) == 0 and results:
+        results = results.order_by('name')
 
     if verbose:
         print_results(results)
+
+    logger.info('Final results length: %s', len(results))
 
     return results
 
