@@ -7,9 +7,24 @@ import wtforms as wf
 from flask import url_for
 from flask_admin.babel import gettext
 import flask_login as login
+from flask_admin.form.widgets import DatePickerWidget
+from datetime import date, datetime
+from flask_admin.model import typefmt
+
+
+def date_format(view, value):
+    return value.strftime('%Y-%m-%d')
+
+
+MY_DEFAULT_FORMATTERS = dict(typefmt.BASE_FORMATTERS)
+MY_DEFAULT_FORMATTERS.update({
+        date: date_format
+    })
 
 
 class SoftwareView(ModelView):
+
+    column_type_formatters = MY_DEFAULT_FORMATTERS  # format dateTime without time
 
     # Columns (in list view):
     # -----------------------
@@ -53,47 +68,57 @@ class SoftwareView(ModelView):
     # }
 
     # *** Rename tags here
-    form_args = {
-        'added_by_name': {'label': 'Name'},
-        'added_by_email': {'label': 'Email'},
-        'is_SW_owner': {'label': 'Are you Software Owner'},
-        'mm_features': {'label': ''},  # remove label
-        # 'mm_features.qm_mm': {'label': 'QM/MM'},  # not here, in form_subdocument
-        'qm_features': {'label': ''},
-        'is_pending': {'label': 'Pending'}
-    }
+    form_args = dict(
+        added_by_name={'label': 'Name'},
+        added_by_email={'label': 'Email'},
+        is_SW_owner={'label': 'Are you Software Owner'},
+        mm_features={'label': ''},  # remove label
+        # mm_features.qm_mm={'label': 'QM/MM'},  # not here, in form_subdocument
+        qm_features={'label': ''},
+        is_pending={'label': 'Pending'},
+        # changes how the input is parsed by strptime (12 hour time)
+        # date_of_latest_version={'format': '%Y-%m-%d %I:%M %p'}
 
-    form_widget_args = {
-        'description': {'rows': 4, 'style': 'color: black'},
-        'long_description': {'rows': 10, 'style': 'color: black'}
-    }
+    )
 
-    form_subdocuments = {
-        'mm_features': {
-            'form_args': {
+    form_widget_args = dict(
+        description={'rows': 4, 'style': 'color: black'},
+        long_description={'rows': 10, 'style': 'color: black'},
+        date_of_latest_version={   # http://www.daterangepicker.com/#options
+            'data-max-date': datetime.now()
+            # 'widget': DatePickerWidget(),  # not working
+            # 'data-role': 'datepicker',
+            # 'data-date-format': '%Y-%m-%d %I:%M %p',  # has to be in both here and in form_args
+            # 'data-show-meridian': 'True'
+        }
+    )
+
+    form_subdocuments = dict(
+        mm_features=dict(
+            form_args={
                 # 'qm_mm': {'label': 'QM/MM'}  # working
             },  # form_args
-            'form_rules': [
+            form_rules=[
                 'ensembles', 'free_energy_methods', 'advanced_sampling_methods',
                 'forcefields', 'file_formats', 'qm_mm', 'tags'
               ],
-            # 'form_widget_args': {
+            # form_widget_args={
             #     'tags': {'class': 'selectpicker form-control', 'data-live-search': "true",
             #     'data-actions-box': "true", 'data-size': 7},
             # },
-        },
+        ),
 
-        'qm_features': {
-            'form_args': {
+        qm_features=dict(
+            form_args={
             },  # form_args
-            'form_rules': [
-                'basis', 'element_coverage', 'other', 'tags'
+            form_rules=[
+                # 'basis', 'element_coverage', 'other', 'tags'
               ],
-        }
-    }
+        )
+    )
 
     form_overrides = {
-        # 'description': TextAreaField
+        # 'date_of_latest_version': DateTimeField?
     }
 
     # Form display organization rules
@@ -196,5 +221,4 @@ def add_admin_views():
     app_admin.add_view(SoftwareView(Software, name='CMS Software DB (private)'))
     app_admin.add_view(SoftwareViewPublic(Software, endpoint='submit_software',
                                          name='Submit Software (public)'))
-
 
