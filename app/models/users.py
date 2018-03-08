@@ -212,6 +212,9 @@ class User(UserMixin, db.Document):
     def __repr__(self):
         return '<User %r>' % self.username
 
+    def __str__(self):
+        return 'username=%s' % self.username
+
 
 class AnonymousUser(AnonymousUserMixin):
 

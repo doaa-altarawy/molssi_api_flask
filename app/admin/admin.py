@@ -226,6 +226,9 @@ class SoftwareViewPublic(SoftwareView):
     def sucess(self):
         return render_template('software_added_success.html')
 
+    def is_accessible(self):
+        return True
+
 
 class UserView(ModelView):
 
