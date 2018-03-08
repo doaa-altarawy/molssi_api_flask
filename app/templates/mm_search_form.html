@@ -38,8 +38,18 @@
     </div> <!-- form-group -->
 
     <div class="form-group row">
+        <label class="col-form-label col-md-2 text-md-right" for="forcefield_types">Forcefield Types</label>
+        <select id="forcefield_types" multiple class="selectpicker col-md-5" data-live-search="true"
+                data-actions-box="true" title="Any" data-size="50">
+            {% for forcefield_type in lib.mm_props.FORCEFIELD_TYPES -%}
+                <option>{{ forcefield_type }}</option>
+            {%- endfor %}
+        </select>
+    </div>
+
+    <div class="form-group row">
         <label class="col-form-label col-md-2 text-md-right" for="mm_tags">Tags</label>
-        <select id="mm_tags" multiple class="selectpicker col-md-5" id="mm_tags" data-live-search="true"
+        <select id="mm_tags" multiple class="selectpicker col-md-5" data-live-search="true"
                 data-actions-box="true" title="Any" data-size="50">
             {% for tag in lib.mm_props.TAG_NAMES -%}
                 <option>{{ tag | upper | replace('_', ' ')}}</option>

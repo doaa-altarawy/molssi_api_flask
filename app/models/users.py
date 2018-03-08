@@ -23,7 +23,6 @@ class Role(db.Document):
     name = db.StringField(max_length=64, unique=True)
     default = db.BooleanField(default=False)
     permissions = db.IntField()
-    # users = db.relationship('User', backref='role', lazy='dynamic')
 
     meta = {
         'indexes': [
@@ -39,13 +38,13 @@ class Role(db.Document):
     @staticmethod
     def insert_roles():
         roles = {
-            'User': [Permission.READ, Permission.WRITE],
+            'No access': [Permission.READ, Permission.WRITE],
             'Moderator': [Permission.READ, Permission.WRITE,
                           Permission.MODERATE],
             'Administrator': [Permission.READ, Permission.WRITE,
                               Permission.MODERATE, Permission.ADMIN],
         }
-        default_role = 'User'
+        default_role = 'No access'
         for r in roles:
             role = Role.objects(name=r).first()
             if role is None:
@@ -70,8 +69,8 @@ class Role(db.Document):
     def has_permission(self, perm):
         return self.permissions & perm == perm
 
-    def __repr__(self):
-        return '<Role %r>' % self.name
+    def __str__(self):
+        return '%s' % self.name
 
 
 class User(UserMixin, db.Document):
@@ -82,7 +81,6 @@ class User(UserMixin, db.Document):
     role = db.ReferenceField(Role)   #####
     password_hash = db.StringField(max_length=128)
     confirmed = db.BooleanField(default=False)
-    name = db.StringField(max_length=100)
     location = db.StringField(max_length=64)
     member_since = db.DateTimeField(default=datetime.utcnow)
     avatar_hash = db.StringField(max_length=32)

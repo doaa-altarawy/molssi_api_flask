@@ -23,14 +23,14 @@ QM_files = ['QM_curated_data.json']
 
 print('Initial DB size: {}'.format(mongo_database.get_DB_size()))
 for filename in MM_files:
-    full_path = os.path.join(config.APPLICATION_ROOT, 'data', filename)
+    full_path = os.path.join(config._basedir, 'app', 'data', filename)
     print('Loading file {} in DB....'.format(full_path))
     mongo_database.load_collection_from_json(full_path, lib_type='MM')
 
     print('After insertion: {}'.format(mongo_database.get_DB_size()))
 
 for filename in QM_files:
-    full_path = os.path.join(config.APPLICATION_ROOT, 'data', filename)
+    full_path = os.path.join(config._basedir, 'app', 'data', filename)
     print('Loading file {} in DB....'.format(full_path))
     mongo_database.load_collection_from_json(full_path, lib_type='QM')
 

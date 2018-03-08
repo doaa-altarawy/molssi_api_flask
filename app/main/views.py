@@ -93,7 +93,7 @@ def software_form(sw_id):
 def contact():
     """Return a test JSON file
     """
-    json_url = os.path.join(current_app.config['APPLICATION_ROOT'], 'static',
+    json_url = os.path.join(current_app.config['base_dir'], 'static',
                     'data', 'test.json')
     logging.debug(json_url)
     # data = json.load(open(json_url))

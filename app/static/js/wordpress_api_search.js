@@ -97,14 +97,13 @@ jQuery(document).ready(function() {
             if (jQuery('#basis').find(":selected").val()) {
                 qm_filters['basis'] = jQuery('#basis').find(":selected").val();
             }
-
             if (jQuery('#coverage').find(":selected").val()) {
                 qm_filters['element_coverage'] = jQuery('#coverage').find(":selected").val();
             }
-
             if (jQuery('#qm_tags').find(":selected").val()) {
                 qm_filters['tags'] = jQuery('#qm_tags').val();
             }
+
         } // QM domain
         else if (domain == 'MM') {
             // MM filters
@@ -121,6 +120,10 @@ jQuery(document).ready(function() {
             if (jQuery('#mm_tags').find(":selected").val()) {
                 mm_filters['tags'] = jQuery('#mm_tags').val();
             }
+            if (jQuery('#forcefield_types').find(":selected").val()) {
+                mm_filters['forcefield_types'] = jQuery('#forcefield_types').val();
+            }
+
         } // MM domain
 
         var data = {
@@ -209,6 +212,7 @@ jQuery(document).ready(function() {
         jQuery('#file_formats').selectpicker('deselectAll');
         jQuery('#ensembles').val('');
         jQuery('#qm_mm').val('');
+        jQuery('#forcefield_types').selectpicker('deselectAll');
         jQuery('#mm_tags').selectpicker('deselectAll');
 
         // Clear QM search panel

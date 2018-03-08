@@ -54,6 +54,7 @@
           {% block main_menu %}
           <ul class="nav navbar-nav">
             {{ layout.menu() }}
+            <li><a href="{{ url_for('main.index') }}" target="_blank">Link to Public Website</a></li>
           </ul>
           {% endblock %}
 

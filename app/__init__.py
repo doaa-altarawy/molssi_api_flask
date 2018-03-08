@@ -32,7 +32,6 @@ def create_app(config_name):
 
     app = Flask(__name__)
     app.config.from_object(config[config_name])
-    print('APPLICATION_ROOT:', app.config['APPLICATION_ROOT'])
 
     # init
     mail.init_app(app)
@@ -42,7 +41,7 @@ def create_app(config_name):
     login_manager.init_app(app)
     app_admin.init_app(app)
     moment.init_app(app)
-    toolbar.init_app(app)
+    # toolbar.init_app(app)
 
     # jinja template
     app.jinja_env.filters['empty'] = replace_empty

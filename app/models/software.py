@@ -59,12 +59,16 @@ class QMFeatures(db.EmbeddedDocument):
 class MMFeatures(db.EmbeddedDocument):
     """MM specific features"""
 
-    ensembles = db.StringField(max_length=200)
+    ENSEMBLES = ['DPD', 'Langevin Dynamics', 'NPH', 'NPT', 'NVE', 'NVP', 'NVT', 'NgammaP', 'NgammaT']
+    FORCEFIELD_TYPES = ["Class I", "Class II", "Polarizable", "Reactive", "Inorganic/Metals"]
+
+    ensembles = db.ListField(db.StringField(max_length=20, choices=ENSEMBLES))
     free_energy_methods = db.StringField(max_length=200)
     advanced_sampling_methods = db.StringField(max_length=200)
 
-    forcefields = db.StringField(max_length=200)
-    file_formats = db.StringField(max_length=100)
+    forcefields = db.StringField(max_length=200, help_text='')
+    forcefield_types = db.ListField(db.StringField(max_length=20, choices=FORCEFIELD_TYPES))
+    file_formats = db.StringField(max_length=100, help_text='What are the supported input file formats?')
     qm_mm = db.BooleanField(verbose_name='QM/MM')
 
     # tags
@@ -81,12 +85,6 @@ class MMFeatures(db.EmbeddedDocument):
                 "building_tools",
                 "implicit_solvent",
 
-                # forcefield
-                "class_i",
-                "class_ii",
-                "polarizable",
-                "reactive",
-                "inorganic_metals"
     ]
 
     tags = db.ListField(db.StringField(max_length=20, choices=TAG_NAMES))
@@ -109,32 +107,34 @@ class Software(db.DynamicDocument):     # flexible schema, can have extra attrib
 
     # availability
     software_name = db.StringField(max_length=100, required=True)
-    license = db.StringField(max_length=200)
-    price = db.StringField(max_length=200)
+    license = db.StringField(max_length=200, required=True, help_text='E.g., GPL, BSD-3, proprietary, ...')
+    price = db.StringField(max_length=200, help_text='E.g., free, free for academia, $600 for one year, ...')
     latest_version = db.StringField(max_length=100)
-    date_of_latest_version = db.DateTimeField()                   # Date of latest version
+    date_of_latest_version = db.DateTimeField()            # Date of latest version
     principal_contact_name = db.StringField(max_length=100)
     principal_contact_email = db.EmailField()
-    official_website = db.URLField()
+    official_website = db.URLField(required=True)
 
     # Others
-    description = db.StringField(max_length=500, required=True, default='',
-                                 help_text='A short description of max 500 characters')
-    long_description = db.StringField(required=True, default='')
+    description = db.StringField(required=True, default='',
+                                 help_text='Short description of max 500 characters')
+    long_description = db.StringField(required=True, default='', help_text='Longer detailed description')
     comments = db.StringField()
-    required_citation = db.StringField()
+    required_citation = db.StringField(help_text='Which papers need to be cited when this software is used')
     domain = db.StringField(required=True, default='MM', choices=['MM', 'QM', 'other'])
 
     # software engineering
     LANGUAGES = ['C', 'C++', 'Python', 'FORTRAN', 'FORTRAN2003', 'FORTRAN77',
                  'FORTRAN90', 'Java', 'JavaScript', 'Other']
 
-    source_code = db.URLField()
-    executables = db.StringField(max_length=100)
-    code_management = db.StringField(max_length=10, choices=['', 'git', 'SVN', 'CVS', 'other'])
+    source_code_link = db.URLField()
+    executables = db.StringField(max_length=100,
+                    help_text='Are pre-compiled distributions available? which operating systems are supported?')
+    code_management = db.StringField(max_length=10,
+                                choices=['', 'git/GitHub', 'git/Bitbucket', 'git/others', 'SVN', 'CVS', 'other'])
     continuous_integration = db.StringField(max_length=20, choices=['', 'Yes', 'No'])
-    tests = db.StringField(max_length=100)
-    languages = db.ListField(db.StringField(max_length=20, choices=LANGUAGES))
+    number_of_tests = db.IntField()
+    languages = db.ListField(db.StringField(max_length=20, choices=LANGUAGES), required=True)
     # for search efficiency, repeat in lowercase, keep original case for display
     languages_lower = db.ListField(db.StringField(max_length=20))
     compilers = db.StringField(max_length=100)
@@ -142,22 +142,22 @@ class Software(db.DynamicDocument):     # flexible schema, can have extra attrib
     # Performance
     parallel = db.StringField(max_length=50, choices=['', 'Yes', 'No'])
     gpu = db.StringField(max_length=50, choices=['', 'Yes', 'No'], verbose_name='GPU')
-    knl = db.StringField(max_length=50, choices=['', 'Yes', 'No'], verbose_name='KNL')
+    knl_optimized = db.StringField(max_length=50, choices=['', 'Yes', 'No'], verbose_name='KNL Optimized')
 
     # support
-    support_line = db.StringField(max_length=250)  # url or email
+    support_line = db.StringField(max_length=250, help_text='URL or email')  # url or email
     documentation = db.URLField()
     number_of_tutorials = db.IntField()
     wiki = db.URLField()
     forum = db.URLField()
     mail_list = db.URLField()
-    ui = db.BooleanField(verbose_name='UI')
+    gui = db.BooleanField(verbose_name='GUI')
 
     # Local
     # published = DateTimeField()
     date_added = db.DateTimeField(default=datetime.datetime.now)
     last_updated = db.DateTimeField()
-    is_pending = db.BooleanField(default=True)
+    is_pending = db.BooleanField(default=True, help_text='If checked, the software will not be public')
 
     mm_features = db.EmbeddedDocumentField(MMFeatures, verbose_name='MM Features')
 

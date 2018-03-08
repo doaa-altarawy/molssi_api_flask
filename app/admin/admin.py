@@ -10,6 +10,7 @@ import flask_login as login
 from flask_admin.form.widgets import DatePickerWidget
 from datetime import date, datetime
 from flask_admin.model import typefmt
+from ..models.users import User, Permission, Role
 
 
 def date_format(view, value):
@@ -71,7 +72,7 @@ class SoftwareView(ModelView):
     form_args = dict(
         added_by_name={'label': 'Name'},
         added_by_email={'label': 'Email'},
-        is_SW_owner={'label': 'Are you Software Owner'},
+        is_SW_owner={'label': 'Are you the Software Owner'},
         mm_features={'label': ''},  # remove label
         # mm_features.qm_mm={'label': 'QM/MM'},  # not here, in form_subdocument
         qm_features={'label': ''},
@@ -84,6 +85,7 @@ class SoftwareView(ModelView):
     form_widget_args = dict(
         description={'rows': 4, 'style': 'color: black'},
         long_description={'rows': 10, 'style': 'color: black'},
+        comments={'rows': 4, 'style': 'color: black'},
         date_of_latest_version={   # http://www.daterangepicker.com/#options
             'data-max-date': datetime.now()
             # 'widget': DatePickerWidget(),  # not working
@@ -123,6 +125,10 @@ class SoftwareView(ModelView):
 
     # Form display organization rules
     form_create_rules = [
+        rules.HTML('<h4>Please fill this form as complete as you can to be accessible through search.</h4>'),
+        rules.HTML('<h5>For any issues submitting this form contact us at info@molssi.org</h5>'),
+        rules.HTML('<hr>'),
+
         rules.FieldSet(('added_by_name', 'added_by_email', 'is_SW_owner'), 'Your Information'),
         rules.HTML('<hr>'),
 
@@ -133,17 +139,17 @@ class SoftwareView(ModelView):
         rules.HTML('<hr>'),
 
         rules.Header('More Details'),
-        'description', 'long_description', 'comments',
-        'required_citation', 'languages', 'compilers', 'ui',
+        'description', 'long_description',
+        'required_citation', 'languages', 'compilers', 'gui',
         rules.HTML('<hr>'),
 
         rules.Header('Software Engineering'),
-        'source_code', 'executables', 'code_management',
-        'continuous_integration', 'tests',
+        'source_code_link', 'executables', 'code_management',
+        'continuous_integration', 'number_of_tests',
         rules.HTML('<hr>'),
 
         rules.Header('Performance'),
-        'parallel', 'gpu', 'knl',
+        'parallel', 'gpu', 'knl_optimized',
         rules.HTML('<hr>'),
 
         rules.Header('Support Links'),
@@ -154,6 +160,12 @@ class SoftwareView(ModelView):
         'domain',
         rules.Header('MM Features'), 'mm_features',
         rules.Header('QM Features'), 'qm_features',
+        rules.HTML('<hr>'),
+
+        rules.HTML('<h3>Do you have any comments or any other information?</h3>'),
+        'comments',
+        rules.HTML('<hr>'),
+
         'is_pending',
     ]
 
@@ -168,7 +180,7 @@ class SoftwareView(ModelView):
         return form_class
 
     def is_accessible(self):
-        return login.current_user.is_authenticated
+        return login.current_user.is_authenticated and login.current_user.can(Permission.MODERATE)
 
 
 class SoftwareViewPublic(SoftwareView):
@@ -215,10 +227,29 @@ class SoftwareViewPublic(SoftwareView):
         return render_template('software_added_success.html')
 
 
-# Register views to admin
-def add_admin_views():
-    from .. import app_admin
-    app_admin.add_view(SoftwareView(Software, name='CMS Software DB (private)'))
-    app_admin.add_view(SoftwareViewPublic(Software, endpoint='submit_software',
-                                         name='Submit Software (public)'))
+class UserView(ModelView):
 
+    can_create = False
+    column_type_formatters = MY_DEFAULT_FORMATTERS  # format dateTime without time
+    column_list = ['username', 'email', 'role']
+    form_excluded_columns = ['password_hash', 'avatar_hash', 'location', 'confirmed']
+
+    inline_models = (Role, )
+
+    form_widget_args = dict(
+        email={'disabled': True},
+        username={'disabled': True},
+        member_since={'disabled': True}
+    )
+
+    def is_accessible(self):
+        return login.current_user.is_authenticated and login.current_user.can(Permission.ADMIN)
+
+
+def add_admin_views():
+    """Register views to admin"""
+    from .. import app_admin
+    app_admin.add_view(SoftwareView(Software, name='Software Data'))
+    app_admin.add_view(UserView(User, name='Users'))
+    app_admin.add_view(SoftwareViewPublic(Software, endpoint='submit_software',
+                                         name='Submit Software Link'))

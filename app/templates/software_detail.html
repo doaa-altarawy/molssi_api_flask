@@ -68,7 +68,11 @@
             {%  if lib.mm_features %}
             <dl class="row mb-3">
                 <dt class="col-sm-4">Ensembles: </dt>
-                <dd class="col-sm-8">{{ lib.mm_features.ensembles | empty }}</dd>
+                <dd class="col-sm-8">
+                    {% for ensemble in lib.mm_features.ensembles -%}
+                        {{ ensemble + " " }}
+                    {%- endfor %}
+                </dd>
                 <dt class="col-sm-4">QM/MM: </dt>
                 <dd class="col-sm-8">{{ lib.qm_mm | empty }}</dd>
                 <dt class="col-sm-4">Free Energy Methods: </dt>
@@ -77,6 +81,12 @@
                 <dd class="col-sm-8">{{ lib.mm_features.advanced_sampling_methods | empty }}</dd>
                 <dt class="col-sm-4">Forcefields: </dt>
                 <dd class="col-sm-8">{{ lib.mm_features.forcefields | empty }}</dd>
+                <dt class="col-sm-4">Forcefield Type: </dt>
+                <dd class="col-sm-8">
+                    {% for forcefield_type in lib.mm_features.forcefield_types -%}
+                        {{ forcefield_type + " " }}
+                    {%- endfor %}
+                </dd>
                 <dt class="col-sm-4">File Formats: </dt>
                 <dd class="col-sm-8">{{ lib.mm_features.file_formats | empty }}</dd>
 

@@ -39,7 +39,11 @@
     <!-- MM -->
     {%  if lib.mm_features %}
     <div class="row mb-4">
-         <div class="col-md-6"><b>Ensembles: </b> {{ lib.mm_features.ensembles | empty }}</div>
+         <div class="col-md-6"><b>Ensembles: </b>
+             {% for ensemble in lib.mm_features.ensembles -%}
+                {{ ensemble + " " }}
+             {%- endfor %}
+         </div>
          <div class="col-md-6"><b>Free Energy Methods: </b> {{ lib.mm_features.free_energy_methods | empty }}</div>
          <div class="col-md-6"><b>Advanced Sampling Methods: </b> {{ lib.mm_features.advanced_sampling_methods | empty }}</div>
          <div class="col-md-6"><b>Forcefields: </b> {{ lib.mm_features.forcefields | empty }}</div>

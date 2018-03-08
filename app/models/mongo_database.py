@@ -260,7 +260,6 @@ def get_compiled_regex(search_keys, sep='|'):
     """Returns a complied regular expression string
     from a query string of space-separated terms"""
 
-    print('tttytpe: ', type(search_keys))
     if isinstance(search_keys, str) or isinstance(search_keys, unicode):
         w_list = ['.*' + term + '.*' for term in search_keys.split()]
     elif isinstance(search_keys, list):
@@ -299,6 +298,7 @@ def get_lib_features():
         'qm_props': {}
     }
     lib['mm_props']['TAG_NAMES'] = MMFeatures.TAG_NAMES
+    lib['mm_props']['FORCEFIELD_TYPES'] = MMFeatures.FORCEFIELD_TYPES
     lib['qm_props']['TAG_NAMES'] = QMFeatures.TAG_NAMES
 
     return lib
