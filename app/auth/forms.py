@@ -16,11 +16,12 @@ class LoginForm(FlaskForm):
 class RegistrationForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Length(3, 64),
                                              Email()])
-    username = StringField('Username', validators=[
-        DataRequired(), Length(3, 64),
-        Regexp('^[A-Za-z][A-Za-z0-9_.]*$', 0,
-               'Usernames must have only letters, numbers, dots or '
-               'underscores')])
+    # username = StringField('Username', validators=[
+    #     DataRequired(), Length(3, 64),
+    #     Regexp('^[A-Za-z][A-Za-z0-9_.]*$', 0,
+    #            'Usernames must have only letters, numbers, dots or '
+    #            'underscores')])
+    full_name = StringField('Full Name', validators=[DataRequired(), Length(3, 100)])
     password = PasswordField('Password', validators=[
         DataRequired(), Length(min=7), EqualTo('password2', message='Passwords must match.')])
     password2 = PasswordField('Confirm password', validators=[DataRequired()])
@@ -30,9 +31,9 @@ class RegistrationForm(FlaskForm):
         if User.objects(email=field.data).first():
             raise ValidationError('Email already registered.')
 
-    def validate_username(self, field):
-        if User.objects(username=field.data).first():
-            raise ValidationError('Username already in use.')
+    # def validate_username(self, field):
+    #     if User.objects(username=field.data).first():
+    #         raise ValidationError('Username already in use.')
 
 
 class ChangePasswordForm(FlaskForm):

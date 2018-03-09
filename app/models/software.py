@@ -40,7 +40,7 @@ class QMFeatures(db.EmbeddedDocument):
                 "gf",
                 "tddft",
                 "dmf",
-                "fequencies_phonons",
+                "frequencies_phonons",
                 "nmr",
                 "symmetry"
     ]

@@ -233,16 +233,13 @@ class SoftwareViewPublic(SoftwareView):
 class UserView(ModelView):
 
     can_create = False
-    column_type_formatters = MY_DEFAULT_FORMATTERS  # format dateTime without time
-    column_list = ['username', 'email', 'role']
+    column_list = ['full_name', 'email', 'role']
     form_excluded_columns = ['password_hash', 'avatar_hash', 'location', 'confirmed']
 
-    inline_models = (Role, )
-
     form_widget_args = dict(
-        email={'disabled': True},
-        username={'disabled': True},
-        member_since={'disabled': True}
+        email={'readonly': True},
+        full_name={'readonly': True},
+        member_since={'readonly': True},
     )
 
     def is_accessible(self):

@@ -77,8 +77,8 @@ class User(UserMixin, db.Document):
     """Users with different access roles"""
 
     email = db.EmailField(max_length=120, unique=True)
-    username = db.StringField(max_length=64, unique=True)
-    role = db.ReferenceField(Role)   #####
+    full_name = db.StringField(max_length=64)
+    role = db.ReferenceField(Role)
     password_hash = db.StringField(max_length=128)
     confirmed = db.BooleanField(default=False)
     location = db.StringField(max_length=64)
@@ -88,7 +88,7 @@ class User(UserMixin, db.Document):
     meta = {
         'allow_inheritance': True,
         'indexes': [
-            'email', 'username'
+            'email',
         ]
     }
 
@@ -190,7 +190,7 @@ class User(UserMixin, db.Document):
     def to_json(self):
         json_user = {
             'url': url_for('api.get_user', id=self.id),
-            'username': self.username,
+            'email': self.email,
             'member_since': self.member_since,
         }
         return json_user
@@ -210,10 +210,10 @@ class User(UserMixin, db.Document):
         return User.objects(id=data['id'])
 
     def __repr__(self):
-        return '<User %r>' % self.username
+        return '<User %r>' % self.email
 
     def __str__(self):
-        return 'username=%s' % self.username
+        return 'email=%s' % self.email
 
 
 class AnonymousUser(AnonymousUserMixin):

@@ -38,13 +38,13 @@ def login():
     if form.validate_on_submit():
         user = User.objects(email=form.email.data).first()
         if user is not None and user.verify_password(form.password.data):
-            logging.debug('Used found in DB: %s', user.username)
+            logging.debug('Used found in DB: %s', user.email)
             login_user(user, form.remember_me.data)
             next_page = request.args.get('next')
             if next_page is None or not next_page.startswith('/'):
                 next_page = url_for('admin.index')
             return redirect(next_page)
-        flash('Invalid username or password.')
+        flash('Invalid email or password.')
     return render_template('auth/login.html', form=form)
 
 
@@ -61,7 +61,7 @@ def register():
     form = RegistrationForm()
     if form.validate_on_submit():
         user = User(email=form.email.data,
-                    username=form.username.data)
+                    full_name=form.full_name.data)
         user.password = form.password.data
         user.save()
         token = user.generate_confirmation_token()
