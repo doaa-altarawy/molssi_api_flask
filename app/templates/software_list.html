@@ -37,7 +37,7 @@
         </div> <!-- col-->
     </div>
     <!-- MM -->
-    {%  if lib.mm_features %}
+    {%  if lib.mm_features and lib.domain == 'MM' %}
     <div class="row mb-4">
          <div class="col-md-6"><b>Ensembles: </b>
              {% for ensemble in lib.mm_features.ensembles -%}
@@ -55,7 +55,7 @@
 
 
     <!-- QM -->
-    {%  if lib.qm_features %}
+    {%  if lib.qm_features and lib.domain == 'QM' %}
     <div class="row mb-4">
          <div class="col-md-6"><b>Basis: </b> {{ lib.qm_features.basis | empty }}</div>
          <div class="col-md-6"><b>Element Coverage: </b> {{ lib.qm_features.element_coverage | empty }}</div>
