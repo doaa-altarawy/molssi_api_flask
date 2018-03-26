@@ -1,0 +1,11 @@
+{% extends 'admin/model/list.html' %}
+
+{% block list_row_actions %}
+    {{ super() }}
+    <a class="icon" onclick="return confirm('Private Edit URL for this software (this link won\'t require login):\n \n' +
+            'localhost:5000/admin/submit_software/edit/' + '{{ admin_view.generate_software_id_token(get_pk_value(row)) }}' +
+            '\n');"
+            title="Get Edit URL">
+      <span class="fa fa-link glyphicon glyphicon-link"></span>
+    </a>
+{% endblock %}

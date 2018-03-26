@@ -7,8 +7,9 @@ class BaseConfig:
 
     _basedir = os.path.abspath(os.path.dirname(__file__))
     STATIC_FOLDER = 'static'
-    ADMINS = frozenset(['daltarawy@vt.edu'])
+    ADMINS = frozenset(['daltarawy@vt.edu'])  ##
     SECRET_KEY = 'SecretKeyForSessionSigning'
+    EDIT_SOFTWARE_SALT = 'ThisIsAnotherSalt'
 
     SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(_basedir, 'app.db')
 
@@ -26,6 +27,7 @@ class BaseConfig:
     MAIL_SENDER = 'MolSSI CMS DB Admin <info@molssi.org>'
     APP_ADMIN = os.environ.get('APP_ADMIN', 'daltarawy@vt.edu')
     EMAIL_CONFIRMATION_ENABLED = False
+
     # Client-side config
     API_RESULTS_PER_PAGE = 5
     EXCLUDE_EMPTY_SW = True

@@ -1,16 +1,17 @@
-from flask import flash, request, redirect, render_template
+from flask import flash, request, redirect, render_template, current_app
 from flask_admin.form import rules, FormOpts
 from flask_admin.contrib.mongoengine import ModelView
 from flask_admin import expose
 from ..models.software import Software
 import wtforms as wf
-from flask import url_for
 from flask_admin.babel import gettext
 import flask_login as login
 from flask_admin.form.widgets import DatePickerWidget
 from datetime import date, datetime
 from flask_admin.model import typefmt
 from ..models.users import User, Permission, Role
+from itsdangerous import URLSafeTimedSerializer as Serializer
+from flask_admin.actions import action
 
 
 def date_format(view, value):
@@ -24,6 +25,8 @@ MY_DEFAULT_FORMATTERS.update({
 
 
 class SoftwareView(ModelView):
+
+    list_template = 'admin/custom_list.html'
 
     column_type_formatters = MY_DEFAULT_FORMATTERS  # format dateTime without time
 
@@ -182,23 +185,51 @@ class SoftwareView(ModelView):
     def is_accessible(self):
         return login.current_user.is_authenticated and login.current_user.can(Permission.MODERATE)
 
+    # @action('get_edit_url', 'Edit URL', 'Get a private edit link')
+    # def get_edit_url(self, ids):
+    #     try:
+    #         print('Id is: ', ids)
+    #         url = 'admin/software/' + self.generate_software_id_token(ids)
+    #         flash('Private URL to edit this software: ' + url)
+    #
+    #     except Exception as ex:
+    #         if not self.handle_view_exception(ex):
+    #             raise
+    #
+    #         flash(gettext('Failed to generate URL. %(error)s', error=str(ex)), 'error')
+
+    def generate_software_id_token(self, id):
+        s = Serializer(current_app.config['SECRET_KEY'])
+        return s.dumps(str(id), salt=current_app.config['EDIT_SOFTWARE_SALT'])  # .decode('utf-8')
+
+    def confirm_software_id_token(self, token):
+        s = Serializer(current_app.config['SECRET_KEY'])
+        try:
+            id = s.loads(
+                token,  # .encode('utf-8'),
+                salt=current_app.config['EDIT_SOFTWARE_SALT']
+            )
+        except:
+            return False
+
+        return id
 
 class SoftwareViewPublic(SoftwareView):
     """
         View to submit Software by the public.
         marked with is_pending=True for review
     """
-    can_create = True
-    can_edit = True
+    can_create = False
+    can_edit = False
     can_delete = False
 
-    form_create_rules = SoftwareView.form_create_rules[:-1]
+    form_create_rules = SoftwareView.form_create_rules[:-1]  # without pending checkbox
 
     extra_css = ['/static/css/custom_admin.css']
 
     @expose('/', methods=('GET', 'POST'))
     def create_view(self):
-        """customize the view"""
+        """customize the create view"""
 
         return_url = '/'
 
@@ -218,6 +249,39 @@ class SoftwareViewPublic(SoftwareView):
 
         return self.render('admin/custom_create.html',
                            # model=model,
+                           form=form,
+                           form_opts=form_opts,
+                           return_url=return_url)
+
+    @expose('/edit/<token>', methods=('GET', 'POST'))
+    def edit_view_token(self, token):
+        """customize the edit view"""
+
+        return_url = '/'
+        id = self.confirm_software_id_token(token)
+        if id:
+            model = self.get_one(id)
+
+        if model is None:
+            flash(gettext('Software does not exist.'), 'error')
+            return redirect(return_url)
+
+        form = self.edit_form(obj=model)
+        if not hasattr(form, '_validated_ruleset') or not form._validated_ruleset:
+            self._validate_form_instance(ruleset=self._form_create_rules, form=form)
+
+        if self.validate_form(form):
+            # model = self.create_model(form)
+
+            if self.update_model(form, model):
+                flash(gettext('Record was successfully created.'), 'success')
+                return redirect('/success')
+
+        form_opts = FormOpts(widget_args=self.form_widget_args,
+                             form_rules=self._form_create_rules)
+
+        return self.render('admin/custom_create.html',
+                           model=model,
                            form=form,
                            form_opts=form_opts,
                            return_url=return_url)
@@ -249,7 +313,7 @@ class UserView(ModelView):
 def add_admin_views():
     """Register views to admin"""
     from .. import app_admin
-    app_admin.add_view(SoftwareView(Software, name='Software Data'))
+    app_admin.add_view(SoftwareView(Software, name='Software List'))
     app_admin.add_view(UserView(User, name='Users'))
     app_admin.add_view(SoftwareViewPublic(Software, endpoint='submit_software',
                                          name='Submit Software Link'))

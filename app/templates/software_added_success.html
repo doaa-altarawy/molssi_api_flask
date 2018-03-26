@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% import 'admin/layout.html' as layout with context -%}
 
 
 
@@ -9,6 +10,11 @@
         </nav>
     </div>
     <div class="container w-75 p-5">
+
+        {% block messages %}
+            {{ layout.messages() }}
+        {% endblock %}
+
         <h5>Software was submitted successfully</h5>
 
         <div class="p-2">
