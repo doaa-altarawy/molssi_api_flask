@@ -2,10 +2,38 @@
 
 {% block list_row_actions %}
     {{ super() }}
-    <a class="icon" onclick="return confirm('Private Edit URL for this software (this link won\'t require login):\n \n' +
-            'localhost:5000/admin/submit_software/edit/' + '{{ admin_view.generate_software_id_token(get_pk_value(row)) }}' +
-            '\n');"
-            title="Get Edit URL">
+    <a id="toggleEditURLmodal" class="icon" role="button"
+            onclick="var url = 'http://localhost:5000/admin/submit_software/edit/' +
+                            '{{ admin_view.generate_software_id_token(get_pk_value(row)) }}';
+                     $('#editURLModal .modal-body a').text(url);
+                     $('#editURLModal .modal-body a').prop('href', url);
+                    "
+            title="Get Edit URL" data-toggle="modal" data-target="#editURLModal">
       <span class="fa fa-link glyphicon glyphicon-link"></span>
     </a>
+{% endblock %}
+
+
+{% block tail %}
+ {{ super() }}
+<!-- Modal -->
+<div class="modal fade" id="editURLModal" tabindex="-1" role="dialog" aria-labelledby="editURLModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="editURLModalLongTitle">Software Editing URL</h4>
+
+            </div>
+            <div class="modal-body">
+                This is a private Edit URL for this software (this link doesn't require login): <br /><br />
+                <a target="_blank"></a>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 {% endblock %}
