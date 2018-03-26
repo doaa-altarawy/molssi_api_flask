@@ -26,7 +26,7 @@
     padding: 5px 5px;
 }
 
-.ad-728x90 {
+.logo-728x90 {
     display: table-cell;
     vertical-align: middle;
     float: none;
@@ -41,7 +41,7 @@
 		width: 50%;
 		float: left;
 	}
-	.ad-728x90 {
+	.logo-728x90 {
 		width: 100%;
 		text-align: center;
 		float: right;
