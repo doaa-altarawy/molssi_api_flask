@@ -3,8 +3,8 @@
 {% block list_row_actions %}
     {{ super() }}
     <a id="toggleEditURLmodal" class="icon" role="button"
-            onclick="var url = 'http://localhost:5000/admin/submit_software/edit/' +
-                            '{{ admin_view.generate_software_id_token(get_pk_value(row)) }}';
+            onclick="var url = '{{ url_for('submit_software.create_view', _external=True) }}' + 'edit/' +
+                               '{{ admin_view.generate_software_id_token(get_pk_value(row)) }}';
                      $('#editURLModal .modal-body a').text(url);
                      $('#editURLModal .modal-body a').prop('href', url);
                     "
