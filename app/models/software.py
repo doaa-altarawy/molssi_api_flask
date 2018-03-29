@@ -113,7 +113,7 @@ class Software(db.DynamicDocument):     # flexible schema, can have extra attrib
     date_of_latest_version = db.DateTimeField()            # Date of latest version
     principal_contact_name = db.StringField(max_length=100)
     principal_contact_email = db.EmailField()
-    official_website = db.URLField(required=True)
+    official_website = db.URLField(required=True, help_text='E.g., http://www.molssi.org')
 
     # Others
     description = db.StringField(required=True, default='',
@@ -154,7 +154,7 @@ class Software(db.DynamicDocument):     # flexible schema, can have extra attrib
     gui = db.BooleanField(verbose_name='GUI')
 
     # Local
-    # published = DateTimeField()
+    # published = DateTimeField()b
     date_added = db.DateTimeField(default=datetime.datetime.now)
     last_updated = db.DateTimeField()
     is_pending = db.BooleanField(default=True, help_text='If checked, the software will not be public')

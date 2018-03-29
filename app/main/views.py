@@ -113,10 +113,3 @@ def contact():
 @main.route('/static/<path:path>')
 def send_js(path):
     return send_from_directory('static', path)
-
-
-@main.route('/success')
-def add_software_success():
-    """Success page after adding a new software"""
-
-    return render_template('software_added_success.html')

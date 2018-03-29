@@ -1,4 +1,4 @@
-from flask import flash, request, redirect, render_template, current_app
+from flask import flash, request, redirect, render_template, current_app, url_for
 from flask_admin.form import rules, FormOpts
 from flask_admin.contrib.mongoengine import ModelView
 from flask_admin import expose
@@ -198,8 +198,13 @@ class SoftwareView(ModelView):
     #
     #         flash(gettext('Failed to generate URL. %(error)s', error=str(ex)), 'error')
 
-    def generate_software_id_token(self, id):
-        s = Serializer(current_app.config['SECRET_KEY'])
+    def generate_software_id_token(self, id, expiration=3600*24*30):
+        """Generate a token safe for URL
+            Id: the id of the software in the DB
+            expiration: in number of seconds (default to a month)
+        """
+
+        s = Serializer(current_app.config['SECRET_KEY'], expiration)
         return s.dumps(str(id), salt=current_app.config['EDIT_SOFTWARE_SALT'])  # .decode('utf-8')
 
     def confirm_software_id_token(self, token):
@@ -207,7 +212,8 @@ class SoftwareView(ModelView):
         try:
             id = s.loads(
                 token,  # .encode('utf-8'),
-                salt=current_app.config['EDIT_SOFTWARE_SALT']
+                salt=current_app.config['EDIT_SOFTWARE_SALT'],
+                max_age=3600*24*30
             )
         except:
             return False
@@ -241,8 +247,8 @@ class SoftwareViewPublic(SoftwareView):
             model = self.create_model(form)
 
             if model:
-                flash(gettext('Record was successfully created.'), 'success')
-                return redirect('/success')
+                # flash('Software was successfully submitted.', 'success')
+                return redirect(url_for('submit_software.success'))
 
         form_opts = FormOpts(widget_args=self.form_widget_args,
                              form_rules=self._form_create_rules)
@@ -257,14 +263,16 @@ class SoftwareViewPublic(SoftwareView):
     def edit_view_token(self, token):
         """customize the edit view"""
 
-        return_url = '/'
+        not_found_url = url_for('submit_software.not_found')
+        success_url = url_for('submit_software.success')
+        model = None
         id = self.confirm_software_id_token(token)
         if id:
             model = self.get_one(id)
 
         if model is None:
-            flash(gettext('Software does not exist.'), 'error')
-            return redirect(return_url)
+            flash('Software does not exist or the URL has expired.', 'error')
+            return redirect(not_found_url)
 
         form = self.edit_form(obj=model)
         if not hasattr(form, '_validated_ruleset') or not form._validated_ruleset:
@@ -274,8 +282,8 @@ class SoftwareViewPublic(SoftwareView):
             # model = self.create_model(form)
 
             if self.update_model(form, model):
-                flash(gettext('Record was successfully created.'), 'success')
-                return redirect('/success')
+                # flash('Software was successfully submitted.', 'success')
+                return redirect(success_url)
 
         form_opts = FormOpts(widget_args=self.form_widget_args,
                              form_rules=self._form_create_rules)
@@ -284,11 +292,15 @@ class SoftwareViewPublic(SoftwareView):
                            model=model,
                            form=form,
                            form_opts=form_opts,
-                           return_url=return_url)
+                           return_url=not_found_url)
 
     @expose('/success')
-    def sucess(self):
-        return render_template('software_added_success.html')
+    def success(self):
+        return render_template('admin/user_message.html', message='Software was submitted successfully')
+
+    @expose('/not_found')
+    def not_found(self):
+        return render_template('admin/user_message.html', message='')
 
     def is_accessible(self):
         return True
