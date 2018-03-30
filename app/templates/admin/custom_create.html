@@ -4,6 +4,15 @@
 
 {% block head %}
     {{ super() }}
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id={{ config.GOOGLE_ANALYTICS_GTAG_submit }}"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', {{ config.GOOGLE_ANALYTICS_GTAG_submit }});
+        </script>
     {{ lib.form_css() }}
 {% endblock %}
 

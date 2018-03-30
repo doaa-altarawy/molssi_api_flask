@@ -34,7 +34,8 @@ class BaseConfig:
 
     # Jinia template
     REPLACE_NONE = ''
-
+    GOOGLE_ANALYTICS_GTAG = 'UA-116673029-1'
+    GOOGLE_ANALYTICS_GTAG_submit = 'UA-116673029-2'
     WTF_CSRF_ENABLED = True   # it's true by default, important to prevent CSRF attacks
 
 

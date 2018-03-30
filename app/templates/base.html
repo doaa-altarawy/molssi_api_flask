@@ -3,6 +3,16 @@
 {% block title %}{{ title|default }}{% endblock title %}
 
 {%- block styles %}
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{ config.GOOGLE_ANALYTICS_GTAG }}"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', {{ config.GOOGLE_ANALYTICS_GTAG }});
+    </script>
+
     {# <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" /> #}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css' ) }}" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
