@@ -9,6 +9,7 @@ from flask_admin import Admin
 from flask_login import LoginManager
 from flask_debugtoolbar import DebugToolbarExtension
 from flask_moment import Moment
+from . import logger
 
 
 mail = Mail()
@@ -29,6 +30,9 @@ toolbar = DebugToolbarExtension()
 def create_app(config_name):
     """Flask app factory pattern
        separately creating the extensions and later initializing"""
+
+    # Setup logging levels
+    logger.setup_logging(config_name=config_name)
 
     app = Flask(__name__)
     app.config.from_object(config[config_name])

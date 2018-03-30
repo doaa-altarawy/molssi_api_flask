@@ -15,7 +15,6 @@ logger = logging.getLogger(__name__)
 
 @auth.before_app_request
 def before_request():
-    logger.debug('current_user.is_authenticated is %s', current_user.is_authenticated)
     logger.debug('current_user is: %s', current_user)
     if current_user.is_authenticated:
         if not current_user.confirmed and current_app.config['EMAIL_CONFIRMATION_ENABLED'] \
@@ -38,7 +37,7 @@ def login():
     if form.validate_on_submit():
         user = User.objects(email=form.email.data).first()
         if user is not None and user.verify_password(form.password.data):
-            logging.debug('Used found in DB: %s', user.email)
+            logger.debug('User found in DB: %s', user.email)
             login_user(user, form.remember_me.data)
             next_page = request.args.get('next')
             if next_page is None or not next_page.startswith('/'):

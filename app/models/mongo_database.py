@@ -242,11 +242,15 @@ def full_search(exec_empty_sw=False, verbose=False, **kwargs):
     # print(results)
 
     if len(query_text) != 0 and results:
+        logger.debug('Sorting results by test_score')
         results = results.search_text(query_text)
         if results:
             results = results.order_by('$text_score')
     elif len(query_text) == 0 and results:
+        logger.debug('Sorting results by name')
         results = results.order_by('name')
+    else:
+        logger.debug('No sorting!! len(query_text): ')
 
     if verbose:
         print_results(results)

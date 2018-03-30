@@ -37,10 +37,10 @@ def setup_logging(config_name):
     log_lvl_file = 'DEBUG'
     log_lvl_console = 'INFO'
 
-    if config_name == 'development':
-        log_lvl_console = 'DEBUG'
-    elif config_name == 'production':
-        log_lvl_file = 'INFO'
+    # if config_name == 'development':
+    #     log_lvl_console = 'DEBUG'
+    # elif config_name == 'production':
+    #     log_lvl_file = 'INFO'
 
     # Set up logging to a file (overwriting)
     log_filename = ('logs/myapp-{}.log'.format(datetime.utcnow().strftime(
