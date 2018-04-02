@@ -177,6 +177,7 @@ class SoftwareView(ModelView):
 
     def scaffold_form(self):
         form_class = super(SoftwareView, self).scaffold_form()
+        form_class.last_updated_by = ''  # mongoengine requires value for Strings, no None
         # form_class.extra = wf.SelectField('Extra', choices=[('c', 'c'),
         #                       ('cpp', 'CPP'), ('py', 'Python')])
         # form_class.tests = wf.DecimalField('Number of Tests')

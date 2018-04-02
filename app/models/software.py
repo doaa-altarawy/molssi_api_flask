@@ -1,5 +1,6 @@
 import datetime
 from flask_mongoengine.wtf import model_form
+from flask_login import current_user
 from .. import db
 
 
@@ -157,6 +158,7 @@ class Software(db.DynamicDocument):     # flexible schema, can have extra attrib
     # published = DateTimeField()b
     date_added = db.DateTimeField(default=datetime.datetime.now)
     last_updated = db.DateTimeField()
+    last_updated_by = db.StringField()
     is_pending = db.BooleanField(default=True, help_text='If checked, the software will not be public')
 
     mm_features = db.EmbeddedDocumentField(MMFeatures, verbose_name='MM Features')
@@ -188,6 +190,7 @@ class Software(db.DynamicDocument):     # flexible schema, can have extra attrib
         """Override save to add languages_lower"""
         self.add_language_lower()
         self.last_updated = datetime.datetime.now
+        self.last_updated_by = str(current_user)
         return super(Software, self).save(*args, **kwargs)
 
     def __str__(self):

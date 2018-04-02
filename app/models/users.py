@@ -168,7 +168,6 @@ class User(UserMixin, db.Document):
             return False
         self.email = new_email
         self.avatar_hash = self.gravatar_hash()
-        # db.session.add(self)
         self.save()
         return True
 
@@ -213,7 +212,7 @@ class User(UserMixin, db.Document):
         return '<User %r>' % self.email
 
     def __str__(self):
-        return 'email=%s' % self.email
+        return '%s' % self.email
 
 
 class AnonymousUser(AnonymousUserMixin):
@@ -223,6 +222,9 @@ class AnonymousUser(AnonymousUserMixin):
 
     def is_administrator(self):
         return False
+
+    def __str__(self):
+        return 'Anonymous'
 
 
 login_manager.anonymous_user = AnonymousUser
