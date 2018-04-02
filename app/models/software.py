@@ -56,6 +56,12 @@ class QMFeatures(db.EmbeddedDocument):
                 if tag_val and tag_val.lower() not in ['', 'no', 'false']:
                     self.tags.append(tag)
 
+    def is_empty(self):
+        if self.basis or self.element_coverage or self.other or self.tags:
+            return False
+        else:
+            return True
+
 
 class MMFeatures(db.EmbeddedDocument):
     """MM specific features"""
@@ -97,6 +103,14 @@ class MMFeatures(db.EmbeddedDocument):
                 tag_val = kwargs.pop(tag, '')
                 if tag_val and tag_val.lower() not in ['', 'no', 'false']:
                     self.tags.append(tag)
+
+    def is_empty(self):
+        if self.ensembles or self.free_energy_methods or self.advanced_sampling_methods \
+                or self.forcefields or self.forcefield_types or self.file_formats \
+                or self.qm_mm or self.tags:
+            return False
+        else:
+            return True
 
 
 class Software(db.DynamicDocument):     # flexible schema, can have extra attributes
@@ -191,6 +205,13 @@ class Software(db.DynamicDocument):     # flexible schema, can have extra attrib
         self.add_language_lower()
         self.last_updated = datetime.datetime.now
         self.last_updated_by = str(current_user)
+
+        if self.mm_features and self.mm_features.is_empty():
+            self.mm_features = None
+
+        if self.qm_features and self.qm_features.is_empty():
+            self.qm_features = None
+
         return super(Software, self).save(*args, **kwargs)
 
     def __str__(self):
