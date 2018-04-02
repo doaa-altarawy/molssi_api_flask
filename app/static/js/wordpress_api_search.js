@@ -165,7 +165,6 @@ jQuery(document).ready(function() {
 
     function show_hide_domain_panel() {
         var domain = jQuery('#domain').find(":checked").val();
-        console.log('Selected domain: ', domain);
 
         if (domain == 'MM'){
             jQuery('#mm_search_form').show();

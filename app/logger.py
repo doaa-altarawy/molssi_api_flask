@@ -30,12 +30,13 @@ def setup_logging(config_name):
     """
 
     # Make sure the logs folder exists (avoid FileNotFoundError)
-    if not os.path.isdir('logs'):
-        os.makedirs('logs')
+    path = os.getcwd() + '/logs'
+    if not os.path.isdir(path):
+        os.makedirs(path)
 
     # Set the logging levels
     log_lvl_file = 'DEBUG'
-    log_lvl_console = 'INFO'
+    log_lvl_console = 'DEBUG'
 
     # if config_name == 'development':
     #     log_lvl_console = 'DEBUG'
@@ -43,7 +44,7 @@ def setup_logging(config_name):
     #     log_lvl_file = 'INFO'
 
     # Set up logging to a file (overwriting)
-    log_filename = ('logs/myapp-{}.log'.format(datetime.utcnow().strftime(
+    log_filename = (os.path.join(path, 'myapp-{}.log').format(datetime.utcnow().strftime(
         "%Y%m%d")))
     # Possibly use %(pathname)s:%(lineno)d
     logging.basicConfig(format='%(asctime)s.%(msecs)03d - %(name)-12s - '

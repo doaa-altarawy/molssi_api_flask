@@ -248,7 +248,7 @@ def full_search(exec_empty_sw=False, verbose=False, **kwargs):
             results = results.order_by('$text_score')
     elif len(query_text) == 0 and results:
         logger.debug('Sorting results by name')
-        results = results.order_by('name')
+        results = results.order_by('software_name')
     else:
         logger.debug('No sorting!! len(query_text): ')
 
