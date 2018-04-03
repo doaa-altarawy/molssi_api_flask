@@ -18,7 +18,7 @@ cors = CORS()
 # cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 # For: @app.route("/api/v1/users")
 bootstrap = Bootstrap()
-app_admin = Admin(name='MolSSI CMS Software DB Admin', template_mode='bootstrap3',
+app_admin = Admin(name='MolSSI Molecular Software DB Admin', template_mode='bootstrap3',
                   base_template='admin/custom_base.html')
 
 login_manager = LoginManager()
