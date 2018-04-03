@@ -12,10 +12,10 @@ from flask_admin.model import typefmt
 from ..models.users import User, Permission, Role
 from itsdangerous import URLSafeTimedSerializer as Serializer
 from flask_admin.actions import action
-
+from flask_admin.helpers import is_form_submitted
 
 def date_format(view, value):
-    return value.strftime('%Y-%m-%d')
+    return value.strftime('%Y-%m-%d %H:%M%p')
 
 
 MY_DEFAULT_FORMATTERS = dict(typefmt.BASE_FORMATTERS)
@@ -32,7 +32,7 @@ class SoftwareView(ModelView):
 
     # Columns (in list view):
     # -----------------------
-    column_list = ['added_by_name', 'software_name', 'domain', 'is_pending']
+    column_list = ['added_by_name', 'software_name', 'last_updated', 'domain', 'is_pending']
     # column_exclude_list = ['description', 'long_description', 'date']
 
     column_labels = {
@@ -250,6 +250,8 @@ class SoftwareViewPublic(SoftwareView):
             if model:
                 # flash('Software was successfully submitted.', 'success')
                 return redirect(url_for('submit_software.success'))
+        elif is_form_submitted():
+            flash('Some fields are missing', 'error')
 
         form_opts = FormOpts(widget_args=self.form_widget_args,
                              form_rules=self._form_create_rules)
