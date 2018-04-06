@@ -49,7 +49,7 @@
         </div>
         <div class="card-footer">
             <a class="card-link" href="{{ lib.official_website }}" target="_blank">Official Website</a>
-            <a class="card-link" href="{{ lib.source or 'http://' }}" target="_blank">Source code</a>
+            <a class="card-link" href="{{ lib.source_code_link or 'http://' }}" target="_blank">Source code</a>
         </div> <!-- card footer -->
         </div>
     </div>
@@ -192,7 +192,7 @@
                     {%- endfor %}
                 </dd>
                 <dt class="col-sm-2">Source Code</dt>
-                <dd class="col-sm-4">{{ lib.source | urlize(40, true, '_blank') | empty }}</dd>
+                <dd class="col-sm-4">{{ lib.source_code_link | urlize(40, true, '_blank') | empty }}</dd>
 
                 <dt class="col-sm-2">Code Management</dt>
                 <dd class="col-sm-4">{{ lib.code_management | empty }} </dd>

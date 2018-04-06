@@ -28,11 +28,12 @@
             </div>
         </nav>
 
-        <h3>Submit Software for review</h3>
-      {% block messages %}
-      {{ layout.messages() }}
-      {% endblock %}
-
+        <div class="admin-form">
+            <h3>Submit Software for review</h3>
+            {% block messages %}
+            {{ layout.messages() }}
+            {% endblock %}
+        </div>
       {# store the jinja2 context for form_rules rendering logic #}
       {% set render_ctx = h.resolve_ctx() %}
 
