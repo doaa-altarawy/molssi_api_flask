@@ -42,7 +42,7 @@
             <dd class="col-sm-10">
                 {{ lib.principal_contact_name or '' }}
                 {% if lib.principal_contact_email %}
-                {{ ' (' + lib.principal_contact_email + ')' }}
+                    (<a href="mailto:{{ lib.principal_contact_email }}" target="_top">{{ lib.principal_contact_email}}</a>)
                 {% endif %}
             </dd>
         </dl>
