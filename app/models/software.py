@@ -66,7 +66,7 @@ class QMFeatures(db.EmbeddedDocument):
 class MMFeatures(db.EmbeddedDocument):
     """MM specific features"""
 
-    ENSEMBLES = ['DPD', 'Langevin Dynamics', 'NPH', 'NPT', 'NVE', 'NVP', 'NVT', 'NgammaP', 'NgammaT']
+    ENSEMBLES = ['DPD', 'Langevin Dynamics', 'NPH', 'NPT', 'NVE', 'NVT', 'NgammaP', 'NgammaT']
     FORCEFIELD_TYPES = ["Class I", "Class II", "Polarizable", "Reactive", "Inorganic/Metals"]
 
     ensembles = db.ListField(db.StringField(max_length=20, choices=ENSEMBLES))
@@ -75,7 +75,7 @@ class MMFeatures(db.EmbeddedDocument):
 
     forcefields = db.StringField(max_length=200, help_text='')
     forcefield_types = db.ListField(db.StringField(max_length=20, choices=FORCEFIELD_TYPES))
-    file_formats = db.StringField(max_length=100, help_text='What are the supported input file formats?')
+    file_formats = db.StringField(max_length=200, help_text='What are the supported input file formats?')
     qm_mm = db.BooleanField(verbose_name='QM/MM')
 
     # tags
@@ -116,17 +116,17 @@ class MMFeatures(db.EmbeddedDocument):
 class Software(db.DynamicDocument):     # flexible schema, can have extra attributes
 
     # added by
-    added_by_name = db.StringField(max_length=100, required=True)
+    added_by_name = db.StringField(max_length=150, required=True)
     added_by_email = db.EmailField(required=True)
     is_SW_owner = db.BooleanField(default=False)
 
     # availability
-    software_name = db.StringField(max_length=100, required=True)
+    software_name = db.StringField(max_length=150, required=True)
     license = db.StringField(max_length=200, required=True, help_text='E.g., GPL, BSD-3, proprietary, ...')
     price = db.StringField(max_length=200, help_text='E.g., free, free for academia, $600 for one year, ...')
     latest_version = db.StringField(max_length=100)
     date_of_latest_version = db.DateTimeField()            # Date of latest version
-    principal_contact_name = db.StringField(max_length=100)
+    principal_contact_name = db.StringField(max_length=150)
     principal_contact_email = db.EmailField()
     official_website = db.URLField(required=True, help_text='E.g., http://www.molssi.org')
 
@@ -143,7 +143,7 @@ class Software(db.DynamicDocument):     # flexible schema, can have extra attrib
                  'FORTRAN90', 'Java', 'JavaScript', 'Other']
 
     source_code_link = db.URLField()
-    executables = db.StringField(max_length=100,
+    executables = db.StringField(max_length=150,
                     help_text='Are pre-compiled distributions available? which operating systems are supported?')
     code_management = db.StringField(max_length=10,
                                 choices=['', 'git/GitHub', 'git/Bitbucket', 'git/others', 'SVN', 'CVS', 'other'])
