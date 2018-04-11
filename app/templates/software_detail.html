@@ -157,17 +157,17 @@
         <div class="card-block">
             <dl class="row mb-0">
                 <dt class="col-sm-2">Support Line</dt>
-                <dd class="col-sm-4">{{ lib.support_line | urlize(30, true, '_blank') | empty }} </dd>
+                <dd class="col-sm-4">{{ lib.support_line | empty | urlize(30, true, '_blank') }} </dd>
                 <dt class="col-sm-2">Documentation</dt>
-                <dd class="col-sm-4">{{ lib.documentation | urlize(30, true, '_blank') | empty }} </dd>
+                <dd class="col-sm-4">{{ lib.documentation | empty | urlize(30, true, '_blank') }} </dd>
                 <dt class="col-sm-2">Tutorials</dt>
                 <dd class="col-sm-4">{{ lib.number_of_tutorials | empty }} </dd>
                 <dt class="col-sm-2">Wiki</dt>
-                <dd class="col-sm-4">{{ lib.wiki | urlize(30, true, '_blank') | empty }} </dd>
+                <dd class="col-sm-4">{{ lib.wiki | empty | urlize(30, true, '_blank') }} </dd>
                 <dt class="col-sm-2">Forum</dt>
-                <dd class="col-sm-4">{{ lib.forum | urlize(30, true, '_blank') | empty }} </dd>
+                <dd class="col-sm-4">{{ lib.forum | empty | urlize(30, true, '_blank') }} </dd>
                 <dt class="col-sm-2">Mail List</dt>
-                <dd class="col-sm-4">{{ lib.mail_list | urlize(30, true, '_blank') | empty }} </dd>
+                <dd class="col-sm-4">{{ lib.mail_list | empty | urlize(30, true, '_blank') }} </dd>
             </dl>
         </div>
         </div>
@@ -192,7 +192,7 @@
                     {%- endfor %}
                 </dd>
                 <dt class="col-sm-2">Source Code</dt>
-                <dd class="col-sm-4">{{ lib.source_code_link | urlize(40, true, '_blank') | empty }}</dd>
+                <dd class="col-sm-4">{{ lib.source_code_link | empty | urlize(40, true, '_blank') }}</dd>
 
                 <dt class="col-sm-2">Code Management</dt>
                 <dd class="col-sm-4">{{ lib.code_management | empty }} </dd>

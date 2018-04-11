@@ -3,16 +3,19 @@
 <section class="card mb-3 card-outline-danger" style="border-radius: 15px">
     <!-- <img class="img-fluid w-25" src="http://localhost:5000/static/images/molssi.jpg" /> -->
 <div class="card-block">
-
-    <h3 class="card-title text-danger"><a href="/software_detail/{{ lib.id }}">{{ lib.software_name }}</a></h3>
-    <p class="card-text text-justify my-md-4">
-        {% if lib.description -%}
-            {{ lib.description | safe | truncate(512) }}
-        {% else %}
-            {{ lib.long_description | safe | truncate(512) }}
-        {% endif %}
-    </p>
-
+    <div class="media">
+{#        <img class="d-flex align-self-start mr-2" src="static/images/molssi.jpg", style="width: 150px">#}
+        <div class="media-body">
+            <h3 class="card-title text-danger"><a href="/software_detail/{{ lib.id }}">{{ lib.software_name }}</a></h3>
+            <p class="card-text text-justify my-md-4">
+                {% if lib.description -%}
+                    {{ lib.description | safe | truncate(512) }}
+                {% else %}
+                    {{ lib.long_description | safe | truncate(512) }}
+                {% endif %}
+            </p>
+        </div>
+    </div>
     <div class="row mb-4">
 
             <div class="col-md-6">
@@ -27,7 +30,7 @@
 
             <div class="col-md-6">
                 <b>Documentation: </b>
-                  {{  lib.documentation | urlize(30, true, '_blank') | empty }}
+                  {{  lib.documentation | empty | urlize(30, true, '_blank') }}
             </div>
     </div>
 
