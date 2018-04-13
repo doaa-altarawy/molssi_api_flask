@@ -46,6 +46,12 @@
                 {% endif %}
             </dd>
         </dl>
+        <div class="row">
+            <div class="col-sm-2">
+                <b>Reguired Citation:</b>
+            </div>
+            <div class="col">{{ lib.required_citation or '' }}</div>
+        </div>
         </div>
         <div class="card-footer">
             <a class="card-link" href="{{ lib.official_website }}" target="_blank">Official Website</a>
@@ -136,7 +142,7 @@
             <dl class="row mb-0">
                 <dt class="col-sm-2">Parallel:</dt> <dd class="col-sm-10">{{ lib.parallel | empty}}</dd>
                 <dt class="col-sm-2">GPU: </dt> <dd class="col-sm-10">{{ lib.gpu | empty}}</dd>
-                <dt class="col-sm-2">KNL: </dt> <dd class="col-sm-10">{{ lib.knl | empty }}</dd>
+                <dt class="col-sm-2">KNL: </dt> <dd class="col-sm-10">{{ lib.knl_optimized | empty }}</dd>
             </dl>
         </div>
         </div>
