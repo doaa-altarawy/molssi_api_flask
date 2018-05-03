@@ -21,7 +21,7 @@ Field Options:
 class QMFeatures(db.EmbeddedDocument):
     """QM specific features"""
 
-    basis = db.StringField(max_length=200)
+    basis = db.StringField(max_length=200, help_text='E.g., Slater, Gaussian, planewave, numerical, etc.')
     element_coverage = db.StringField(max_length=200)
     other = db.StringField(max_length=250)
 
@@ -73,7 +73,7 @@ class MMFeatures(db.EmbeddedDocument):
     free_energy_methods = db.StringField(max_length=200)
     advanced_sampling_methods = db.StringField(max_length=200)
 
-    forcefields = db.StringField(max_length=200, help_text='')
+    forcefields = db.StringField(max_length=200, help_text='E.g., AMBER, OPLSAA, Dreiding, or other named forcefields')
     forcefield_types = db.ListField(db.StringField(max_length=20, choices=FORCEFIELD_TYPES))
     file_formats = db.StringField(max_length=200, help_text='What are the supported input file formats?')
     qm_mm = db.BooleanField(verbose_name='QM/MM')
@@ -124,18 +124,20 @@ class Software(db.DynamicDocument):     # flexible schema, can have extra attrib
     software_name = db.StringField(max_length=150, required=True)
     license = db.StringField(max_length=200, required=True, help_text='E.g., GPL, BSD-3, proprietary, ...')
     price = db.StringField(max_length=200, help_text='E.g., free, free for academia, $600 for one year, ...')
-    latest_version = db.StringField(max_length=100)
+    latest_version = db.StringField(max_length=100,
+                            help_text="If your software doesn't have official releases, "
+                                    "feel free to put 'continual versions in GitHub' or similar.")
     date_of_latest_version = db.DateTimeField()            # Date of latest version
     principal_contact_name = db.StringField(max_length=150)
-    principal_contact_email = db.EmailField()
+    principal_contact_email = db.EmailField(help_text="Contact name and email will be public, so feel free to leave blank or use an email like support@xxxx")
     official_website = db.URLField(required=True, help_text='E.g., http://www.molssi.org')
 
     # Others
     description = db.StringField(required=True, default='',
-                                 help_text='Short description of max 500 characters')
-    long_description = db.StringField(required=True, default='', help_text='Longer detailed description')
-    comments = db.StringField()
-    required_citation = db.StringField(help_text='Which papers need to be cited when this software is used')
+                                 help_text='Short description (max 500 characters) which will be displayed in the search results list')
+    long_description = db.StringField(required=True, default='', help_text='Longer detailed description used in the software details page')
+    comments = db.StringField(help_text='This comment is private to MolSSI team and won\'t be published with the software.')
+    required_citation = db.StringField(help_text='Which papers should be cited when this software is used')
     domain = db.StringField(required=True, default='MM', choices=['MM', 'QM', 'other'])
 
     # software engineering
@@ -148,7 +150,8 @@ class Software(db.DynamicDocument):     # flexible schema, can have extra attrib
     code_management = db.StringField(max_length=10,
                                 choices=['', 'git/GitHub', 'git/Bitbucket', 'git/others', 'SVN', 'CVS', 'other'])
     continuous_integration = db.StringField(max_length=20, choices=['', 'Yes', 'No'])
-    number_of_tests = db.IntField()
+    number_of_tests = db.IntField(help_text='Approximate number of tests')
+    test_coverage = db.IntField(min_value=0, max_value=100, help_text='If available, use a number between 0 and 100 (without the %)')
     languages = db.ListField(db.StringField(max_length=20, choices=LANGUAGES), required=True)
     # for search efficiency, repeat in lowercase, keep original case for display
     languages_lower = db.ListField(db.StringField(max_length=20))

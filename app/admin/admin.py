@@ -80,6 +80,7 @@ class SoftwareView(ModelView):
         # mm_features.qm_mm={'label': 'QM/MM'},  # not here, in form_subdocument
         qm_features={'label': ''},
         is_pending={'label': 'Pending'},
+        required_citation={'label': 'Requested Citations(s)'},
         # changes how the input is parsed by strptime (12 hour time)
         # date_of_latest_version={'format': '%Y-%m-%d %I:%M %p'}
 
@@ -129,10 +130,14 @@ class SoftwareView(ModelView):
     # Form display organization rules
     form_create_rules = [
         rules.HTML('<h4>Please fill this form as complete as you can to be accessible through search.</h4>'),
-        rules.HTML('<h5>For any issues submitting this form contact us at info@molssi.org</h5>'),
+        rules.HTML('<h5>(For any issues submitting this form contact us at info@molssi.org)</h5>'),
         rules.HTML('<hr>'),
 
-        rules.FieldSet(('added_by_name', 'added_by_email', 'is_SW_owner'), 'Your Information'),
+        rules.Header('Your Information'),
+        rules.HTML('<h6>Your information will not be public. '
+                   'We will use it to contact you if we have questions about your submission, '
+                   'or want to clarify something.</h6>'),
+        rules.FieldSet(('added_by_name', 'added_by_email', 'is_SW_owner')),
         rules.HTML('<hr>'),
 
         rules.Header('Availability'),
@@ -148,7 +153,7 @@ class SoftwareView(ModelView):
 
         rules.Header('Software Engineering'),
         'source_code_link', 'executables', 'code_management',
-        'continuous_integration', 'number_of_tests',
+        'continuous_integration', 'number_of_tests', 'test_coverage',
         rules.HTML('<hr>'),
 
         rules.Header('Performance'),
