@@ -268,7 +268,6 @@ class SoftwareViewPublic(SoftwareView):
 
             if model:
                 # flash('Software was successfully submitted.', 'success')
-                print('fffffffff model id', model.id)
                 return redirect(url_for('submit_software.success', software_id=model.id))
         elif is_form_submitted():
             flash('Some fields are missing', 'error')
@@ -325,7 +324,7 @@ class SoftwareViewPublic(SoftwareView):
         preview_url = url_for('main.software_detail', sw_id=software_id, _external=True)
 
         return render_template('admin/user_message.html',
-                               message='Software was submitted successfully',
+                               message='Thank you. The software was submitted successfully.',
                                edit_url=edit_url,
                                preview_url=preview_url)
 
