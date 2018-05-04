@@ -268,7 +268,8 @@ class SoftwareViewPublic(SoftwareView):
 
             if model:
                 # flash('Software was successfully submitted.', 'success')
-                return redirect(url_for('submit_software.success'))
+                print('fffffffff model id', model.id)
+                return redirect(url_for('submit_software.success', software_id=model.id))
         elif is_form_submitted():
             flash('Some fields are missing', 'error')
 
@@ -286,7 +287,6 @@ class SoftwareViewPublic(SoftwareView):
         """customize the edit view"""
 
         not_found_url = url_for('submit_software.not_found')
-        success_url = url_for('submit_software.success')
         model = None
         id = self.confirm_software_id_token(token)
         if id:
@@ -305,7 +305,7 @@ class SoftwareViewPublic(SoftwareView):
 
             if self.update_model(form, model):
                 # flash('Software was successfully submitted.', 'success')
-                return redirect(success_url)
+                return redirect(url_for('submit_software.success', software_id=model.id))
 
         form_opts = FormOpts(widget_args=self.form_widget_args,
                              form_rules=self._form_create_rules)
@@ -316,9 +316,18 @@ class SoftwareViewPublic(SoftwareView):
                            form_opts=form_opts,
                            return_url=not_found_url)
 
-    @expose('/success')
-    def success(self):
-        return render_template('admin/user_message.html', message='Software was submitted successfully')
+    @expose('/success/<software_id>')
+    def success(self, software_id):
+        """Return a sucess page with links to preview and edit software"""
+
+        edit_url = url_for('submit_software.create_view', _external=True) + 'edit/' + \
+                                    self.generate_software_id_token(software_id)
+        preview_url = url_for('main.software_detail', sw_id=software_id, _external=True)
+
+        return render_template('admin/user_message.html',
+                               message='Software was submitted successfully',
+                               edit_url=edit_url,
+                               preview_url=preview_url)
 
     @expose('/not_found')
     def not_found(self):

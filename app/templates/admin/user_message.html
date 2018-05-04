@@ -18,9 +18,23 @@
         <h5>{{ message }}</h5>
 
         <div class="pt-5">
-            <p><a href="http://molssi.org/software-search/">Return to MolSSI Software DB search page</a></p>
+            <h6>You software is saved for review but may not be public yet.</h6>
+            <br />
+            <ul>
+                <li>
+                    <p>To preview your submitted software: <a href="{{ preview_url }} " target="_blank">{{ preview_url }}</a></p>
+                </li>
+                <li>
+                    <p>To edit your submitted software: <a href="{{ edit_url }}" target="_blank">{{ edit_url }}</a></p>
+                </li>
+            </ul>
+
+        </div>
+
+        <div class="pt-5">
+            <p><a href="http://molssi.org/software-search/">Return to MolSSI Molecular Software DB search page</a></p>
             {# <p><a href={{ url_for('main.software_search') }}>Return to MolSSI Software DB search page</a></p>  #}
-            <p><a href={{ url_for('submit_software.index_view')  }}>Add another Software</a></p>
+            <p><a href={{ url_for('submit_software.index_view')  }}>Add another software</a></p>
         </div>
     </div>
 {%  endblock %}
