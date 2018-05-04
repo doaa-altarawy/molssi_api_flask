@@ -135,7 +135,7 @@ class Software(db.DynamicDocument):     # flexible schema, can have extra attrib
     # Others
     description = db.StringField(required=True, default='',
                                  help_text='Short description (max 500 characters) which will be displayed in the search results list')
-    long_description = db.StringField(required=True, default='', help_text='Longer detailed description used in the software details page')
+    long_description = db.StringField(required=True, default='', help_text='Longer detailed description used in the software detail page')
     comments = db.StringField(help_text='This comment is private to MolSSI team and won\'t be published with the software.')
     required_citation = db.StringField(help_text='Which papers should be cited when this software is used')
     domain = db.StringField(required=True, default='MM', choices=['MM', 'QM', 'other'])

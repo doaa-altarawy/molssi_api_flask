@@ -13,6 +13,9 @@ from ..models.users import User, Permission, Role
 from itsdangerous import URLSafeTimedSerializer as Serializer
 from flask_admin.actions import action
 from flask_admin.helpers import is_form_submitted
+from wtforms.widgets import TextArea
+from wtforms import TextAreaField
+
 
 def date_format(view, value):
     return value.strftime('%Y-%m-%d %H:%M%p')
@@ -22,6 +25,16 @@ MY_DEFAULT_FORMATTERS = dict(typefmt.BASE_FORMATTERS)
 MY_DEFAULT_FORMATTERS.update({
         date: date_format
     })
+
+
+class CKTextAreaWidget(TextArea):
+    def __call__(self, field, **kwargs):
+        kwargs.setdefault('class_', 'ckeditor')
+        return super(CKTextAreaWidget, self).__call__(field, **kwargs)
+
+
+class CKTextAreaField(TextAreaField):
+    widget = CKTextAreaWidget()
 
 
 class SoftwareView(ModelView):
@@ -123,9 +136,10 @@ class SoftwareView(ModelView):
         )
     )
 
-    form_overrides = {
-        # 'date_of_latest_version': DateTimeField?
-    }
+    form_overrides = dict(
+        # date_of_latest_version=DateTimeField?
+        long_description=CKTextAreaField
+    )
 
     # Form display organization rules
     form_create_rules = [

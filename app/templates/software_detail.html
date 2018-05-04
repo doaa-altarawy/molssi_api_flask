@@ -3,7 +3,7 @@
 {% block title %}Software Detail{% endblock %}
 
 {% block page_content %}
-<div id="page_wrapper" class="container mb-3" style="max-width: 90%">
+<div id="page_wrapper" class="container mb-3">
 
     <div>
         <h3 class="text-danger">{{ lib.software_name }}</h3>
@@ -47,10 +47,10 @@
             </dd>
         </dl>
         <div class="row">
-            <div class="col-sm-2">
-                <b>Reguired Citation:</b>
+            <div class="col-sm-auto ml-3">
+                <b>Requested Citation(s):</b>
             </div>
-            <div class="col">{{ lib.required_citation or '' }}</div>
+            <div class="col-sm">{{ lib.required_citation | safe or '' }}</div>
         </div>
         </div>
         <div class="card-footer">
@@ -140,9 +140,9 @@
         <div id="performance" class="collapse show" role="tabpanel" aria-labelledby="heading3">
         <div class="card-block">
             <dl class="row mb-0">
-                <dt class="col-sm-2">Parallel:</dt> <dd class="col-sm-10">{{ lib.parallel | empty}}</dd>
-                <dt class="col-sm-2">GPU: </dt> <dd class="col-sm-10">{{ lib.gpu | empty}}</dd>
-                <dt class="col-sm-2">KNL: </dt> <dd class="col-sm-10">{{ lib.knl_optimized | empty }}</dd>
+                <dt class="col-sm-2">Parallel</dt> <dd class="col-sm-10">{{ lib.parallel | empty}}</dd>
+                <dt class="col-sm-2">GPU </dt> <dd class="col-sm-10">{{ lib.gpu | empty}}</dd>
+                <dt class="col-sm-2">KNL </dt> <dd class="col-sm-10">{{ lib.knl_optimized | empty }}</dd>
             </dl>
         </div>
         </div>
@@ -203,14 +203,19 @@
                 <dt class="col-sm-2">Code Management</dt>
                 <dd class="col-sm-4">{{ lib.code_management | empty }} </dd>
 
-                <dt class="col-sm-2">Continuous Integration</dt>
-                <dd class="col-sm-4">{{ lib.continuous_integration | empty }} </dd>
-                <dt class="col-sm-2">Executables</dt>
-                <dd class="col-sm-4">{{ lib.excutables | empty }} </dd>
-                <dt class="col-sm-2">Tests</dt>
-                <dd class="col-sm-4">{{ lib.number_of_tests | empty }} </dd>
                 <dt class="col-sm-2">Compilers</dt>
                 <dd class="col-sm-4">{{ lib.compilers | empty }} </dd>
+
+                <dt class="col-sm-2">Executables</dt>
+                <dd class="col-sm-4">{{ lib.excutables | empty }} </dd>
+                <dt class="col-sm-2">Number of Tests</dt>
+                <dd class="col-sm-4">{{ lib.number_of_tests | empty }} </dd>
+
+            <dt class="col-sm-3">Continuous Integration</dt>
+                <dd class="col-sm-3">{{ lib.continuous_integration | empty }} </dd>
+            <dt class="col-sm-2">Test Coverage</dt>
+                <dd class="col-sm-4">{{ lib.test_coverage | empty }}%</dd>
+
             </dl>
         </div>
         </div>

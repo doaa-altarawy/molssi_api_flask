@@ -138,3 +138,19 @@ https://github.com/silviomoreto/bootstrap-select/issues/1135
 #libraryName{
     min-width: 150px;
 }
+
+
+
+@media (min-width: 768px) {
+    /* For mobile phones: */
+    #page_wrapper {
+        max-width: 100%;
+    }
+}
+
+@media (min-width: 992px) {
+    /* For mobile phones: */
+    #page_wrapper {
+        max-width: 90%;
+    }
+}
