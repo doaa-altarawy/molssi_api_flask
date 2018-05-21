@@ -1,0 +1,202 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}Library Detail{% endblock %}
+
+{% block page_content %}
+<div class="container mb-3 border border-secondary" style="border-radius: 15px; max-width: 80%">
+    <!-- <img class="img-fluid w-25" src="http://localhost:5000/static/images/molssi.jpg" /> -->
+    <div>
+        <h3 class="text-danger">{{ lib.name }}</h3>
+        <p class="text-justify my-md-4">
+        {% if lib.long_description -%}
+            {{ lib.long_description | safe }}
+        {% else %}
+            {{ lib.description | safe }}
+        {% endif %}
+        </p>
+    </div>
+
+
+    <div class="card">
+        <div class="card-header-yellow">
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#" data-target="#availability" data-toggle="tab">Availability</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-target="#features" data-toggle="tab">Features</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-target="#performance" data-toggle="tab">Performance</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-target="#support" data-toggle="tab">Suport</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-target="#se" data-toggle="tab">Software Engineering</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+
+    <div id="tabsJustifiedContent" class="tab-content">
+    <!-- Availability -->
+    <div id='availability' class="card mb-3 tab-pane fade active show">
+        <h6 class="card-header card-header-purple">Availability</h6>
+        <div class="card-block">
+        <dl class="row">
+            <dt class="col-sm-2">Owner:</dt>
+            <dd class="col-sm-4"> {{ lib.owner }}</dd>
+
+            <dt class="col-sm-2">Latest version:</dt>
+            <dd class="col-sm-4">    {{ lib.latest_version or "unkown" }}
+                {% if lib.date %} ({{ lib.date }})   {% endif %}
+            </dd>
+
+            <dt class="col-sm-2">License: </dt>
+            <dd class="col-sm-10">
+                {{ lib.license or 'unknown' }} {% if lib.price %} {{ ' (' + lib.price + ')'}}
+                {% endif %}
+            </dd>
+
+            <dt class="col-sm-2">Principal Contact: </dt>
+            <dd class="col-sm-10">
+                {{ lib.principal_contact_name or '' }}
+                {% if lib.principal_contact_email %}
+                {{ ' (' + lib.principal_contact_email + ')' }}
+                {% endif %}
+            </dd>
+        </dl>
+        </div>
+        <div class="card-footer">
+            <a class="card-link" href="{{ lib.official_website }}" target="_blank">Offecial Website</a>
+            <a class="card-link" href="{{ lib.source or 'http://' }}" target="_blank">Source code</a>
+        </div> <!-- card footer -->
+    </div>
+
+
+    <!-- Domain Features -->
+    <div id='features' class="card mb-3 tab-pane fade">
+        <h6 class="card-header card-header-pink">Domain Features</h6>
+
+        <div class="card-block">
+            <!-- MM -->
+            {%  if lib.mm_features %}
+            <dl class="row mb-3">
+                <dt class="col-sm-2">Ensembles: </dt>
+                <dd class="col-sm-4">{{ lib.mm_features.ensembles or '' }}</dd>
+                <dt class="col-sm-2">Free Energy Methods: </dt>
+                <dd class="col-sm-4">{{ lib.mm_features.free_energy_methods or '' }}</dd>
+                <dt class="col-sm-2">Advanced Sampling Methods: </dt>
+                <dd class="col-sm-4">{{ lib.mm_features.advanced_sampling_methods or '' }}</dd>
+                <dt class="col-sm-2">Forcefields: </dt>
+                <dd class="col-sm-4">{{ lib.mm_features.forcefields or '' }}</dd>
+                <dt class="col-sm-2">File Formats: </dt>
+                <dd class="col-sm-4">{{ lib.mm_features.file_formats or '' }}</dd>
+                <dt class="col-sm-2">QM/MM: </dt>
+                <dd class="col-sm-4">{{ lib.qm_mm or '' }}</dd>
+            </dl>
+            {% endif %}
+
+
+            <!-- QM -->
+            {%  if lib.qm_features %}
+            <dl class="row mb-3">
+                <dt class="col-sm-2">Basis: </dt>
+                <dd class="col-sm-4"> {{ lib.qm_features.basis or ''}}</dd>
+                <dt class="col-sm-2">Coverage: </dt>
+                <dd class="col-sm-4"> {{ lib.qm_features.coverage or ''}}</dd>
+                <dt class="col-sm-2">Other: </dt>
+                <dd>{{ lib.qm_features.other or '' }}</dd>
+            </dl>
+            {% endif %}
+
+
+            <div>
+                <span class="bg-primary text-white mr-3 p-1 rounded"> Tags </span>
+                <span class="badge badge-pill badge-primary"> Tags2 </span>
+                {% for tag in lib.qm_features.tags -%}
+                    <mark>{{ tag | upper}}</mark> &nbsp;
+                {%- endfor %}
+                {% for tag in lib.mm_features.tags -%}
+                    <mark>{{ tag | upper }}</mark> &nbsp;
+                {%- endfor %}
+            </div>
+        </div>
+    </div> <!-- end Domain Features -->
+
+    <!-- Performance -->
+    <div id='performance' class="card mb-3  tab-pane fade">
+        <h6 class="card-header card-header-blue">Performance</h6>
+        <div class="card-block">
+            <dl class="row mb-0">
+                <dt class="col-sm-2">Parallel:</dt> <dd class="col-sm-10">{{ lib.parallel or ''}}</dd>
+                <dt class="col-sm-2">GPU: </dt> <dd class="col-sm-10">{{ lib.gpu or ''}}</dd>
+                <dt class="col-sm-2">KNL: </dt> <dd class="col-sm-10">{{ lib.knl or '' }}</dd>
+            </dl>
+        </div>
+    </div> <!-- SE card -->
+
+
+    <!-- Support -->
+    <div id='support' class="card mb-3  tab-pane fade">
+        <h6 class="card-header card-header-green">Support</h6>
+        <div class="card-block">
+            <dl class="row mb-0">
+                <dt class="col-sm-2">Support Line</dt>
+                <dd class="col-sm-4">{{ lib.support_line | urlize(40, true, '_blank') or 'unknown' }} </dd>
+                <dt class="col-sm-2">Documentation</dt>
+                <dd class="col-sm-4">{{ lib.documentation | urlize(40, true, '_blank') or 'unknown' }} </dd>
+                <dt class="col-sm-2">Tutorials</dt>
+                <dd class="col-sm-4">{{ lib.tutorials or 'unknown' }} </dd>
+                <dt class="col-sm-2">Wiki</dt>
+                <dd class="col-sm-4">{{ lib.wiki | urlize(40, true, '_blank') or 'unknown' }} </dd>
+                <dt class="col-sm-2">Forum</dt>
+                <dd class="col-sm-4">{{ lib.forum | urlize(40, true, '_blank') or 'unknown' }} </dd>
+                <dt class="col-sm-2">Mail List</dt>
+                <dd class="col-sm-4">{{ lib.mail_list | urlize(40, true, '_blank') or 'unknown' }} </dd>
+            </dl>
+        </div>
+    </div> <!-- SE card -->
+
+    <!-- SE -->
+    <div id='se' class="card mb-3  tab-pane fade">
+        <h6 class="card-header card-header-yellow">Software Engineering</h6>
+        <div class="card-block">
+            <dl class="row mb-0">
+                <dt class="col-sm-2">Langauges</dt>
+                <dd class="col-sm-4">
+                    {% for lang in lib.languages -%}
+                        {{ lang + " " }}
+                    {%- endfor %}
+                </dd>
+                <dt class="col-sm-2">Source Code:</dt>
+                <dd class="col-sm-4">{{ lib.source | urlize(40, true, '_blank') or 'unknown' }}</dd>
+
+                <dt class="col-sm-2">Code Management</dt>
+                <dd class="col-sm-4">{{ lib.code_management or 'unknown' }} </dd>
+
+                <dt class="col-sm-2">Continuous Integration</dt>
+                <dd class="col-sm-4">{{ lib.continuous_integration or 'unknown' }} </dd>
+                <dt class="col-sm-2">Executables</dt>
+                <dd class="col-sm-4">{{ lib.excutables or 'unknown' }} </dd>
+                <dt class="col-sm-2">Tests</dt>
+                <dd class="col-sm-4">{{ lib.tests or 'unknown' }} </dd>
+                <dt class="col-sm-2">Compilers</dt>
+                <dd class="col-sm-4">{{ lib.compilers or 'unknown' }} </dd>
+            </dl>
+        </div>
+    </div> <!-- SE card -->
+    </div>
+    <div>
+        <hr/>
+        <a href="javascript:window.history.back()" target="_top" class="card-link">
+            <h5 class="d-inline-block"><i class="fa fa-arrow-left" aria-hidden="true"></i> Back</h5>
+        </a>
+    </div>
+
+
+</div> <!-- container library_details  -->
+{% endblock %}
