@@ -317,7 +317,7 @@ class SoftwareViewPublic(SoftwareView):
 
     @expose('/success/<software_id>')
     def success(self, software_id):
-        """Return a sucess page with links to preview and edit software"""
+        """Return a success page with links to preview and edit software"""
 
         edit_url = url_for('submit_software.create_view', _external=True) + 'edit/' + \
                                     self.generate_software_id_token(software_id)
