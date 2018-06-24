@@ -1,16 +1,16 @@
-from flask import request, render_template, flash, g, \
+from flask import request, render_template, flash, \
                 render_template_string, session, \
                 redirect, url_for, abort, jsonify, send_from_directory,\
                 current_app
-from flask_jsonpify import jsonpify
 import os
 import json
 from . import main
 from ..models import mongo_database
 from .forms import SoftwareForm
-from ..admin.admin import SoftwareView
+# from ..admin.admin import SoftwareView
 import logging
 from flask_login import login_required, current_user
+from ..models.search_logs import save_access
 
 
 @main.route('/')
@@ -70,11 +70,16 @@ def search_libraries(to_json=True):
 # @admin_required
 # @permission_required(Permission.MODERATE)
 def software_detail(sw_id):
+
     logging.info('Find software with ID: %s', sw_id)
     software = mongo_database.get_software(sw_id)
-    logging.debug("This is software: %s", software.software_name)
+
     if software is None:
         flash("Library not found")
+        return render_template('404.html'), 404
+
+    logging.debug("This is software: %s", software.software_name)
+    save_access(software)
 
     return render_template('software_detail.html', lib=software)
 
@@ -94,7 +99,7 @@ def contact():
     """Return a test JSON file
     """
     json_url = os.path.join(current_app.config['base_dir'], 'static',
-                    'data', 'test.json')
+                            'data', 'test.json')
     logging.debug(json_url)
     # data = json.load(open(json_url))
 
@@ -102,12 +107,6 @@ def contact():
         data = json.load(f)
 
     return jsonify(data)
-
-    # For JSONP:
-    # return jsonpify({
-    #               'name': 'Doaa Altarawy',
-    #               'info': 'Research Scientist at MolSSI'
-    #               })
 
 
 @main.route('/static/<path:path>')

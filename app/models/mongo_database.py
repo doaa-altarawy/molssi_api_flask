@@ -288,9 +288,10 @@ def get_json(verbose=False):
 
 def get_software(lib_id):
     libs = Software.objects(id=lib_id)
-    if libs:    # return first result
-        return libs[0]
-    else:
+    try:
+        if libs:    # return first result
+            return libs[0]
+    except:
         return None
 
 

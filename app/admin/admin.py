@@ -10,6 +10,7 @@ from flask_admin.form.widgets import DatePickerWidget
 from datetime import date, datetime
 from flask_admin.model import typefmt
 from ..models.users import User, Permission, Role
+from ..models.search_logs import SoftwareAccess
 from itsdangerous import URLSafeTimedSerializer as Serializer
 from flask_admin.actions import action
 from flask_admin.helpers import is_form_submitted
@@ -352,10 +353,29 @@ class UserView(ModelView):
         return login.current_user.is_authenticated and login.current_user.can(Permission.ADMIN)
 
 
+class SoftwareAccessLogsView(ModelView):
+
+    can_create = False
+    can_edit = False
+    column_list = ['software', 'access_date', 'ip_address']
+    # form_excluded_columns = ['ip_address', ]
+    column_type_formatters = MY_DEFAULT_FORMATTERS
+
+    form_widget_args = dict(
+        software={'readonly': True},
+        access_date={'readonly': True},
+        ip_address={'readonly': True},
+    )
+
+    def is_accessible(self):
+        return login.current_user.is_authenticated and login.current_user.can(Permission.ADMIN)
+
+
 def add_admin_views():
     """Register views to admin"""
     from .. import app_admin
     app_admin.add_view(SoftwareView(Software, name='Software List'))
     app_admin.add_view(UserView(User, name='Users'))
+    app_admin.add_view(SoftwareAccessLogsView(SoftwareAccess, name='Search Logs'))
     app_admin.add_view(SoftwareViewPublic(Software, endpoint='submit_software',
-                                         name='Submit Software Link'))
+                                         name='Submit Software'))
