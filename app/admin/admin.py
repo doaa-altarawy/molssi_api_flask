@@ -357,6 +357,7 @@ class SoftwareAccessLogsView(ModelView):
 
     can_create = False
     can_edit = False
+    can_export = True
     column_list = ['software', 'access_date', 'ip_address']
     # form_excluded_columns = ['ip_address', ]
     column_type_formatters = MY_DEFAULT_FORMATTERS
