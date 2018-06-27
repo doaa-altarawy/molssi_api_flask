@@ -356,18 +356,18 @@ class UserView(ModelView):
 class SoftwareAccessLogsView(ModelView):
 
     can_create = False
-    can_edit = False
+    can_edit = True
     can_export = True
-    column_list = ['software', 'access_date', 'ip_address']
+    column_list = ['software', 'access_date', 'ip_address', 'comment']
     # form_excluded_columns = ['ip_address', ]
     column_type_formatters = MY_DEFAULT_FORMATTERS
 
     form_widget_args = dict(
-        software={'readonly': True},
+        software={'readonly': True},  # not working with references
         access_date={'readonly': True},
         ip_address={'readonly': True},
     )
-
+    
     def is_accessible(self):
         return login.current_user.is_authenticated and login.current_user.can(Permission.ADMIN)
 

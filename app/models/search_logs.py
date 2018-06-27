@@ -14,6 +14,7 @@ class SoftwareAccess(db.Document):
     software = db.ReferenceField(Software)
     access_date = db.DateTimeField(default=datetime.now)
     ip_address = db.StringField(max_length=100)
+    comment = db.StringField(max_length=100)
 
     meta = {
         'strict': False,                # allow extra fields
@@ -31,14 +32,12 @@ class SoftwareAccess(db.Document):
                 self.ip_address
 
 
-def save_access(software):
+def save_access(software, comment=None):
     """Save the accessed software, date of access, and IP address
         of the client"""
 
-    try:
-        ip_address = ip_address=request.environ['REMOTE_ADDR']
-    except:
-        ip_address = None
+    ip_address = request.environ.get('REMOTE_ADDR', None)
 
-    log = SoftwareAccess(software=software, ip_address=ip_address)
+    log = SoftwareAccess(software=software, ip_address=ip_address,
+                         comment=comment)
     log.save()
