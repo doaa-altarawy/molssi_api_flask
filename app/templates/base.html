@@ -4,7 +4,8 @@
 
 {%- block styles %}
     <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id={{ config.GOOGLE_ANALYTICS_GTAG }}"></script>
+    <!--<script async src="https://www.googletagmanager.com/gtag/js?id={{ config.GOOGLE_ANALYTICS_GTAG }}"></script>-->
+    <script async src="{{ url_for('static', filename='js/google_analytics.js') }}"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
