@@ -16,6 +16,7 @@ from flask_admin.actions import action
 from flask_admin.helpers import is_form_submitted
 from wtforms.widgets import TextArea
 from wtforms import TextAreaField
+import warnings
 
 
 def date_format(view, value):
@@ -350,7 +351,8 @@ class UserView(ModelView):
     )
 
     def is_accessible(self):
-        return login.current_user.is_authenticated and login.current_user.can(Permission.ADMIN)
+        return (login.current_user.is_authenticated
+                and login.current_user.can(Permission.ADMIN))
 
 
 class SoftwareAccessLogsView(ModelView):
@@ -369,14 +371,18 @@ class SoftwareAccessLogsView(ModelView):
     )
     
     def is_accessible(self):
-        return login.current_user.is_authenticated and login.current_user.can(Permission.ADMIN)
+        return (login.current_user.is_authenticated
+                and login.current_user.can(Permission.ADMIN))
 
 
 def add_admin_views():
     """Register views to admin"""
     from .. import app_admin
-    app_admin.add_view(SoftwareView(Software, name='Software List'))
-    app_admin.add_view(UserView(User, name='Users'))
-    app_admin.add_view(SoftwareAccessLogsView(SoftwareAccess, name='Search Logs'))
-    app_admin.add_view(SoftwareViewPublic(Software, endpoint='submit_software',
-                                         name='Submit Software'))
+
+    with warnings.catch_warnings():
+        warnings.filterwarnings('ignore', 'Fields missing from ruleset', UserWarning)
+        app_admin.add_view(SoftwareView(Software, name='Software List'))
+        app_admin.add_view(UserView(User, name='Users'))
+        app_admin.add_view(SoftwareAccessLogsView(SoftwareAccess, name='Search Logs'))
+        app_admin.add_view(SoftwareViewPublic(Software, endpoint='submit_software',
+                                             name='Submit Software'))
