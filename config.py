@@ -23,8 +23,8 @@ class BaseConfig:
         ['true', 'on', '1']
     MAIL_USERNAME = os.environ.get('MAIL_USERNAME', 'userhere')
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD', 'passhere')
-    MAIL_SUBJECT_PREFIX = '[MolSSI CMS Software DB]'
-    MAIL_SENDER = 'MolSSI CMS DB Admin <info@molssi.org>'
+    MAIL_SUBJECT_PREFIX = '[MolSSI Molecular Software DB]'
+    MAIL_SENDER = 'MolSSI Molecular DB Admin <info@molssi.org>'
     APP_ADMIN = os.environ.get('APP_ADMIN', 'daltarawy@vt.edu')
     EMAIL_CONFIRMATION_ENABLED = False
 
@@ -57,18 +57,20 @@ class DevelopmentConfig(BaseConfig):
 class TestingConfig(BaseConfig):
     DEBUG = True
     TESTING = True
-    WORDPRESS_DOMAIN = 'http://molssi.org'
-    API_DOMAIN = 'http://molssi-api.herokuapp.com'
+    WORDPRESS_DOMAIN = 'http://localhost:8888'
+    API_DOMAIN = 'http://localhost:5000'
     MONGODB_SETTINGS = {
-        'host': "mongodb://ninja:fakePass@ds127163.mlab.com:27163/resources_website"
+        'db': "test_db",
+        # 'username': 'travis',
+        # 'password': 'test'
     }
 
 
 class ProductionConfig(BaseConfig):
     DEBUG = False
     TESTING = False
-    WORDPRESS_DOMAIN = 'http://molssi.org'
-    API_DOMAIN = 'http://api.molssi.org'
+    WORDPRESS_DOMAIN = 'https://molssi.org'
+    API_DOMAIN = 'https://api.molssi.org'
     MONGODB_SETTINGS = {
         'host': "mongodb://ninja:fakePass@ds127163.mlab.com:27163/resources_website",
     }
