@@ -16,10 +16,11 @@ if __name__ == "__main__":
             'Flask-Jsonpify==1.5.0',
             'pymongo',
             'mongoengine',
+            'flask_mongoengine'
         ],
         extras_require={
             'docs': [
-                'sphinx', 
+                'sphinx',
                 'sphinxcontrib-napoleon',
                 'sphinx_rtd_theme',
                 'numpydoc',
