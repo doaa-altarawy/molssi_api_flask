@@ -261,6 +261,14 @@ def create_software(lib_type='', **kwargs):
         lib = Software(qm_features=qm_features, **kwargs)
 
     else:
-        lib = Software(**kwargs)
+        qm_features = QMFeatures()
+        set_props_values(QMFeatures, qm_features, kwargs)
+        qm_features.add_tags(kwargs)
+
+        mm_features = MMFeatures()
+        set_props_values(MMFeatures, mm_features, kwargs)
+        mm_features.add_tags(kwargs)
+
+        lib = Software(qm_features=qm_features, mm_features=mm_features, **kwargs)
 
     return lib
