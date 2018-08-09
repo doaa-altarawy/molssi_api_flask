@@ -10,6 +10,7 @@ from flask_login import LoginManager
 from flask_debugtoolbar import DebugToolbarExtension
 from flask_moment import Moment
 from . import logger
+import logging
 
 
 mail = Mail()
@@ -36,6 +37,8 @@ def create_app(config_name):
 
     app = Flask(__name__)
     app.config.from_object(config[config_name])
+    logging.info('Creating app with config {}'.format(config_name))
+    logging.info('Testing is {}'.format(app.config['TESTING']))
 
     # init
     mail.init_app(app)
@@ -59,9 +62,10 @@ def create_app(config_name):
     # from .api import api as api_blueprint
     # app.register_blueprint(api_blueprint, url_prefix='/api/v1')
 
-    # To avoid circular import
-    from app.admin import add_admin_views
-    add_admin_views()
+    if config_name != 'testing':
+        # To avoid circular import
+        from app.admin import add_admin_views
+        add_admin_views()
 
     return app
 
