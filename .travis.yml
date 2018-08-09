@@ -1,0 +1,47 @@
+language: python
+
+sudo: true
+
+# python versions to be tested
+matrix:
+  include:
+    - python: 2.7
+#    - python: 3.5
+    - python: 3.6
+
+# will still build pull requests
+branches:
+  only:
+    - master
+
+notifications:
+    email: false
+
+services:
+  - mongodb
+
+before_install:
+  # Get local information about the machine
+  - uname -a
+  - free -m
+  - df -h
+  - ulimit -a
+
+install:
+  # Install the library with test requirements
+  - pip install -e .[tests]
+
+before_script:
+  - sleep 15    # fixes an issue with travis,
+                # MongoDB does not accept connections immediately.
+  - mongo test_db # --eval 'db.createUser({user:"travis",pwd:"test",roles:["readWrite"]});'
+  - mongoimport --db test_db --collection software --type json --jsonArray --file tests/data/software.json
+
+script:
+    - pytest -v --cov=./app
+  # with doctest to test examples in doctrings
+#   - pytest -v --doctest-modules --cov=./app
+
+# if successful, track code coverage with codecov
+after_success:
+  - codecov
