@@ -34,7 +34,7 @@ install:
 before_script:
   - sleep 15    # fixes an issue with travis,
                 # MongoDB does not accept connections immediately.
-  - mongo test_db # --eval 'db.createUser({user:"travis",pwd:"test",roles:["readWrite"]});'
+  - mongo test_db --eval ';' # --eval 'db.createUser({user:"travis",pwd:"test",roles:["readWrite"]});'
   - mongoimport --db test_db --collection software --type json --jsonArray --file tests/data/software.json
 
 script:
