@@ -1,0 +1,3 @@
+[{"_id":{"$oid":"5aa192c14fc828637b936bfc"},"name":"No access","default":true,"permissions":{"$numberInt":"3"}},
+{"_id":{"$oid":"5aa192c14fc828637b936bfd"},"name":"Moderator","default":false,"permissions":{"$numberInt":"7"}},
+{"_id":{"$oid":"5aa192c14fc828637b936bfe"},"name":"Administrator","default":false,"permissions":{"$numberInt":"15"}}]

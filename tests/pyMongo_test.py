@@ -13,7 +13,7 @@ db = client.pymongo_test
 # Collections and documents are akin to SQL tables and rows
 posts = db.posts
 
-def inser_one():
+def insert_one():
     post_data = {
         'title': 'Python and MongoDB',
         'content': 'PyMongo is fun',
