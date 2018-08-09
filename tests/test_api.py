@@ -24,7 +24,8 @@ class TestAPIs(object):
 
     @classmethod
     def setup_class(cls):
-        cls.url = '/api/search'
+        cls.api_url = '/api/search'
+        cls.template_url = '/search'
         app = create_app('testing')
         cls.app_context = app.app_context()
         cls.app_context.push()
@@ -36,7 +37,6 @@ class TestAPIs(object):
     def teardown_class(cls):
         # Software.objects().delete()
         cls.app_context.pop()
-        print('dddddddddddddddddddddddd')
 
     @classmethod
     def fill_db(cls):
@@ -85,9 +85,22 @@ class TestAPIs(object):
 
         # http://localhost:5000/api/search?query_text=&domain=&languages=[]
         params = dict(query_text='', domain='', languages='[]')
-        response = self.client.get(self.url, query_string=params) #, headers=headers)
+        response = self.client.get(self.api_url, query_string=params) #, headers=headers)
         assert response.status_code == 200
 
         json_data = json.loads(response.get_data(as_text=True))
         # 60 none pending software out of 158 in the test DB
         assert len(json_data) == 60
+
+    def test_empty_formatted_search(self):
+        """Get the default formatted for the default search
+         """
+
+        params = dict(query_text='', domain='', languages='[]')
+        response = self.client.get(self.template_url, query_string=params)
+        assert response.status_code == 200
+
+        formatted_data = response.get_data(as_text=True)
+        assert 'ABINIT' in formatted_data
+        assert 'ACES' in formatted_data
+        assert '</div>' in formatted_data
