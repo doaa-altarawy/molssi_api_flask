@@ -117,16 +117,16 @@ class User(UserMixin, db.Document):
         s = Serializer(current_app.config['SECRET_KEY'], expiration)
         return s.dumps({'confirm': str(self.id)}).decode('utf-8')
 
-    def confirm(self, token):
-        s = Serializer(current_app.config['SECRET_KEY'])
+    def confirm(self, token, expiration=3600):
+        s = Serializer(current_app.config['SECRET_KEY'], expiration)
         try:
             data = s.loads(token.encode('utf-8'))
         except:
+            print('Error: failed to encode token.')
             return False
-        if data.get('confirm') != self.id:
+        if data.get('confirm') != str(self.id):
             return False
         self.confirmed = True
-        # db.session.add(self)
         self.save()
         return True
 
@@ -159,7 +159,7 @@ class User(UserMixin, db.Document):
             data = s.loads(token.encode('utf-8'))
         except:
             return False
-        if data.get('change_email') != self.id:
+        if data.get('change_email') != str(self.id):
             return False
         new_email = data.get('new_email')
         if new_email is None:
@@ -188,7 +188,7 @@ class User(UserMixin, db.Document):
 
     def to_json(self):
         json_user = {
-            'url': url_for('api.get_user', id=self.id),
+            'url': url_for('api.get_user', id=str(self.id)),
             'email': self.email,
             'member_since': self.member_since,
         }
