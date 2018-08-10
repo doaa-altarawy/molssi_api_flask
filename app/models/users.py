@@ -188,7 +188,7 @@ class User(UserMixin, db.Document):
 
     def to_json(self):
         json_user = {
-            'url': url_for('api.get_user', id=str(self.id)),
+            'id': str(self.id),
             'email': self.email,
             'member_since': self.member_since,
         }
