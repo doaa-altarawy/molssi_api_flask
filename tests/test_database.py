@@ -19,8 +19,7 @@ class TestDatabase(object):
         Testing database CRUD operations on Software collection
 
         Import data before running this test:
-        mongoimport --db test_db --collection software --type json --jsonArray
-                --file tests/data/software.json
+        mongoimport --db test_db --collection software --type json --jsonArray --file tests/data/software.json
     """
 
     @classmethod
@@ -64,7 +63,7 @@ class TestDatabase(object):
         assert not psi4.mm_features
         print(psi4.to_json())
 
-    def get_software(self, name) -> Software:
+    def get_software(self, name):
         return Software.objects(software_name=name).first()
 
     def test_add_MM_software(self):

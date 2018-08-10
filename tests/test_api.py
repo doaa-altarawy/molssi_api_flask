@@ -4,7 +4,7 @@ from flask import current_app
 import pytest
 import json
 from base64 import b64encode
-from app.models.software import Software, create_software
+from app.models.software import Software
 import os
 from os.path import join, dirname, abspath
 import pymongo
