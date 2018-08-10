@@ -242,5 +242,5 @@ def update_roles():
     Role.insert_roles()
 
 
-update_roles()
+
 

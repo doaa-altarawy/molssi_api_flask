@@ -62,6 +62,10 @@ def create_app(config_name):
     # from .api import api as api_blueprint
     # app.register_blueprint(api_blueprint, url_prefix='/api/v1')
 
+    # create user roles
+    from models.users import update_roles
+    update_roles()
+
     if config_name != 'testing':
         # To avoid circular import
         from app.admin import add_admin_views
