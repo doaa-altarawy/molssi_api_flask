@@ -84,16 +84,6 @@ def software_detail(sw_id):
     return render_template('software_detail.html', lib=software)
 
 
-@main.route('/software/<sw_id>', methods=['GET', 'POST'])
-def software_form(sw_id):
-    software = mongo_database.get_software(sw_id)
-    logging.debug("This is software: ", software.software_name)
-
-    form = SoftwareForm()
-
-    return render_template('software_form.html', form=form)
-
-
 @main.route('/contact')
 def contact():
     """Return a test JSON file

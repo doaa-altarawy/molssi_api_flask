@@ -104,3 +104,21 @@ class TestAPIs(object):
         assert 'ABINIT' in formatted_data
         assert 'ACES' in formatted_data
         assert '</div>' in formatted_data
+
+    def test_get_software_details(self):
+        url = 'software_detail/5aa1926f750213c7dc3f210b'
+        response = self.client.get(url)
+        assert response.status_code == 200
+
+        assert 'GAMESS (UK)' in response.get_data(as_text=True)
+        assert 'Compilers' in response.get_data(as_text=True)
+        assert 'Documentation' in response.get_data(as_text=True)
+
+    def test_get_software_details_notfound(self):
+        url = 'software_detail/wrong_id'
+        response = self.client.get(url)
+        assert response.status_code == 404
+
+
+
+
