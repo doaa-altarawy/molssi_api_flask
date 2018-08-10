@@ -158,7 +158,7 @@ def change_email_request():
                   'address has been sent to you.')
             return redirect(url_for('admin.index'))
         else:
-            flash('Invalid email or password.')
+            flash('Invalid password.')
     return render_template("auth/change_email.html", form=form)
 
 
