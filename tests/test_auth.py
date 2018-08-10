@@ -62,7 +62,7 @@ class TestAuth(object):
         return success
 
     def logout(self):
-        self.client.get(self.auth_url+'/logout', follow_redirects=True)
+        return self.client.get(self.auth_url+'/logout', follow_redirects=True)
 
     def test_register(self):
         # get registration form
@@ -75,7 +75,15 @@ class TestAuth(object):
         # on success, redirect to home
         assert response.status_code == 302
         assert '/auth/login' in response.get_data(as_text=True)
-        # print(response.get_data(as_text=True))
+
+        # test unconfirmed
+        self.logout()
+        data = dict(email='dina@gmail.com', password='somePass')
+        response = self.client.post(self.auth_url+'/login', data=data,
+                                    follow_redirects=True)
+        assert response.status_code == 200
+        assert 'You have not confirmed your account yet' \
+               in response.get_data(as_text=True)
 
     def test_register_exiting_email(self):
         data = dict(email='daltarawy@vt.edu', password='somePass',
