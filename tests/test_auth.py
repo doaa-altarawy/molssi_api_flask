@@ -88,4 +88,4 @@ class TestAuth(object):
         # logout
         response = self.client.get(self.auth_url+'/logout',
                                      follow_redirects=True)
-        assert 'You have been logged out' in response.get_data()
+        assert 'You have been logged out' in response.get_data(as_text=True)
