@@ -1,6 +1,6 @@
 from __future__ import print_function
 from mongoengine import connect
-from .software import Software, QMFeatures, MMFeatures, create_software
+from .software import Software, QMFeatures, MMFeatures
 from mongoengine.queryset.visitor import Q
 import json
 import re
@@ -42,7 +42,7 @@ b) Strings:
 
 
 Query with:
-Software.object(..) --> no exception, can return 0+, returns a queryset
+Software.objects(..) --> no exception, can return 0+, returns a queryset
 Software.get(..) --> return exactly one, raises exception otherwise
                     (DoesNotExist, MultipleObjectsReturned)
 
@@ -90,21 +90,6 @@ def clear_libraries():
     """Clear Libraries Collections"""
     Software.objects().delete()
     # db.drop_database('resources_website')
-
-
-def load_collection_from_json(filename, lib_type=None):
-    """Load DB from a Json file with list of JSON objects of libraries"""
-
-    with open(filename) as f:
-        json_list = json.load(f)
-
-    for json_record in json_list:
-        software = create_software(lib_type, **json_record)
-        software.save(validate=False)
-
-    # [Software(**json_record).save(validate=False) for json_record in json_list]
-
-    # Software.objects.insert(software_list) # doesn't call override save
 
 
 # ---------------------------   Query functions  ------------------------ #

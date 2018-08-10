@@ -48,14 +48,6 @@ class QMFeatures(db.EmbeddedDocument):
 
     tags = db.ListField(db.StringField(max_length=20, choices=TAG_NAMES))
 
-    def add_tags(self, kwargs):
-        self.tags = []
-        for tag in self.TAG_NAMES:
-            if tag in kwargs:
-                tag_val = kwargs.pop(tag, '')
-                if tag_val and tag_val.lower() not in ['', 'no', 'false']:
-                    self.tags.append(tag)
-
     def is_empty(self):
         if self.basis or self.element_coverage or self.other or self.tags:
             return False
@@ -95,14 +87,6 @@ class MMFeatures(db.EmbeddedDocument):
     ]
 
     tags = db.ListField(db.StringField(max_length=20, choices=TAG_NAMES))
-
-    def add_tags(self, kwargs):
-        self.tags = []
-        for tag in self.TAG_NAMES:
-            if tag in kwargs:
-                tag_val = kwargs.pop(tag, '')
-                if tag_val and tag_val.lower() not in ['', 'no', 'false']:
-                    self.tags.append(tag)
 
     def is_empty(self):
         if self.ensembles or self.free_energy_methods or self.advanced_sampling_methods \
@@ -199,10 +183,6 @@ class Software(db.DynamicDocument):     # flexible schema, can have extra attrib
     def __unicode__(self):
         return self.software_name
 
-    @property
-    def software_type(self):
-        return self.__class__.__name__
-
     def save(self, *args, **kwargs):
         """Override save to add languages_lower"""
         self.add_language_lower()
@@ -228,47 +208,4 @@ class Software(db.DynamicDocument):     # flexible schema, can have extra attrib
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-def props(cls):
-    all_props = [i for i in cls.__dict__.keys() if i[:1] != '_']
-    all_props.remove('tags')
-    all_props.remove('TAG_NAMES')
-    all_props.remove('add_tags')
-    return all_props
 
-
-def set_props_values(cls, obj, prop_values):
-    for prop in props(cls):
-            if prop in prop_values:
-                tag_val = prop_values.pop(prop, '')
-                if tag_val:  # and tag_val.lower() not in ['', 'no', 'false']:
-                    setattr(obj, prop, tag_val)
-
-
-def create_software(lib_type='', **kwargs):
-    """Create a Library object from a set of params
-       A Builder Design Pattern"""
-
-    if lib_type == 'MM':
-        mm_features = MMFeatures()
-        set_props_values(MMFeatures, mm_features, kwargs)
-        mm_features.add_tags(kwargs)
-        lib = Software(mm_features=mm_features, **kwargs)
-
-    elif lib_type == 'QM':
-        qm_features = QMFeatures()
-        set_props_values(QMFeatures, qm_features, kwargs)
-        qm_features.add_tags(kwargs)
-        lib = Software(qm_features=qm_features, **kwargs)
-
-    else:
-        qm_features = QMFeatures()
-        set_props_values(QMFeatures, qm_features, kwargs)
-        qm_features.add_tags(kwargs)
-
-        mm_features = MMFeatures()
-        set_props_values(MMFeatures, mm_features, kwargs)
-        mm_features.add_tags(kwargs)
-
-        lib = Software(qm_features=qm_features, mm_features=mm_features, **kwargs)
-
-    return lib
