@@ -57,6 +57,7 @@ class DevelopmentConfig(BaseConfig):
 class TestingConfig(BaseConfig):
     DEBUG = True
     TESTING = True
+    EMAIL_CONFIRMATION_ENABLED = True
     WORDPRESS_DOMAIN = 'http://localhost:8888'
     API_DOMAIN = 'http://localhost:5000'
     # disable CSRF protection in testing
