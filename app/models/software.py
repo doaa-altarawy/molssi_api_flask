@@ -218,7 +218,7 @@ class Software(db.DynamicDocument):     # flexible schema, can have extra attrib
         return super(Software, self).save(*args, **kwargs)
 
     def __str__(self):
-        return str(self.id) + ', name: ' + self.software_name + ', is_pending: ' + \
+        return self.software_name + ', is_pending: ' + \
                 str(self.is_pending) + ', Domain: ' + self.domain
 
     def add_language_lower(self):
