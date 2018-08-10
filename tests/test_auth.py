@@ -39,11 +39,17 @@ class TestAuth(object):
         user.confirmed = True
         user.save()
 
-    def test_admin_permissions(self):
+    def test_admin_user(self):
         user = User.objects(email='daltarawy@vt.edu').first()
         assert user
         assert user.is_administrator()
         assert user.can(Permission.MODERATE)
+
+        with pytest.raises(AttributeError):
+            user.password()
+
+        assert user.to_json()['email'] == 'daltarawy@vt.edu'
+
 
     def test_app_exists(self):
         assert current_app is not None
