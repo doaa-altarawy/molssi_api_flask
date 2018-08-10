@@ -51,6 +51,7 @@ queryset Functions:
 .order_by('field_name')
 .sum('field_name')
 
+results = Software.objects(domain__in=domain)
 
 Create Objects:
 ---------------
@@ -94,28 +95,12 @@ def clear_libraries():
 
 # ---------------------------   Query functions  ------------------------ #
 
-def find_language(lang, verbose=False):
-    results = Software.objects(languages_lower__in=lang.lower())
-    if verbose:
-        logger.debug('Num of results for {} is {}'.format(lang.lower(), results.count()))
-        print_results(results)
-    return results
-
-
-def find_domain(domain, verbose=False):
-    results = Software.objects(domain__in=domain)
-    if verbose:
-        print('Num of results for {} is {}'.format(domain, results.count()))
-        print_results(results)
-
-    return results
-
 
 def search_description(keyword, verbose=False):
     """Search descrption """
     # TODO: fixme
 
-    results = Software.objects(description__contains(keyword))
+    results = Software.objects(description__contains=keyword)
     if verbose:
         logger.debug('Num of results for {} is {}'.format(keyword, results.count()))
         print_results(results)
@@ -123,24 +108,19 @@ def search_description(keyword, verbose=False):
     return results
 
 
-def search_text(query, verbose=False):
+def search_text(query):
     """search indexed text fields (defined with $ in meta)"""
     results = Software.objects.search_text(query)
 
     if results:
         results = results.order_by('$text_score')
 
-    if verbose:
-        print_results(results)
-
     return results
 
 
-def complex_query(languages=[], domains=[], verbose=False):
+def complex_query(languages=[], domains=[]):
     languages_lower = [lang.lower() for lang in languages]
     results = Software.objects(Q(languages_lower__in=languages_lower) & Q(domain__in=domains))
-    if verbose:
-        print_results(results)
 
     return results
 
@@ -294,21 +274,6 @@ def get_lib_features():
     return lib
 
 # ----------------------- Printing and Utils ------------------------- #
-
-
-def add_one(name, description='', languages='', domain='', verbose=False):
-    my_lib = Software(
-        name=name,
-        description=description,
-        languages=languages,
-        domain=domain
-    )
-
-    my_lib.save()
-    if verbose:
-        print('Added: ', my_lib)
-
-    return my_lib
 
 
 def print_results(results):

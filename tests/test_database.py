@@ -10,6 +10,7 @@ import os
 from os.path import join, dirname, abspath
 import pymongo
 from pprint import pprint
+from app.models import mongo_database as db_util
 
 headers = {'Content-Type': 'application/json'}
 
@@ -61,14 +62,14 @@ class TestDatabase(object):
         psi4 = Software.objects(software_name='Psi4').first()
         assert psi4.qm_features
         assert not psi4.mm_features
-        print(psi4.to_json())
+        # print(psi4.to_json())
 
     def get_software(self, name):
         return Software.objects(software_name=name).first()
 
     def test_add_MM_software(self):
         software = self.get_software('LAMMPS')
-        print(software.to_json())
+        # print(software.to_json())
         assert software.mm_features
         assert not software.mm_features.is_empty()
 
@@ -82,5 +83,14 @@ class TestDatabase(object):
 
         assert software.id != id
 
+        software.delete()
 
+    def test_search(self):
+
+        assert len(db_util.search_description('LAMMPS')) == 1
+        assert len(db_util.search_text('DFT')) == 21
+        assert len(db_util.search_text('WXYZ')) == 0
+        assert len(db_util.complex_query(['python', 'c'], ['QM'])) == 16
+
+        # test db_util.full_search
 
