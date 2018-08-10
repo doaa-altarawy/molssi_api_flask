@@ -24,7 +24,7 @@ class SoftwareAccess(db.Document):
     }
 
     def __unicode__(self):
-        return self.basis_set_name
+        return self.software.software_name
 
     def __str__(self):
         return 'software:' + self.software + ', access_date: ' \
