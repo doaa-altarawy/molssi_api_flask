@@ -50,6 +50,13 @@ class TestAuth(object):
 
         assert user.to_json()['email'] == 'daltarawy@vt.edu'
 
+        # admin is confirmed
+        self.login_admin()
+        response = self.client.get(self.auth_url+'/unconfirmed', follow_redirects=True)
+        assert response.status_code == 200
+        assert 'You have not confirmed your account yet' \
+               not in response.get_data(as_text=True)
+
 
     def test_app_exists(self):
         assert current_app is not None
@@ -102,6 +109,12 @@ class TestAuth(object):
         assert 'You have not confirmed your account yet' \
                in response.get_data(as_text=True)
 
+        # wrong confirmation token
+        response = self.client.get(self.auth_url+'/confirm/'+'wrong',
+                                   follow_redirects=True)
+        assert 'The confirmation link is invalid or has expired' \
+               in response.get_data(as_text=True)
+
         user = User.objects(email='dina@gmail.com').first()
         token = user.generate_confirmation_token()
         response = self.client.get(self.auth_url+'/confirm/'+token,
@@ -127,6 +140,12 @@ class TestAuth(object):
         assert '/admin/' in response.get_data(as_text=True)
         assert 'Change Email' in response.get_data(as_text=True)
         assert 'Change Password' in response.get_data(as_text=True)
+
+        # Try to confirmation already confirmed, redirect to home
+        response = self.client.get(self.auth_url+'/confirm/'+'123',
+                                   follow_redirects=True)
+        assert '/admin/' in response.get_data(as_text=True)
+
 
     def test_wrong_sign_in(self):
         data = dict(email='daltarawy@vt.edu', password='wrongPass')
