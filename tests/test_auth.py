@@ -3,7 +3,7 @@ from flask import current_app
 import pytest
 import json
 from base64 import b64encode
-from app.models.users import User
+from app.models.users import User, Permission
 
 
 class TestAuth(object):
@@ -38,6 +38,12 @@ class TestAuth(object):
         user.password = 'fakePass'
         user.confirmed = True
         user.save()
+
+    def test_admin_permissions(self):
+        user = User.objects(email='daltarawy@vt.edu').first()
+        assert user
+        assert user.is_administrator()
+        assert user.can(Permission.MODERATE)
 
     def test_app_exists(self):
         assert current_app is not None
@@ -84,6 +90,20 @@ class TestAuth(object):
         assert response.status_code == 200
         assert 'You have not confirmed your account yet' \
                in response.get_data(as_text=True)
+
+        # confirm email
+        response = self.client.get(self.auth_url+'/confirm', follow_redirects=True)
+        assert 'You have not confirmed your account yet' \
+               in response.get_data(as_text=True)
+
+        user = User.objects(email='dina@gmail.com').first()
+        token = user.generate_confirmation_token()
+        response = self.client.get(self.auth_url+'/confirm/'+token,
+                                   follow_redirects=True)
+        assert 'You have confirmed your account. Thanks' \
+               in response.get_data(as_text=True)
+        # update user from DB, and check if confirmed
+        assert User.objects(email='dina@gmail.com').first().confirmed
 
     def test_register_exiting_email(self):
         data = dict(email='daltarawy@vt.edu', password='somePass',
