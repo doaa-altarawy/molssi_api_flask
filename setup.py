@@ -16,7 +16,7 @@ if __name__ == "__main__":
             'Flask-Jsonpify==1.5.0',
             'pymongo',
             'mongoengine',
-            'flask_mongoengine'
+            'flask_mongoengine',
         ],
         extras_require={
             'docs': [
@@ -31,6 +31,10 @@ if __name__ == "__main__":
                 'pytest-cov',
                 'pytest-pep8',
             ],
+            'develop': [
+                'Flask-DebugToolbar',
+                'mongomock', #?
+            ]
         },
 
         # tests_require=[
