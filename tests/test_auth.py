@@ -1,15 +1,9 @@
-import requests
 from app import create_app, db
 from flask import current_app
 import pytest
 import json
 from base64 import b64encode
 from app.models.users import User
-import os
-from os.path import join, dirname, abspath
-import pymongo
-
-headers = {'Content-Type': 'application/json'}
 
 
 class TestAuth(object):
@@ -60,6 +54,10 @@ class TestAuth(object):
         }
 
     def test_register(self):
+        # get registration form
+        response = self.client.get((self.auth_url+'/register'))
+        assert response.status_code == 200
+
         data = dict(email='dina@gmail.com', password='somePass',
                     password2='somePass', full_name='Dina')
         response = self.client.post(self.auth_url+'/register', data=data)
@@ -67,6 +65,13 @@ class TestAuth(object):
         assert response.status_code == 302
         assert '/auth/login' in response.get_data(as_text=True)
         # print(response.get_data(as_text=True))
+
+    def test_register_exiting_email(self):
+        data = dict(email='daltarawy@vt.edu', password='somePass',
+                    password2='somePass', full_name='Doaa')
+        response = self.client.post(self.auth_url+'/register', data=data)
+        assert response.status_code == 200
+        assert 'Email already registered' in response.get_data(as_text=True)
 
     def test_sign_in(self):
         data = dict(email='daltarawy@vt.edu', password='fakePass')
@@ -78,6 +83,13 @@ class TestAuth(object):
         assert 'Change Email' in response.get_data(as_text=True)
         assert 'Change Password' in response.get_data(as_text=True)
 
+    def test_wrong_sign_in(self):
+        data = dict(email='daltarawy@vt.edu', password='wrongPass')
+        response = self.client.post(self.auth_url+'/login', data=data,
+                                    follow_redirects=True)
+        assert response.status_code == 200
+        assert 'Invalid email or password' in response.get_data(as_text=True)
+
     def test_sign_out(self):
         # make sure you are logged in first
         data = dict(email='daltarawy@vt.edu', password='fakePass')
@@ -87,5 +99,5 @@ class TestAuth(object):
         assert 'Change Email' in response.get_data(as_text=True)
         # logout
         response = self.client.get(self.auth_url+'/logout',
-                                     follow_redirects=True)
+                                   follow_redirects=True)
         assert 'You have been logged out' in response.get_data(as_text=True)
