@@ -61,6 +61,9 @@ class TestAuth(object):
         success = 'Change Email' in response.get_data(as_text=True)
         return success
 
+    def logout(self):
+        self.client.get(self.auth_url+'/logout', follow_redirects=True)
+
     def test_register(self):
         # get registration form
         response = self.client.get((self.auth_url+'/register'))
@@ -166,4 +169,22 @@ class TestAuth(object):
                                     follow_redirects=True)
         assert response.status_code == 200
         assert 'confirm your new email address' in response.get_data(as_text=True)
- 
+
+    def test_reset_password(self):
+        # if already logged in, redirect to home
+        self.login_admin()
+        response = self.client.get(self.auth_url+'/reset', follow_redirects=True)
+        assert 'Change Email' in response.get_data(as_text=True)
+
+        # Logout and reset password
+        self.logout()
+        response = self.client.get(self.auth_url+'/reset', follow_redirects=True)
+        assert response.status_code == 200
+        assert 'Reset Your Password' in response.get_data(as_text=True)
+
+        response = self.client.post(self.auth_url+'/reset',
+                                    data=dict(email='someEmail@vt.edu'),
+                                    follow_redirects=True)
+        assert response.status_code == 200
+        assert 'An email with instructions to reset your password' \
+               in response.get_data(as_text=True)
