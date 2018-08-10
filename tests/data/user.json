@@ -1,1 +1,19 @@
-{"_id":{"$oid":"5aa1934b4fc828637b936bff"},"_cls":"User","email":"daltarawy@vt.edu","full_name":"Doaa Altarawy","role":{"$oid":"5aa192c14fc828637b936bfe"},"password_hash":"pbkdf2:sha256:50000$nJTSY5WU$96c0559151ba81865cbc5d7c786d102946c0c294c079d4c144697891d41bacc8","confirmed":false,"member_since":{"$date":{"$numberLong":"1520538442000"}},"avatar_hash":"28e464905236311a538fa346b5fa8a54"}
+{
+  "_id": {
+    "$oid": "5aa1934b4fc828637b936bff"
+  },
+  "_cls": "User",
+  "email": "daltarawy@vt.edu",
+  "full_name": "Doaa Altarawy",
+  "role": {
+    "$oid": "5aa192c14fc828637b936bfe"
+  },
+  "password_hash": "pbkdf2:sha256:50000$nJTSY5WU$96c0559151ba81865cbc5d7c786d102946c0c294c079d4c144697891d41bacc8",
+  "confirmed": false,
+  "member_since": {
+    "$date": {
+      "$numberLong": "1520538442000"
+    }
+  },
+  "avatar_hash": "28e464905236311a538fa346b5fa8a54"
+}
