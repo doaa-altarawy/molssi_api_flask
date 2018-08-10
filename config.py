@@ -59,6 +59,8 @@ class TestingConfig(BaseConfig):
     TESTING = True
     WORDPRESS_DOMAIN = 'http://localhost:8888'
     API_DOMAIN = 'http://localhost:5000'
+    # disable CSRF protection in testing
+    WTF_CSRF_ENABLED = False
     MONGODB_SETTINGS = {
         'db': "test_db",
         # 'username': 'travis',
