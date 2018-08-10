@@ -63,7 +63,7 @@ def create_app(config_name):
     # app.register_blueprint(api_blueprint, url_prefix='/api/v1')
 
     # create user roles
-    from models.users import update_roles
+    from .models.users import update_roles
     update_roles()
 
     if config_name != 'testing':
