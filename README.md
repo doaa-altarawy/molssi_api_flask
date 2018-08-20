@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/doaa-altarawy/molssi_api_flask.svg?branch=master)](https://travis-ci.org/doaa-altarawy/molssi_api_flask)
+[![codecov](https://codecov.io/gh/doaa-altarawy/molssi_api_flask/branch/master/graph/badge.svg)](https://codecov.io/gh/doaa-altarawy/molssi_api_flask)
 
 # MolSSI API (Flask)
 
