@@ -15,6 +15,7 @@ from app.models import mongo_database as db_util
 headers = {'Content-Type': 'application/json'}
 
 
+@pytest.mark.usefixtures("app", "client")
 class TestDatabase(object):
     """
         Testing database CRUD operations on Software collection
@@ -23,31 +24,10 @@ class TestDatabase(object):
         mongoimport --db test_db --collection software --type json --jsonArray --file tests/data/software.json
     """
 
-    @classmethod
-    def setup_class(cls):
-        app = create_app('testing')
-        cls.app_context = app.app_context()
-        cls.app_context.push()
-        cls.fill_db()
-
-    @classmethod
-    def teardown_class(cls):
-        # Software.objects().delete()
-        cls.app_context.pop()
-
-    @classmethod
-    def fill_db(cls):
-        """Fill the test DB with some tests data from json"""
-
-        data_path = join(dirname(abspath(__file__)), 'data')
-        data_path = join(data_path, 'software.json')
-        pymongo.MongoClient('mongoimport --db test_db --collection software '
-                            + '--type json --jsonArray --file ' + data_path)
-
     def test_app_exists(self):
         assert current_app is not None
 
-    def test_database_filled(self):
+    def test_database_filled(self, app):
         assert Software.objects.count() == 158
 
     def get_api_headers(self, username, password):
@@ -86,11 +66,9 @@ class TestDatabase(object):
         software.delete()
 
     def test_search(self):
-
         assert len(db_util.search_description('LAMMPS')) == 1
         assert len(db_util.search_text('DFT')) == 21
         assert len(db_util.search_text('WXYZ')) == 0
         assert len(db_util.complex_query(['python', 'c'], ['QM'])) == 16
 
         # test db_util.full_search
-

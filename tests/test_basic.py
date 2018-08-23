@@ -1,20 +1,13 @@
-from app import create_app
+# from app import create_app
 from flask import current_app
+import pytest
 
 
+@pytest.mark.usefixtures("app", "client")
 class TestBasicApp(object):
     """
         Test creating a Flask app in Testing mode
     """
-
-    @classmethod
-    def setup_class(cls):
-        app = create_app('testing')
-        cls.app_context = app.app_context()
-        cls.app_context.push()
-
-    def teardown_class(cls):
-        cls.app_context.pop()
 
     def test_app_exists(self):
         assert current_app is not None

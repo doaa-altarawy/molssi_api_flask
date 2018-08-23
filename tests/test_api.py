@@ -1,5 +1,3 @@
-import requests
-from app import create_app, db
 from flask import current_app
 import pytest
 import json
@@ -9,9 +7,11 @@ import os
 from os.path import join, dirname, abspath
 import pymongo
 
+
 headers = {'Content-Type': 'application/json'}
 
 
+@pytest.mark.usefixtures("app", "client")   # to use fixtures from conftest
 class TestAPIs(object):
     """
         Testing the APIs by connecting to the flask app from a client.
@@ -26,17 +26,6 @@ class TestAPIs(object):
     def setup_class(cls):
         cls.api_url = '/api/search'
         cls.template_url = '/search'
-        app = create_app('testing')
-        cls.app_context = app.app_context()
-        cls.app_context.push()
-        cls.client = app.test_client()
-        # cls.client = cls.app.test_client(use_cookies=True)
-        cls.fill_db()
-
-    @classmethod
-    def teardown_class(cls):
-        # Software.objects().delete()
-        cls.app_context.pop()
 
     @classmethod
     def fill_db(cls):
@@ -71,33 +60,33 @@ class TestAPIs(object):
             'Content-Type': 'application/json'
         }
 
-    def test_home_page(self):
+    def test_home_page(self, client):
         """The API to the root should get all software"""
 
-        response = self.client.get('/')
+        response = client.get('/')
         assert response.status_code == 200
         assert 'MolSSI' in response.get_data(as_text=True)
 
-    def test_empty_search(self):
+    def test_empty_search(self, client):
         """Default (empty) search results in all none pending software
          in the DB
          """
 
         # http://localhost:5000/api/search?query_text=&domain=&languages=[]
         params = dict(query_text='', domain='', languages='[]')
-        response = self.client.get(self.api_url, query_string=params) #, headers=headers)
+        response = client.get(self.api_url, query_string=params) #, headers=headers)
         assert response.status_code == 200
 
         json_data = json.loads(response.get_data(as_text=True))
         # 60 none pending software out of 158 in the test DB
         assert len(json_data) == 60
 
-    def test_empty_formatted_search(self):
+    def test_empty_formatted_search(self, client):
         """Get the default formatted for the default search
          """
 
         params = dict(query_text='', domain='', languages='[]')
-        response = self.client.get(self.template_url, query_string=params)
+        response = client.get(self.template_url, query_string=params)
         assert response.status_code == 200
 
         formatted_data = response.get_data(as_text=True)
@@ -105,18 +94,18 @@ class TestAPIs(object):
         assert 'ACES' in formatted_data
         assert '</div>' in formatted_data
 
-    def test_get_software_details(self):
+    def test_get_software_details(self, client):
         url = 'software_detail/5aa1926f750213c7dc3f210b'
-        response = self.client.get(url)
+        response = client.get(url)
         assert response.status_code == 200
 
         assert 'GAMESS (UK)' in response.get_data(as_text=True)
         assert 'Compilers' in response.get_data(as_text=True)
         assert 'Documentation' in response.get_data(as_text=True)
 
-    def test_get_software_details_notfound(self):
+    def test_get_software_details_notfound(self, client):
         url = 'software_detail/wrong_id'
-        response = self.client.get(url)
+        response = client.get(url)
         assert response.status_code == 404
 
 
