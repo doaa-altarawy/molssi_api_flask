@@ -11,9 +11,9 @@ if __name__ == "__main__":
         license='BSD-3C',
         packages=setuptools.find_packages(),
         install_requires=[
-            'Flask==0.12.2',
-            'Flask_Cors==3.0.3',
-            'Flask-Jsonpify==1.5.0',
+            'Flask>0.12.3',
+            'Flask_Cors',
+            'Flask-Jsonpify',
             'pymongo',
             'mongoengine',
             'flask_mongoengine',
