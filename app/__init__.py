@@ -46,7 +46,6 @@ def create_app(config_name):
     cors.init_app(app)
     bootstrap.init_app(app)
     login_manager.init_app(app)
-    app_admin.init_app(app)
     moment.init_app(app)
     # toolbar.init_app(app)
 
@@ -66,10 +65,12 @@ def create_app(config_name):
     from .models.users import update_roles
     update_roles()
 
-    if config_name != 'testing':
-        # To avoid circular import
-        from app.admin import add_admin_views
-        add_admin_views()
+    # To avoid circular import
+    from app.admin import add_admin_views
+    add_admin_views()
+
+    # Then init the app
+    app_admin.init_app(app)
 
     return app
 
