@@ -55,3 +55,4 @@ log
 logs/
 app/templates/admin2/
 config_local.py
+.pytest_cache/
