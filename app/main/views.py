@@ -122,19 +122,19 @@ def software_detail(sw_id):
     return render_template('software_detail.html', lib=software)
 
 
-@main.route('/contact')
-def contact():
-    """Return a test JSON file
-    """
-    json_url = os.path.join(current_app.config['base_dir'], 'static',
-                            'data', 'test.json')
-    logging.debug(json_url)
-    # data = json.load(open(json_url))
-
-    with main.open_resource(json_url) as f:
-        data = json.load(f)
-
-    return jsonify(data)
+# @main.route('/contact')
+# def contact():
+#     """Return a test JSON file
+#     """
+#     json_url = os.path.join(current_app.config['base_dir'], 'static',
+#                             'data', 'test.json')
+#     logging.debug(json_url)
+#     # data = json.load(open(json_url))
+#
+#     with main.open_resource(json_url) as f:
+#         data = json.load(f)
+#
+#     return jsonify(data)
 
 
 @main.route('/static/<path:path>')
