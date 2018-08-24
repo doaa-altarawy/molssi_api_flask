@@ -167,7 +167,8 @@ class TestAPIs(object):
                 [],
                 ["PDB", "PDBX/MMCIF", "DCD", "CSV", "TXT", "XML", "PRMTOP",
                  "INPCRD", "MDCRD", "MDVEL"],
-                ["CSV", "TXT"]
+                ["CSV", "TXT"],
+                "CSV"
             ]
         return arr[request.param]
 
@@ -261,10 +262,10 @@ class TestAPIs(object):
         return arr[request.param]
 
     def test_possible_filters_qm(self, client, languages, basis, qm_tags,
-                                 element_coverage):
+                                 element_coverage, ensembles):
         """Search using many possible filters for MM software
         """
-        qm_filters = dict(basis=basis, tags=qm_tags,
+        qm_filters = dict(basis=basis, tags=qm_tags, ensembles=ensembles,
                           element_coverage=element_coverage)
         query = dict(query_text='', domain='QM', languages=languages,
                      qm_filters=qm_filters)
