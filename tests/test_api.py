@@ -197,12 +197,20 @@ class TestAPIs(object):
         arr = ["Yes", "No"]
         return arr[request.param]
 
+    @pytest.fixture(params=[0, 1])
+    def ensembles(self, request):
+        arr = [
+            [],
+            ['DPD', 'NPT']
+        ]
+        return arr[request.param]
+
     def test_possible_filters_mm(self, client, languages, file_formates, mm_tags,
-                                 forcefield_types, qm_mm):
+                                 forcefield_types, qm_mm, ensembles):
         """Search using many possible filters for MM software
         """
         mm_filters = dict(file_formates=file_formates, tags=mm_tags, qm_mm=qm_mm,
-                          forcefield_types=forcefield_types)
+                          forcefield_types=forcefield_types, ensembles=ensembles)
         query = dict(query_text='', domain='MM', languages=languages,
                      mm_filters=mm_filters)
         response = client.get(self.api_url, query_string=query)
@@ -253,19 +261,11 @@ class TestAPIs(object):
         ]
         return arr[request.param]
 
-    @pytest.fixture(params=[0, 1])
-    def ensembles(self, request):
-        arr = [
-            [],
-            ['DPD', 'NPT']
-        ]
-        return arr[request.param]
-
     def test_possible_filters_qm(self, client, languages, basis, qm_tags,
-                                 element_coverage, ensembles):
-        """Search using many possible filters for MM software
+                                 element_coverage):
+        """Search using many possible filters for QM software
         """
-        qm_filters = dict(basis=basis, tags=qm_tags, ensembles=ensembles,
+        qm_filters = dict(basis=basis, tags=qm_tags,
                           element_coverage=element_coverage)
         query = dict(query_text='', domain='QM', languages=languages,
                      qm_filters=qm_filters)
