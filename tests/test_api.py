@@ -131,23 +131,23 @@ class TestAPIs(object):
         (dict(query_text='', domain='MM', languages='[]', price='free'), 12),
         (dict(query_text='', domain='MM', languages='[]', price='non-free'), 8),
         (dict(query_text='', domain='MM', languages='["Python","C"]'), 6),
-        # (dict(query_text='', domain='MM',
-        #       mm_filters={
-        #                   "file_formats": ["CSV", "TXT"],
-        #                   "qm_mm": "Yes",
-        #                   "tags": ["PERIODICITY 0D", "CONSTRAINTS", "MONTE CARLO"],
-        #                   "forcefield_types": ["Class I", "Polarizable"]
-        #                   }), 3)
+        (dict(query_text='', domain='MM', languages='[]',
+              mm_filters={
+                          "file_formats": ["CSV", "TXT"],
+                          "qm_mm": "Yes",
+                          "tags": ["PERIODICITY 0D", "CONSTRAINTS", "MONTE CARLO"],
+                          "forcefield_types": ["Class I", "Polarizable"]
+                          }), 1)  # OpenMM
     ])
     def test_search_MM(self, client, query, result_size):
         """Regression test for several filters
         """
-        print(query)
         response = client.get(self.api_url, query_string=query)
         assert response.status_code == 200
 
         json_data = json.loads(response.get_data(as_text=True))
         assert len(json_data) == result_size
+
 
     # @pytest.mark.parametrize()
     # def test_possible_filters(self, client, ):
@@ -160,3 +160,18 @@ class TestAPIs(object):
     #     json_data = json.loads(response.get_data(as_text=True))
     #     # assert len(json_data) == 0
 
+
+{
+    'qm_filters': u'{}',
+    'domain': u'MM',
+    'mm_filters':
+        u'{"file_formats":["CSV","TXT"],"qm_mm":"Yes"}',
+    'price': u'',
+    'languages': u'[]',
+    'query_text': u''}
+
+{
+    'query_text': '',
+    'domain': 'MM',
+    'mm_filters':
+        "{'file_formats': ['CSV', 'TXT'], 'qm_mm': 'Yes'}"}

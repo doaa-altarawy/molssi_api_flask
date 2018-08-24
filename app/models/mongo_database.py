@@ -97,14 +97,11 @@ def clear_libraries():
 # ---------------------------   Query functions  ------------------------ #
 
 
-def search_description(keyword, verbose=False):
+def search_description(keyword):
     """Search description """
     # TODO: fixme
 
     results = Software.objects(description__contains=keyword)
-    if verbose:
-        logger.debug('Num of results for {} is {}'.format(keyword, results.count()))
-        print_results(results)
 
     return results
 
@@ -140,9 +137,9 @@ def full_search(exec_empty_sw=False, **kwargs):
     query_text = kwargs.pop('query_text', '')
 
     if kwargs.get('qm_filters'):
-        qm_filters = json.loads(kwargs.pop('qm_filters', ''))
+        qm_filters = json.loads(kwargs.pop('qm_filters', '').replace('\'', '"'))
     if kwargs.get('mm_filters'):
-        mm_filters = json.loads(kwargs.pop('mm_filters', ''))
+        mm_filters = json.loads(kwargs.pop('mm_filters', '').replace('\'', '"'))
 
     # ----------- MM filters ------------
     if 'qm_mm' in mm_filters:
