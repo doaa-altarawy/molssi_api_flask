@@ -1,15 +1,9 @@
-import requests
-from app import create_app, db
 from flask import current_app
 import pytest
 import json
 from base64 import b64encode
 from app.models.software import Software
 from app.models.software import QMFeatures, MMFeatures
-import os
-from os.path import join, dirname, abspath
-import pymongo
-from pprint import pprint
 from app.models import mongo_database as db_util
 
 headers = {'Content-Type': 'application/json'}
@@ -29,6 +23,8 @@ class TestDatabase(object):
 
     def test_database_filled(self, app):
         assert Software.objects.count() == 158
+        assert db_util.get_DB_size() == 158
+        assert len(json.loads(db_util.get_json())) == 158
 
     def get_api_headers(self, username, password):
         return {

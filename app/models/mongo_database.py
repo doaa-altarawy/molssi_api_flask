@@ -255,24 +255,6 @@ def get_lib_features():
 
     return lib
 
-# ----------------------- Printing and Utils ------------------------- #
-
-
-def print_results(results):
-    """For testing"""
-    if results:
-        for res in results:
-            print(res)
-    print('........')
-
-
-def print_all():
-    """Print all Documents in the Libraries collection"""
-
-    all_libs = Software.objects
-    print('Currently in DB: ', all_libs.count())
-    print_results(all_libs)
-
 
 def get_DB_size():
     return Software.objects.count()

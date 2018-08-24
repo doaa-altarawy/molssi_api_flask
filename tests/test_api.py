@@ -155,39 +155,39 @@ class TestAPIs(object):
     @pytest.fixture(params=[0, 1, 2])
     def languages(self, request):
         arr = [
-                '["Python", "C", "C++", "FORTRAN"]',
                 '[]',
-                '["Python"]',
+                '["Python", "C", "C++", "FORTRAN"]',
+                '["Python"]'
             ]
         return arr[request.param]
 
     @pytest.fixture(params=[0, 1, 2])
     def file_formates(self, request):
         arr = [
+                [],
                 ["PDB", "PDBX/MMCIF", "DCD", "CSV", "TXT", "XML", "PRMTOP",
                  "INPCRD", "MDCRD", "MDVEL"],
-                ["CSV", "TXT"],
-                []
+                ["CSV", "TXT"]
             ]
         return arr[request.param]
 
     @pytest.fixture(params=[0, 1, 2])
     def mm_tags(self, request):
         arr = [
-                ["PERIODICITY 0D","PERIODICITY 1 AND 2D","PERIODICITY 3D",
-                 "CONSTRAINTS","RIGID BODIES","RESTRAINTS","MONTE CARLO",
-                 "RNEMD","ANALYSIS TOOLS","BUILDING TOOLS","IMPLICIT SOLVENT"],
-                ["PERIODICITY 0D","PERIODICITY 1 AND 2D"],
-                []
+                [],
+                ["PERIODICITY 0D", "PERIODICITY 1 AND 2D", "PERIODICITY 3D",
+                 "CONSTRAINTS", "RIGID BODIES", "RESTRAINTS", "MONTE CARLO",
+                 "RNEMD", "ANALYSIS TOOLS", "BUILDING TOOLS", "IMPLICIT SOLVENT"],
+                ["PERIODICITY 0D", "PERIODICITY 1 AND 2D"]
             ]
         return arr[request.param]
 
     @pytest.fixture(params=[0, 1, 2])
     def forcefield_types(self, request):
         arr = [
+                [],
                 ["Class I", "Class II", "Polarizable", "Reactive", "Inorganic/Metals"],
-                ["Class I"],
-                []
+                ["Class I"]
             ]
         return arr[request.param]
 
@@ -246,9 +246,17 @@ class TestAPIs(object):
     @pytest.fixture(params=[0, 1, 2])
     def qm_tags(self, request):
         arr = [
+            [],
             ["SEMIEMPIRICAL", "DFT", "DFT U", "HYBRID", "ROHF", "UHF"],
-            ['DFT'],
-            []
+            ['DFT']
+        ]
+        return arr[request.param]
+
+    @pytest.fixture(params=[0, 1])
+    def ensembles(self, request):
+        arr = [
+            [],
+            ['DPD', 'NPT']
         ]
         return arr[request.param]
 
