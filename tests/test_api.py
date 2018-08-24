@@ -3,7 +3,6 @@ import pytest
 import json
 from base64 import b64encode
 from app.models.software import Software
-import os
 from os.path import join, dirname, abspath
 import pymongo
 
@@ -11,7 +10,7 @@ import pymongo
 headers = {'Content-Type': 'application/json'}
 
 
-@pytest.mark.usefixtures("app", "client")   # to use fixtures from conftest
+@pytest.mark.usefixtures("app", "client", autouse=True)   # to use fixtures from conftest
 class TestAPIs(object):
     """
         Testing the APIs by connecting to the flask app from a client.
@@ -79,7 +78,7 @@ class TestAPIs(object):
 
         json_data = json.loads(response.get_data(as_text=True))
         # 60 none pending software out of 158 in the test DB
-        assert len(json_data) == 60
+        assert len(json_data) == 63
 
     def test_empty_formatted_search(self, client):
         """Get the default formatted for the default search
@@ -108,6 +107,51 @@ class TestAPIs(object):
         response = client.get(url)
         assert response.status_code == 404
 
+    @pytest.mark.parametrize("query, result_size", [
+        (dict(query_text='', domain='', languages='[]'), 63),
+        (dict(query_text='', domain='', languages='[]', price='free',
+              qm_filters={}, mm_filters={}), 44),
+        (dict(query_text='', domain='QM', languages='[]'), 41),
+        (dict(query_text='', domain='MM', languages='[]'), 16),
+        (dict(query_text='', domain='', languages='[]', price='free'), 44),
+        (dict(query_text='', domain='', languages='[]', price='non-free'), 28),
+    ])
+    def test_search(self, client, query, result_size):
+        """Regression test for several filters
+        """
+        response = client.get(self.api_url, query_string=query)
+        assert response.status_code == 200
 
+        json_data = json.loads(response.get_data(as_text=True))
+        assert len(json_data) == result_size
 
+    # @pytest.mark.parametrize("query, result_size", [
+    #     (dict(query_text='', domain='MM', languages='[]'), 60),
+    #     (dict(query_text='', domain='MM', languages='[]', price='free'), 60),
+    #     (dict(query_text='', domain='MM', languages='[]', price='non-free'), 60),
+    #     (dict(query_text='', domain='MM', languages='["Python","C"]'), 60),
+    #     (dict(query_text='', domain='MM',
+    #           mm_filters={"file_formats": ["CSV", "TXT"], "qm_mm": "Yes",
+    #                       "tags": ["PERIODICITY 0D", "CONSTRAINTS", "MONTE CARLO"],
+    #                       "forcefield_types": ["Class I", "Polarizable"]}), 60)
+    # ])
+    # def test_search_MM(self, query, result_size):
+    #     """Regression test for several filters
+    #     """
+    #     response = self.client.get(self.api_url, query_string=query)
+    #     assert response.status_code == 200
+    #
+    #     json_data = json.loads(response.get_data(as_text=True))
+    #     assert len(json_data) == result_size
+
+    # @pytest.mark.parametrize()
+    # def test_possible_filters(self, client, ):
+    #     """Search using many possible filters
+    #     """
+    #     params = dict(query_text='', domain='', languages='[]')
+    #     response = client.get(self.api_url, query_string=params)
+    #     assert response.status_code == 200
+    #
+    #     json_data = json.loads(response.get_data(as_text=True))
+    #     # assert len(json_data) == 0
 

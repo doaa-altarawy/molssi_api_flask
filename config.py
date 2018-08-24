@@ -30,7 +30,7 @@ class BaseConfig:
 
     # Client-side config
     API_RESULTS_PER_PAGE = 5
-    EXCLUDE_EMPTY_SW = True
+    EXCLUDE_EMPTY_SW = False  # TODO: to be removed
 
     # Jinia template
     REPLACE_NONE = ''
@@ -55,7 +55,7 @@ class DevelopmentConfig(BaseConfig):
 
 
 class TestingConfig(BaseConfig):
-    DEBUG = True
+    DEBUG = False
     TESTING = True
     EMAIL_CONFIRMATION_ENABLED = True
     WORDPRESS_DOMAIN = 'http://localhost:8888'

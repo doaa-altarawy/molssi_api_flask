@@ -85,7 +85,6 @@ class TestAuth(object):
                     password2='somePass', full_name='Dina')
         response = client.post(self.auth_url+'/register', data=data)
         # on success, redirect to home
-        print('mmmmmm', response.get_data(as_text=True))
         assert response.status_code == 302
         assert '/auth/login' in response.get_data(as_text=True)
 
