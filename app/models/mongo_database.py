@@ -97,7 +97,7 @@ def clear_libraries():
 
 
 def search_description(keyword, verbose=False):
-    """Search descrption """
+    """Search description """
     # TODO: fixme
 
     results = Software.objects(description__contains=keyword)

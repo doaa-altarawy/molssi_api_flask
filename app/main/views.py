@@ -37,8 +37,46 @@ def search_libraries_ui():
 
 @main.route('/api/search')
 def search_libraries(to_json=True):
-    """Search MongoDB for the given query
-       Return: JSON (array of libraries)
+    """Search MongoDB for software using the given query
+
+        Input filters are passed as get request keys
+
+        Get Request Parameters:
+        ---------------
+        query_text : str
+        domain : MM or QM
+        languages : list of str
+                   example: ["Python","C","C++","FORTRAN"]
+        price : free or non-free (optional, default is free)
+
+        mm_filters : dict of keys (optional)
+            e.g., {"file_formats":["CSV","TXT"],"qm_mm":"Yes"}
+            - "file_formats" : list ["CSV","TXT"]
+            - "qm_mm" : Yes or No
+            - "tags": list of supported QM tags,
+                e.g., ["PERIODICITY 0D","CONSTRAINTS","MONTE CARLO"]
+            - "forcefield_types" : list of str,
+                e.g., ["Class I","Polarizable"]}
+
+        qm_filters : dict of QM keys (optional)
+        - "basis" : str, e.g., "Gaussian",
+        - "element_coverage" : str, e.g., "H..Hg"
+        - "tags" : list of supported tags
+            e.g., ["DFT","HYBRID"]
+
+        Returns:
+        --------
+            JSON (array of software)
+
+        Examples:
+        ---------
+            http://localhost:5000/search?query_text=&domain=QM&languages=["C++","FORTRAN"]
+            &price=non-free&qm_filters={"basis":"Gaussian","element_coverage":"H..Hg",
+            "tags":["DFT","HYBRID"]}
+
+            http://localhost:5000/search?query_text=&domain=MM&languages=[]&price=free
+            &qm_filters={}&mm_filters={"file_formats":["CSV","TXT"],"qm_mm":"Yes",
+            "tags":["PERIODICITY 0D","MONTE CARLO"],"forcefield_types":["Class II","Polarizable"]}
     """
 
     # query_text = request.args.get('query_text', '', type=str)
