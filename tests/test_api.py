@@ -17,8 +17,7 @@ class TestAPIs(object):
         A testing DB is used, filled with test data, and cleared afterward
 
         Import data before running this test:
-        mongoimport --db test_db --collection software --type json --jsonArray
-                --file tests/data/software.json
+        mongoimport --db test_db --collection software --type json --jsonArray --file tests/data/software.json
     """
 
     @classmethod
@@ -107,6 +106,27 @@ class TestAPIs(object):
         response = client.get(url)
         assert response.status_code == 404
 
+    def test_search_non_empty(self, client):
+        """Regression test for several filters
+        """
+
+        # find all software
+        params = dict(query_text='', domain='', languages='[]')
+        response = client.get(self.api_url, query_string=params)
+        assert response.status_code == 200
+
+        json_data = json.loads(response.get_data(as_text=True))
+        assert len(json_data) == 63
+
+        # test searching only the ones with non empty descriptions
+        tmp = current_app.config['EXCLUDE_EMPTY_SW']
+        current_app.config['EXCLUDE_EMPTY_SW'] = True
+        response = client.get(self.api_url, query_string=params)
+
+        json_data = json.loads(response.get_data(as_text=True))
+        current_app.config['EXCLUDE_EMPTY_SW'] = tmp
+        assert len(json_data) == 60
+
     @pytest.mark.parametrize("query, result_size", [
         (dict(query_text='', domain='', languages='[]'), 63),
         (dict(query_text='', domain='', languages='[]', price='free',
@@ -161,7 +181,7 @@ class TestAPIs(object):
             ]
         return arr[request.param]
 
-    @pytest.fixture(params=[0, 1, 2])
+    @pytest.fixture(params=[0, 1, 2, 3])
     def file_formates(self, request):
         arr = [
                 [],
