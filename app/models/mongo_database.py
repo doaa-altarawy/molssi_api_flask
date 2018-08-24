@@ -5,6 +5,7 @@ from mongoengine.queryset.visitor import Q
 import json
 import re
 import logging
+from six import string_types
 
 
 '''
@@ -125,7 +126,7 @@ def complex_query(languages=[], domains=[]):
     return results
 
 
-def full_search(exec_empty_sw=False, verbose=False, **kwargs):
+def full_search(exec_empty_sw=False, **kwargs):
     """Search the libraries collection using joint search of multiple fields
         any empty field will not be searched.
         if all fields are empty, then all documents are returned
@@ -186,8 +187,7 @@ def full_search(exec_empty_sw=False, verbose=False, **kwargs):
         if val:
             query[key] = val
 
-    if exec_empty_sw: # exclude empty sw
-        # non_empty = {'$or': [{'description__ne': ''}, {'long_description__ne': ''}]}
+    if exec_empty_sw:  # exclude empty sw
         arg_query += (Q(description__ne='') | Q(long_description__ne=''),)
 
     # exclude pending sw
@@ -197,14 +197,6 @@ def full_search(exec_empty_sw=False, verbose=False, **kwargs):
     results = Software.objects(*arg_query, **query)
 
     logger.info('Results length: %s', len(results))
-
-    # if len(languages_lower) != 0 and len(domain) != 0:
-    #     results = Software.objects(Q(languages_lower__in=languages_lower) & Q(domain__in=domain))
-    # elif len(languages_lower) != 0:
-    #     results = Software.objects(languages_lower__in=languages_lower)
-    # elif len(domain) != 0:
-    #     results = Software.objects(domain__in=domain)
-    # print(results)
 
     if len(query_text) != 0 and results:
         logger.debug('Sorting results by test_score')
@@ -217,9 +209,6 @@ def full_search(exec_empty_sw=False, verbose=False, **kwargs):
     else:
         logger.debug('No sorting!! len(query_text): ')
 
-    if verbose:
-        print_results(results)
-
     logger.info('Final results length: %s', len(results))
 
     return results
@@ -229,7 +218,7 @@ def get_compiled_regex(search_keys, sep='|'):
     """Returns a complied regular expression string
     from a query string of space-separated terms"""
 
-    if isinstance(search_keys, str) or isinstance(search_keys, unicode):
+    if isinstance(search_keys, string_types): # python 2 3 compatible
         w_list = ['.*' + term + '.*' for term in search_keys.split()]
     elif isinstance(search_keys, list):
         w_list = ['.*' + term + '.*' for term in search_keys]

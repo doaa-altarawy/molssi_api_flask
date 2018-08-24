@@ -125,24 +125,29 @@ class TestAPIs(object):
         json_data = json.loads(response.get_data(as_text=True))
         assert len(json_data) == result_size
 
-    # @pytest.mark.parametrize("query, result_size", [
-    #     (dict(query_text='', domain='MM', languages='[]'), 60),
-    #     (dict(query_text='', domain='MM', languages='[]', price='free'), 60),
-    #     (dict(query_text='', domain='MM', languages='[]', price='non-free'), 60),
-    #     (dict(query_text='', domain='MM', languages='["Python","C"]'), 60),
-    #     (dict(query_text='', domain='MM',
-    #           mm_filters={"file_formats": ["CSV", "TXT"], "qm_mm": "Yes",
-    #                       "tags": ["PERIODICITY 0D", "CONSTRAINTS", "MONTE CARLO"],
-    #                       "forcefield_types": ["Class I", "Polarizable"]}), 60)
-    # ])
-    # def test_search_MM(self, query, result_size):
-    #     """Regression test for several filters
-    #     """
-    #     response = self.client.get(self.api_url, query_string=query)
-    #     assert response.status_code == 200
-    #
-    #     json_data = json.loads(response.get_data(as_text=True))
-    #     assert len(json_data) == result_size
+    @pytest.mark.parametrize("query, result_size", [
+        (dict(query_text='', domain='MM', languages='[]'), 16),
+        (dict(query_text='OpenMM', domain='MM', languages='[]'), 3),
+        (dict(query_text='', domain='MM', languages='[]', price='free'), 12),
+        (dict(query_text='', domain='MM', languages='[]', price='non-free'), 8),
+        (dict(query_text='', domain='MM', languages='["Python","C"]'), 6),
+        # (dict(query_text='', domain='MM',
+        #       mm_filters={
+        #                   "file_formats": ["CSV", "TXT"],
+        #                   "qm_mm": "Yes",
+        #                   "tags": ["PERIODICITY 0D", "CONSTRAINTS", "MONTE CARLO"],
+        #                   "forcefield_types": ["Class I", "Polarizable"]
+        #                   }), 3)
+    ])
+    def test_search_MM(self, client, query, result_size):
+        """Regression test for several filters
+        """
+        print(query)
+        response = client.get(self.api_url, query_string=query)
+        assert response.status_code == 200
+
+        json_data = json.loads(response.get_data(as_text=True))
+        assert len(json_data) == result_size
 
     # @pytest.mark.parametrize()
     # def test_possible_filters(self, client, ):
