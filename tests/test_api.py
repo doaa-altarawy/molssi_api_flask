@@ -115,6 +115,8 @@ class TestAPIs(object):
         (dict(query_text='', domain='MM', languages='[]'), 16),
         (dict(query_text='', domain='', languages='[]', price='free'), 44),
         (dict(query_text='', domain='', languages='[]', price='non-free'), 28),
+        (dict(query_text='', domain='', languages='[]', price='unknown'), 1),  ###
+
     ])
     def test_search(self, client, query, result_size):
         """Regression test for several filters
@@ -124,6 +126,8 @@ class TestAPIs(object):
 
         json_data = json.loads(response.get_data(as_text=True))
         assert len(json_data) == result_size
+
+    # ---------------------- MM filters tests --------------------------- #
 
     @pytest.mark.parametrize("query, result_size", [
         (dict(query_text='', domain='MM', languages='[]'), 16),
@@ -148,30 +152,115 @@ class TestAPIs(object):
         json_data = json.loads(response.get_data(as_text=True))
         assert len(json_data) == result_size
 
+    @pytest.fixture(params=[0, 1, 2])
+    def languages(self, request):
+        arr = [
+                '["Python", "C", "C++", "FORTRAN"]',
+                '[]',
+                '["Python"]',
+            ]
+        return arr[request.param]
 
-    # @pytest.mark.parametrize()
-    # def test_possible_filters(self, client, ):
-    #     """Search using many possible filters
-    #     """
-    #     params = dict(query_text='', domain='', languages='[]')
-    #     response = client.get(self.api_url, query_string=params)
-    #     assert response.status_code == 200
-    #
-    #     json_data = json.loads(response.get_data(as_text=True))
-    #     # assert len(json_data) == 0
+    @pytest.fixture(params=[0, 1, 2])
+    def file_formates(self, request):
+        arr = [
+                ["PDB", "PDBX/MMCIF", "DCD", "CSV", "TXT", "XML", "PRMTOP",
+                 "INPCRD", "MDCRD", "MDVEL"],
+                ["CSV", "TXT"],
+                []
+            ]
+        return arr[request.param]
 
+    @pytest.fixture(params=[0, 1, 2])
+    def mm_tags(self, request):
+        arr = [
+                ["PERIODICITY 0D","PERIODICITY 1 AND 2D","PERIODICITY 3D",
+                 "CONSTRAINTS","RIGID BODIES","RESTRAINTS","MONTE CARLO",
+                 "RNEMD","ANALYSIS TOOLS","BUILDING TOOLS","IMPLICIT SOLVENT"],
+                ["PERIODICITY 0D","PERIODICITY 1 AND 2D"],
+                []
+            ]
+        return arr[request.param]
 
-{
-    'qm_filters': u'{}',
-    'domain': u'MM',
-    'mm_filters':
-        u'{"file_formats":["CSV","TXT"],"qm_mm":"Yes"}',
-    'price': u'',
-    'languages': u'[]',
-    'query_text': u''}
+    @pytest.fixture(params=[0, 1, 2])
+    def forcefield_types(self, request):
+        arr = [
+                ["Class I", "Class II", "Polarizable", "Reactive", "Inorganic/Metals"],
+                ["Class I"],
+                []
+            ]
+        return arr[request.param]
 
-{
-    'query_text': '',
-    'domain': 'MM',
-    'mm_filters':
-        "{'file_formats': ['CSV', 'TXT'], 'qm_mm': 'Yes'}"}
+    @pytest.fixture(params=[0, 1])
+    def qm_mm(self, request):
+        arr = ["Yes", "No"]
+        return arr[request.param]
+
+    def test_possible_filters_mm(self, client, languages, file_formates, mm_tags,
+                                 forcefield_types, qm_mm):
+        """Search using many possible filters for MM software
+        """
+        mm_filters = dict(file_formates=file_formates, tags=mm_tags, qm_mm=qm_mm,
+                          forcefield_types=forcefield_types)
+        query = dict(query_text='', domain='MM', languages=languages,
+                     mm_filters=mm_filters)
+        response = client.get(self.api_url, query_string=query)
+        assert response.status_code == 200
+
+        json.loads(response.get_data(as_text=True))
+
+    # ---------------------- QM filters tests --------------------------- #
+
+    @pytest.mark.parametrize("query, result_size", [
+        (dict(query_text='', domain='QM', languages='[]'), 41),
+        (dict(query_text='Gaussian', domain='QM', languages='[]'), 5),
+        (dict(query_text='', domain='QM', languages='[]', price='free'), 28),
+        (dict(query_text='', domain='QM', languages='[]', price='non-free'), 17),
+        (dict(query_text='', domain='QM', languages='["Python","C"]'), 14),
+        (dict(query_text='', domain='QM', languages='["Python","C"]',
+              qm_filters={
+                          "basis": "Gaussian",
+                          "element_coverage": "H..Lr",
+                          "tags": ["DFT", "HYBRID"]
+                          }), 1)  # NWChem
+    ])
+    def test_search_QM(self, client, query, result_size):
+        """Regression test for several filters
+        """
+        response = client.get(self.api_url, query_string=query)
+        assert response.status_code == 200
+
+        json_data = json.loads(response.get_data(as_text=True))
+        assert len(json_data) == result_size
+
+    @pytest.fixture(params=[0, 1, 2])
+    def basis(self, request):
+        arr = ['Gaussian', 'Planewave', 'Daubechies wavelets']
+        return arr[request.param]
+
+    @pytest.fixture(params=[0, 1, 2])
+    def element_coverage(self, request):
+        arr = ["H..Lr", 'H..Hg', 'H..118']
+        return arr[request.param]
+
+    @pytest.fixture(params=[0, 1, 2])
+    def qm_tags(self, request):
+        arr = [
+            ["SEMIEMPIRICAL", "DFT", "DFT U", "HYBRID", "ROHF", "UHF"],
+            ['DFT'],
+            []
+        ]
+        return arr[request.param]
+
+    def test_possible_filters_qm(self, client, languages, basis, qm_tags,
+                                 element_coverage):
+        """Search using many possible filters for MM software
+        """
+        qm_filters = dict(basis=basis, tags=qm_tags,
+                          element_coverage=element_coverage)
+        query = dict(query_text='', domain='QM', languages=languages,
+                     qm_filters=qm_filters)
+        response = client.get(self.api_url, query_string=query)
+        assert response.status_code == 200
+
+        json.loads(response.get_data(as_text=True))

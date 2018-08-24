@@ -227,14 +227,10 @@ def get_compiled_regex(search_keys, sep='|'):
     return regex
 
 
-def get_json(verbose=False):
+def get_json():
     """Get json data of the DB"""
 
-    json_data = Software.objects().to_json()
-    if verbose:
-        print(json_data)
-
-    return json_data
+    return Software.objects().to_json()
 
 
 def get_software(lib_id):
