@@ -13,6 +13,7 @@ class TestAuth(object):
 
     auth_url = '/auth'
 
+    # prerequisite for all other tests
     @pytest.fixture(scope='class', autouse=True)
     def fill_db(cls, app):
         """Fill the test DB with the admin user
@@ -68,7 +69,7 @@ class TestAuth(object):
         client.get(self.auth_url+'/logout', follow_redirects=True)
         data = dict(email='daltarawy@vt.edu', password='fakePass')
         response = client.post(self.auth_url+'/login', data=data,
-                                    follow_redirects=True)
+                               follow_redirects=True)
         success = 'Change Email' in response.get_data(as_text=True)
         return success
 
@@ -91,7 +92,7 @@ class TestAuth(object):
         self.logout(client)
         data = dict(email='dina@gmail.com', password='somePass')
         response = client.post(self.auth_url+'/login', data=data,
-                                    follow_redirects=True)
+                               follow_redirects=True)
         assert response.status_code == 200
         assert 'You have not confirmed your account yet' \
                in response.get_data(as_text=True)
@@ -103,14 +104,14 @@ class TestAuth(object):
 
         # wrong confirmation token
         response = client.get(self.auth_url+'/confirm/'+'wrong',
-                                   follow_redirects=True)
+                              follow_redirects=True)
         assert 'The confirmation link is invalid or has expired' \
                in response.get_data(as_text=True)
 
         user = User.objects(email='dina@gmail.com').first()
         token = user.generate_confirmation_token()
         response = client.get(self.auth_url+'/confirm/'+token,
-                                   follow_redirects=True)
+                              follow_redirects=True)
         assert 'You have confirmed your account. Thanks' \
                in response.get_data(as_text=True)
         # update user from DB, and check if confirmed
@@ -135,14 +136,14 @@ class TestAuth(object):
 
         # Try to confirmation already confirmed, redirect to home
         response = client.get(self.auth_url+'/confirm/'+'123',
-                                   follow_redirects=True)
+                              follow_redirects=True)
         assert '/admin/' in response.get_data(as_text=True)
 
 
     def test_wrong_sign_in(self, client):
         data = dict(email='daltarawy@vt.edu', password='wrongPass')
         response = client.post(self.auth_url+'/login', data=data,
-                                    follow_redirects=True)
+                               follow_redirects=True)
         assert response.status_code == 200
         assert 'Invalid email or password' in response.get_data(as_text=True)
 
@@ -150,12 +151,12 @@ class TestAuth(object):
         # make sure you are logged in first
         data = dict(email='daltarawy@vt.edu', password='fakePass')
         response = client.post(self.auth_url+'/login', data=data,
-                                    follow_redirects=True)
+                               follow_redirects=True)
         assert response.status_code == 200
         assert 'Change Email' in response.get_data(as_text=True)
         # logout
         response = client.get(self.auth_url+'/logout',
-                                   follow_redirects=True)
+                              follow_redirects=True)
         assert 'You have been logged out' in response.get_data(as_text=True)
 
     def test_change_password(self, client):
@@ -180,7 +181,7 @@ class TestAuth(object):
         # correct entry
         data = dict(old_password='fakePass', password='1234567', password2='1234567')
         response = client.post(self.auth_url+'/change-password', data=data,
-                                    follow_redirects=True)
+                               follow_redirects=True)
         assert response.status_code == 200
         assert 'Your password has been updated' in response.get_data(as_text=True)
 
@@ -211,7 +212,7 @@ class TestAuth(object):
         # correct entry
         data = dict(email='daltarawy2@vt.edu', password='fakePass')
         response = client.post(self.auth_url+'/change_email', data=data,
-                                    follow_redirects=True)
+                               follow_redirects=True)
         assert response.status_code == 200
         assert 'confirm your new email address' in response.get_data(as_text=True)
 
@@ -228,8 +229,8 @@ class TestAuth(object):
         assert 'Reset Your Password' in response.get_data(as_text=True)
 
         response = client.post(self.auth_url+'/reset',
-                                    data=dict(email='someEmail@vt.edu'),
-                                    follow_redirects=True)
+                               data=dict(email='someEmail@vt.edu'),
+                               follow_redirects=True)
         assert response.status_code == 200
         assert 'An email with instructions to reset your password' \
                in response.get_data(as_text=True)

@@ -242,6 +242,7 @@ class SoftwareView(ModelView):
 
         return id
 
+
 class SoftwareViewPublic(SoftwareView):
     """
         View to submit Software by the public.

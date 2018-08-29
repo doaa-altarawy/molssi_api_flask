@@ -23,7 +23,7 @@ ignore:
   - setup.py
   - config*.py
   - *wsgi*.py
-  - */admin/.*
+#  - */admin/.*
 
 # Pull request comments:
 # ----------------------

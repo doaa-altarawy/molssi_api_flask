@@ -17,7 +17,8 @@ class TestAPIs(object):
         A testing DB is used, filled with test data, and cleared afterward
 
         Import data before running this test:
-        mongoimport --db test_db --collection software --type json --jsonArray --file tests/data/software.json
+        mongoimport --db test_db --collection software --type json --jsonArray
+                --file tests/data/software.json
     """
 
     @classmethod
