@@ -386,4 +386,4 @@ def add_admin_views():
         app_admin.add_view(UserView(User, name='Users'))
         app_admin.add_view(SoftwareAccessLogsView(SoftwareAccess, name='Search Logs'))
         app_admin.add_view(SoftwareViewPublic(Software, endpoint='submit_software',
-                                             name='Submit Software'))
+                                              name='Submit Software'))

@@ -1,6 +1,4 @@
-from flask import current_app
 import pytest
-import json
 from base64 import b64encode
 from app.models.software import Software
 from app.models.users import User
@@ -132,33 +130,3 @@ class TestAdmin(object):
                in response.get_data(as_text=True)
 
         Software.objects(software_name='test_software_new').delete()
-
-    def test_admin_submit_software(self, client, form_empty):
-        """The Admin home with login"""
-
-        # Doesn't require login
-        assert self.logout(client)
-
-        response = client.post(self.admin_url + '/submit_software/',
-                               data=form_empty, follow_redirects=True)
-
-        assert 'Submit Software for review' in response.get_data(as_text=True)
-        assert 'Some fields are missing' in response.get_data(as_text=True)
-        assert 'This field is required' in response.get_data(as_text=True)
-
-    def test_admin_submit_software_full(self, client, form_full):
-        """The Admin home with login"""
-
-        # Doesn't require login
-        assert self.logout(client)
-
-        form_full['software_name'] = 'test_software_submit'
-        response = client.post(self.admin_url + '/submit_software/',
-                               data=form_full, follow_redirects=True)
-
-        assert 'Thank you. The software was submitted successfully' \
-               in response.get_data(as_text=True)
-        assert "To preview your submitted software" in response.get_data(as_text=True)
-        assert 'To edit your submitted software: ' in response.get_data(as_text=True)
-
-        Software.objects(software_name='test_software_submit').delete()
