@@ -305,6 +305,8 @@ class SoftwareViewPublic(SoftwareView):
         if self.validate_form(form):
             # model = self.create_model(form)
 
+            # mark the software as pending for MolSSI review - not public
+            model.is_pending = True
             if self.update_model(form, model):
                 # flash('Software was successfully submitted.', 'success')
                 return redirect(url_for('submit_software.success', software_id=model.id))
