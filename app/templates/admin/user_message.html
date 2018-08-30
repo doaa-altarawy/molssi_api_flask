@@ -17,19 +17,21 @@
 
         <h5>{{ message }}</h5>
 
-        <div class="pt-5">
-            <h6>Your software is saved for review but may not be public yet.</h6>
-            <br />
-            <ul>
-                <li>
-                    <p>To preview your submitted software: <a href="{{ preview_url }} " target="_blank">{{ preview_url }}</a></p>
-                </li>
-                <li>
-                    <p>To edit your submitted software: <a href="{{ edit_url }}" target="_blank">{{ edit_url }}</a></p>
-                </li>
-            </ul>
+        {%  if not software_not_found %}
+            <div class="pt-5">
+                <h6>Your software is saved for review but may not be public yet.</h6>
+                <br />
+                <ul>
+                    <li>
+                        <p>To preview your submitted software: <a href="{{ preview_url }} " target="_blank">{{ preview_url }}</a></p>
+                    </li>
+                    <li>
+                        <p>To edit your submitted software: <a href="{{ edit_url }}" target="_blank">{{ edit_url }}</a></p>
+                    </li>
+                </ul>
 
-        </div>
+            </div>
+        {% endif %}
 
         <div class="pt-5">
             <p><a href="https://molssi.org/software-search/">Return to MolSSI Molecular Software DB search page</a></p>

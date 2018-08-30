@@ -114,7 +114,8 @@ class TestSubmitSoftware(object):
         """Test edit software after submission (not found)"""
 
         # review the submitted page (with wrong URL)
-        response = client.get('/edit/wrong_token', follow_redirects=True)
+        response = client.get(self.admin_url + '/submit_software/edit/wrong_token',
+                              follow_redirects=True)
 
-        assert 'Page Not Found' in response.get_data(as_text=True)
-        assert response.status_code == 404
+        assert 'Software does not exist or the URL has expired.' \
+               in response.get_data(as_text=True)

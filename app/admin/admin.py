@@ -333,7 +333,9 @@ class SoftwareViewPublic(SoftwareView):
 
     @expose('/not_found')
     def not_found(self):
-        return render_template('admin/user_message.html', message='')
+        return render_template('admin/user_message.html',
+                               software_not_found=True,
+                               message='Software does not exist or the URL has expired.')
 
     def is_accessible(self):
         return True
