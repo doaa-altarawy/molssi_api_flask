@@ -141,7 +141,7 @@ class User(UserMixin, db.Document):
             data = s.loads(token.encode('utf-8'))
         except:
             return False
-        user = User.objects(id=data.get('reset'))  ### id or what?
+        user = User.objects(id=data.get('reset')).first()
         if user is None:
             return False
         user.password = new_password
@@ -161,12 +161,8 @@ class User(UserMixin, db.Document):
             return False
         if data.get('change_email') != str(self.id):
             return False
-        new_email = data.get('new_email')
-        if new_email is None:
-            return False
-        if self.objects(email=new_email).first() is not None:
-            return False
-        self.email = new_email
+
+        self.email = data.get('new_email')
         self.avatar_hash = self.gravatar_hash()
         self.save()
         return True

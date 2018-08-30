@@ -1,4 +1,4 @@
-from flask import current_app
+from flask import current_app, url_for
 import pytest
 import json
 from base64 import b64encode
@@ -14,7 +14,7 @@ class TestAuth(object):
     auth_url = '/auth'
 
     # prerequisite for all other tests
-    @pytest.fixture(scope='class', autouse=True)
+    @pytest.fixture(scope='function', autouse=True)
     def fill_db(cls, app):
         """Fill the test DB with the admin user
             The admin is user whose email is defined in Flask
@@ -209,12 +209,20 @@ class TestAuth(object):
         assert response.status_code == 200
         assert 'Invalid password' in response.get_data(as_text=True)
 
-        # correct entry
+        # correct entry to change email
         data = dict(email='daltarawy2@vt.edu', password='fakePass')
         response = client.post(self.auth_url+'/change_email', data=data,
                                follow_redirects=True)
         assert response.status_code == 200
         assert 'confirm your new email address' in response.get_data(as_text=True)
+
+        # Confirm changed email
+        user = User.objects(email='daltarawy@vt.edu').first()
+        token = user.generate_email_change_token(new_email='daltarawy2@vt.edu')
+        url = self.auth_url + '/change_email/' + token
+        response = client.get(url, follow_redirects=True)
+        assert 'Your email address has been updated' in response.get_data(as_text=True)
+
 
     def test_reset_password(self, client):
         # if already logged in, redirect to home
@@ -234,3 +242,13 @@ class TestAuth(object):
         assert response.status_code == 200
         assert 'An email with instructions to reset your password' \
                in response.get_data(as_text=True)
+
+        # clicking the link in the email and changing the password
+        user = User.objects(email='daltarawy@vt.edu').first()
+        token = user.generate_reset_token()
+        url = self.auth_url + '/reset/' + token
+        response = client.post(url,
+                               data=dict(password='fakePass', password2='fakePass'),
+                               follow_redirects=True)
+        assert 'Your password has been updated' in response.get_data(as_text=True)
+
