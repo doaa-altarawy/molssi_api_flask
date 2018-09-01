@@ -10,7 +10,7 @@ Flask-Jsonpify
 Flask-HTTPAuth
 Flask-Login
 Flask-Mail
-flask-mongoengine
+Flask-mongoengine
 Flask-WTF
 flask-moment
 #itsdangerous

@@ -16,7 +16,7 @@ if __name__ == "__main__":
             'Flask-Jsonpify',
             'pymongo',
             'mongoengine',
-            'flask_mongoengine',
+            'flask-mongoengine',
         ],
         extras_require={
             'docs': [

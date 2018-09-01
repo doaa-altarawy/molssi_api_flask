@@ -36,7 +36,12 @@ Or if using a different path than the default /data/db:
 $ mongo
 > use resources_website
 > db.createUser({user: 'doaa', pwd: 'fakePass', roles : [{db: 'resources_website', role: 'readWrite'}] } )
-> exit
+> quit()   # save and exit
+
+# fill the database with sameple data:
+$ mongoimport --db resources_website --collection software --type json --jsonArray --file molssi_code_db/tests/data/software.json
+$ mongoimport --db test_db --collection software --type json --jsonArray --file molssi_code_db/tests/data/software.json
+
 ```
 
 ### Run the Development Web Server
