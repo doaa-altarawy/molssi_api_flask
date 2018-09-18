@@ -12,11 +12,7 @@ if __name__ == "__main__":
         packages=setuptools.find_packages(),
         install_requires=[
             'Flask>0.12.3',
-            'Flask_Cors',
-            'Flask-Jsonpify',
-            'pymongo',
-            'mongoengine',
-            'flask-mongoengine',
+            'WTForms==2.1',
         ],
         extras_require={
             'docs': [
@@ -33,7 +29,6 @@ if __name__ == "__main__":
             ],
             'develop': [
                 'Flask-DebugToolbar',
-                'mongomock', #?
             ]
         },
 

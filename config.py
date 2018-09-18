@@ -15,7 +15,6 @@ class BaseConfig:
 
     THREADS_PER_PAGE = 8
 
-
     # email
     MAIL_SERVER = os.environ.get('MAIL_SERVER', 'smtp.googlemail.com')
     MAIL_PORT = int(os.environ.get('MAIL_PORT', '587'))
@@ -32,12 +31,14 @@ class BaseConfig:
     API_RESULTS_PER_PAGE = 5
     EXCLUDE_EMPTY_SW = False  # TODO: to be removed
 
-    # Jinia template
+    # Jinja template
     REPLACE_NONE = ''
     GOOGLE_ANALYTICS_GTAG = 'UA-116673029-1'
     GOOGLE_ANALYTICS_GTAG_submit = 'UA-116673029-2'
     WTF_CSRF_ENABLED = True   # it's true by default, important to prevent CSRF attacks
 
+    # Rich text editor
+    CKEDITOR_PKG_TYPE = 'basic'
 
 class DevelopmentConfig(BaseConfig):
     DEBUG = True

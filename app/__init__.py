@@ -11,6 +11,7 @@ from flask_debugtoolbar import DebugToolbarExtension
 from flask_moment import Moment
 from . import logger
 import logging
+from flask_ckeditor import CKEditor
 
 
 mail = Mail()
@@ -26,6 +27,7 @@ login_manager = LoginManager()
 login_manager.login_view = 'auth.login'   # endpoint name for the login view
 moment = Moment()
 toolbar = DebugToolbarExtension()
+ckeditor = CKEditor()
 
 
 def create_app(config_name):
@@ -48,6 +50,7 @@ def create_app(config_name):
     login_manager.init_app(app)
     moment.init_app(app)
     # toolbar.init_app(app)
+    ckeditor.init_app(app)
 
     # jinja template
     app.jinja_env.filters['empty'] = replace_empty

@@ -14,9 +14,8 @@ from ..models.search_logs import SoftwareAccess
 from itsdangerous import URLSafeTimedSerializer as Serializer
 from flask_admin.actions import action
 from flask_admin.helpers import is_form_submitted
-from wtforms.widgets import TextArea
-from wtforms import TextAreaField
 import warnings
+from flask_ckeditor import CKEditorField
 
 
 def date_format(view, value):
@@ -27,16 +26,6 @@ MY_DEFAULT_FORMATTERS = dict(typefmt.BASE_FORMATTERS)
 MY_DEFAULT_FORMATTERS.update({
         date: date_format
     })
-
-
-class CKTextAreaWidget(TextArea):
-    def __call__(self, field, **kwargs):
-        kwargs.setdefault('class_', 'ckeditor')
-        return super(CKTextAreaWidget, self).__call__(field, **kwargs)
-
-
-class CKTextAreaField(TextAreaField):
-    widget = CKTextAreaWidget()
 
 
 class SoftwareView(ModelView):
@@ -140,7 +129,9 @@ class SoftwareView(ModelView):
 
     form_overrides = dict(
         # date_of_latest_version=DateTimeField?
-        long_description=CKTextAreaField
+        long_description=CKEditorField,
+        description=CKEditorField,
+        required_citation=CKEditorField
     )
 
     # Form display organization rules
@@ -253,6 +244,10 @@ class SoftwareViewPublic(SoftwareView):
     can_delete = False
 
     form_create_rules = SoftwareView.form_create_rules[:-1]  # without pending checkbox
+    # add reCaptcha
+    # form_create_rules.append(
+    #     rules.HTML('<div class="g-recaptcha mx-auto" '
+    #                'data-sitekey="6Ldrfm8UAAAAABUHIJScHKTr4SXm1qK9G-rF3igi"></div>'))
 
     extra_css = ['/static/css/custom_admin.css']
 

@@ -34,8 +34,11 @@
 {% block tail %}
     {{ super() }}
     <script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap-select.min.js' ) }}"></script>
-    <script src="https://cdn.ckeditor.com/ckeditor5/10.0.0/classic/ckeditor.js"></script>
-
+{#    <script src="https://cdn.ckeditor.com/ckeditor5/11.0.1/classic/ckeditor.js"></script>#}
+    {{ ckeditor.load() }}
+    {{ ckeditor.config(name='description', height=100) }}
+    {{ ckeditor.config(name='long_description', height=120) }}
+    {{ ckeditor.config(name='required_citation', height=90) }}
 
     <script type="text/javascript">
         jQuery(document).ready(function() {
@@ -47,26 +50,27 @@
                 'size': 7
             });
 
-            // Rich Text editors
-            var textEditors = document.querySelectorAll('#long_description, #description, #required_citation');
-            for (var i=0; i < textEditors.length; i++) {
-                console.log(textEditors[i]);
-                ClassicEditor
-                    .create(textEditors[i], {
-                        toolbar: [
-                            'bold',
-                            'italic',
-                            'link',
-                            'bulletedList',
-                            'numberedList',
-                            'undo',
-                            'redo'
-                        ]
-                    })
-                    .catch(function (error) {
-                        console.log(error);
-                    });
-            }// end for
+            // Rich Text editors (CKeditor 5, required is not working)
+            {#var textEditors = document.querySelectorAll('#long_description, #description, #required_citation');#}
+            {#for (var i=0; i < textEditors.length; i++) {#}
+            {#    console.log(textEditors[i]);#}
+            {#    ClassicEditor#}
+            {#        .create(textEditors[i], {#}
+            {#            toolbar: [#}
+            {#                'bold',#}
+            {#                'italic',#}
+            {#                'link',#}
+            {#                'bulletedList',#}
+            {#                'numberedList',#}
+            {#                'undo',#}
+            {#                'redo'#}
+            {#            ]#}
+            {#        })#}
+            {#        .catch(function (error) {#}
+            {#            console.log(error);#}
+            {#        });#}
+            // end for
+
         });
     </script>
 
