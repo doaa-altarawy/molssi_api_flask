@@ -13,7 +13,7 @@ class TestSubmitSoftware(object):
         Testing submitting software by the users
 
         Import data before running this test:
-        mongoimport --db test_db --collection software --type json --jsonArray
+        mongoimport --db test_db --drop --collection software --type json --jsonArray
                 --file tests/data/software.json
     """
 
@@ -91,8 +91,8 @@ class TestSubmitSoftware(object):
         # get edit URL from response
         edit_url = response.get_data(as_text=True).split(
                                 'To edit your submitted software: <a href="')[-1]
-        edit_url = edit_url.split('" target="_blank">')[0]
-        # print(edit_url)
+        edit_url = edit_url.split('" target="_blank"')[0]
+        print(edit_url)
 
         # review the submitted page
         response = client.get(edit_url, follow_redirects=True)
