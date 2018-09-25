@@ -34,7 +34,7 @@
 
     <div class="form-group row">
         <label class="col-form-label col-md-2 text-md-right" for="qm_tags">Tags</label>
-        <select id="qm_tags" multiple class="selectpicker col-md-5" id="mm_tags" data-live-search="true"
+        <select id="qm_tags" multiple class="selectpicker col-md-5" data-live-search="true"
                 data-actions-box="true" title="Any" data-size="50">
             {% for tag in lib.qm_props.TAG_NAMES -%}
                 <option>{{ tag | upper | replace('_', ' ')}}</option>

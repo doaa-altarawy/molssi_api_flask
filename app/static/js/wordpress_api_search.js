@@ -185,7 +185,7 @@ jQuery(document).ready(function() {
         if (lang.val() && lang.prop('checked')) {
             jQuery('#languages').find('input:first').prop('checked', false);
         }
-        else if (lang.val() && lang.prop('checked')) {
+        else {
             jQuery('#languages').find('input').not(':first').prop('checked', false);
         }
     });
