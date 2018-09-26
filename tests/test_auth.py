@@ -252,3 +252,8 @@ class TestAuth(object):
                                follow_redirects=True)
         assert 'Your password has been updated' in response.get_data(as_text=True)
 
+    def test_auth_token(self):
+        user = User.objects(email='daltarawy@vt.edu').first()
+        token = user.generate_auth_token()
+        assert User.verify_auth_token(token).id == user.id
+        assert not User.verify_auth_token('wrong token')

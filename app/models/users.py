@@ -190,7 +190,7 @@ class User(UserMixin, db.Document):
         }
         return json_user
 
-    def generate_auth_token(self, expiration):
+    def generate_auth_token(self, expiration=3600):
         s = Serializer(current_app.config['SECRET_KEY'],
                        expires_in=expiration)
         return s.dumps({'id': str(self.id)}).decode('utf-8')
@@ -202,7 +202,7 @@ class User(UserMixin, db.Document):
             data = s.loads(token)
         except:
             return None
-        return User.objects(id=data['id'])
+        return User.objects(id=data['id']).first()
 
     def __repr__(self):
         return '<User %r>' % self.email
