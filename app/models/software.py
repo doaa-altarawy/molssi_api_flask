@@ -180,9 +180,6 @@ class Software(db.DynamicDocument):     # flexible schema, can have extra attrib
         ]
     }
 
-    def __unicode__(self):
-        return self.software_name
-
     def save(self, *args, **kwargs):
         """Override save to add languages_lower"""
         self.add_language_lower()

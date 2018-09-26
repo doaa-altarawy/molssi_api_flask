@@ -23,13 +23,10 @@ class SoftwareAccess(db.Document):
         ]
     }
 
-    def __unicode__(self):
-        return self.software.software_name
-
     def __str__(self):
-        return 'software:' + self.software + ', access_date: ' \
-               + self.access_date + ', ip_address: ' + \
-                self.ip_address
+        return 'software:' + str(self.software) \
+               + ', access_date: ' + str(self.access_date) \
+               + ', ip_address: ' + str(self.ip_address)
 
 
 def save_access(software, comment=None):
