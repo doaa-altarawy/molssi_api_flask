@@ -3,7 +3,6 @@ import pytest
 import json
 from base64 import b64encode
 from app.models.software import Software
-from app.models.software import QMFeatures, MMFeatures
 from app.models import mongo_database as db_util
 
 headers = {'Content-Type': 'application/json'}

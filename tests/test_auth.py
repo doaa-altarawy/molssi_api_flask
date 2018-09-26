@@ -1,6 +1,5 @@
-from flask import current_app, url_for
+from flask import current_app
 import pytest
-import json
 from base64 import b64encode
 from app.models.users import User, Permission
 from flask_login import current_user
