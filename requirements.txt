@@ -2,7 +2,7 @@
 #certifi
 #chardet
 #click
-Flask>0.12.3
+Flask>1.0.0
 Flask-Admin
 Flask-Bootstrap
 Flask-Cors

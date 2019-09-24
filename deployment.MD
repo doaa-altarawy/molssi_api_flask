@@ -18,7 +18,8 @@ Connection is lost when you close your machine or shut down the local developmen
 * Run on shell
   ```
   cd path/to/project
-  heroku create app_name
+  heroku create app_name  # if new app
+  heroku git:remote -a molssi_api_flask  # if the app already exists
   git remote -v
   git push heroku master   # push, install requiremnts.txt, run server
   heroku config:set FLASK_CONFIG=production   # set env variables ...
