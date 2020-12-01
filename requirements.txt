@@ -28,3 +28,4 @@ WTForms==2.1
 #gunicorn
 Flask-DebugToolbar
 flask-ckeditor
+dnspython
